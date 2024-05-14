@@ -11,9 +11,9 @@
 --------------------------------------------------------------*/
 body {
   font-family: "Inconsolata", monospace;
-  color: #0d1e2d;
+  color: #fff;
   background: rgb(74,119,113);
-  background: linear-gradient(180deg, rgba(74,119,113,1) 0%, rgba(224,161,19,1) 100%);
+	background: linear-gradient(90deg, rgba(74,119,113,1) 0%, rgba(224,161,19,1) 100%);
 }
 
 a {
