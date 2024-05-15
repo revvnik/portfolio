@@ -12,8 +12,7 @@
 body {
   font-family: "Inconsolata", monospace;
   color: #fff;
-  background: rgb(74,119,113);
-	background: linear-gradient(90deg, rgba(74,119,113,1) 0%, rgba(224,161,19,1) 100%);
+  background: #4a7771
 }
 
 a {
