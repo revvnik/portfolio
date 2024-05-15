@@ -397,6 +397,7 @@ h6,
 
 .custom-navbar .navbar-brand {
   font-size: 1.7rem;
+  color: #fff;
 }
 
 /* Burger */
@@ -405,6 +406,7 @@ h6,
   height: 32px;
   cursor: pointer;
   position: relative;
+  color: #fff;
 }
 
 .burger:before,
@@ -417,6 +419,7 @@ h6,
   border-radius: 2px;
   position: absolute;
   opacity: 1;
+  color: #fff;
 }
 
 .burger:before,
@@ -424,49 +427,60 @@ h6,
   transition: top 0.35s cubic-bezier(0.23, 1, 0.32, 1), transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1), background-color 1.15s cubic-bezier(0.86, 0, 0.07, 1);
   -webkit-transition: top 0.35s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1), background-color 1.15s cubic-bezier(0.86, 0, 0.07, 1);
   content: "";
+  color: #fff;
 }
 
 .burger:before {
   top: 4px;
+  color: #fff;
 }
 
 .burger span {
   top: 15px;
+  color: #fff;
 }
 
 .burger:after {
   top: 26px;
+  color: #fff;
 }
 
 /* Hover */
 .burger:hover:before {
   top: 7px;
+  color: #fff;
 }
 
 .burger:hover:after {
   top: 23px;
+  color: #fff;
 }
 
 /* Click */
 .burger.active span {
   opacity: 0;
+  color: #fff;
 }
 
 .burger.active:before,
 .burger.active:after {
   top: 40%;
+  color: #fff;
 }
 
 .burger.active:before {
   transform: rotate(45deg);
+  color: #fff;
 }
 
 .burger.active:after {
   transform: rotate(-45deg);
+  color: #fff;
 }
 
 .burger:focus {
   outline: none;
+  color: #fff;
 }
 
 /*--------------------------------------------------------------
