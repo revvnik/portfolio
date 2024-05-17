@@ -40,7 +40,7 @@ h6,
 
 .filters a {
     text-decoration: none;
-    color: #000;
+    color: #fff;
     display: inline-block;
     padding-left: 10px;
     padding-right: 10px;
@@ -60,11 +60,11 @@ h6,
     right: 10px;
     bottom: 0;
     height: 1px;
-    background-color: #000;
+    background-color: #fff;
 }
 
 .filters a.active {
-    color: #000;
+    color: #fff;
 }
 
 .filters a.active:before {
@@ -153,23 +153,26 @@ h6,
 
 .testimonial-wrap {
     padding: 50px 50px 80px 50px;
-    background: #eceff2;
+    background: #0d1e2d;
+    border-radius: 25px;
 }
 
 .testimonial-wrap .testimonial {
     text-align: center;
     max-width: 500px;
     margin: 0 auto;
+    border-radius: 25px;
 }
 
 .testimonial-wrap .testimonial img {
-    border-radius: 50%;
     width: 120px;
     margin: 0 auto 30px auto;
+    border-radius: 25px;
 }
 
 .testimonial-wrap .testimonial blockquote p {
     font-size: 20px;
+    border-radius: 25px;
 }
 
 .h3 {
@@ -528,4 +531,8 @@ h6,
 /* Active Burger Navbar */
 .sticky-navbar.burger-active {
     background-color: #0d1e2d; /* Background color when burger menu is active */
+}
+
+html {
+    scroll-behavior: smooth;
 }
