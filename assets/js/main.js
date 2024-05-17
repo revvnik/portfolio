@@ -44,36 +44,7 @@
       navbar.classList.toggle('burger-active'); // Toggle the burger-active class on navbar
     })
   
-    /**
-     * Porfolio isotope and filter
-     */
-    window.addEventListener('load', () => {
-      let portfolioContainer = select('#portfolio-grid');
-      if (portfolioContainer) {
-        let portfolioIsotope = new Isotope(portfolioContainer, {
-          itemSelector: '.item',
-        });
-  
-        let portfolioFilters = select('#filters a', true);
-  
-        on('click', '#filters a', function(e) {
-          e.preventDefault();
-          portfolioFilters.forEach(function(el) {
-            el.classList.remove('active');
-          });
-          this.classList.add('active');
-  
-          portfolioIsotope.arrange({
-            filter: this.getAttribute('data-filter')
-          });
-          portfolioIsotope.on('arrangeComplete', function() {
-            AOS.refresh()
-          });
-        }, true);
-      }
-  
-    });
-  
+    
     /**
      * Testimonials slider
      */
@@ -111,5 +82,42 @@
         navbar.classList.remove('scrolled');
       }
     });
-  
+    
+
+    /**
+     * Porfolio isotope and filter
+     */
+    window.addEventListener('load', () => {
+        let portfolioContainer = select('#portfolio-grid');
+        if (portfolioContainer) {
+    
+          let portfolioFilters = select('#filters a', true);
+    
+          on('click', '#filters a', function(e) {
+            portfolioFilters.forEach(function(el) {
+              el.classList.remove('active');
+            });
+            this.classList.add('active');
+          }, true);
+        }
+    
+      });
+
+      document.querySelectorAll('a').forEach(anchor => {
+        anchor.addEventListener('click', function(event) {
+            const href = this.getAttribute('href');
+            if (href.startsWith('#')) {  // Check if the href is an internal link (fragment identifier)
+                event.preventDefault();
+                const targetId = href.substring(1);
+                document.getElementById(targetId).scrollIntoView();
+                history.pushState(null, '', ' ');
+            } else if (this.hostname === window.location.hostname) {  // Check if the link is internal but not a fragment identifier
+                event.preventDefault();
+                window.location.href = href;  // Navigate to the internal page without fragment identifier
+            } else {
+                // Do nothing for external links or other cases
+            }
+        });
+    });
+    
   })();

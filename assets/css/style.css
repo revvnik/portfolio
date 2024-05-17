@@ -74,7 +74,7 @@ h6,
     right: 10px;
     bottom: 0;
     height: 1px;
-    background-color: #000;
+    background-color: #fff;
 }
 
 .item {
@@ -154,14 +154,12 @@ h6,
 .testimonial-wrap {
     padding: 50px 50px 80px 50px;
     background: #0d1e2d;
-    border-radius: 25px;
 }
 
 .testimonial-wrap .testimonial {
     text-align: center;
     max-width: 500px;
     margin: 0 auto;
-    border-radius: 25px;
 }
 
 .testimonial-wrap .testimonial img {
@@ -213,17 +211,20 @@ h6,
 .testimonials-slider .swiper-pagination {
     margin-top: -60px;
     position: relative;
+    border-radius: 25px;
 }
 
 .testimonials-slider .swiper-pagination .swiper-pagination-bullet {
     width: 12px;
     height: 12px;
-    background-color: rgba(13, 30, 45, 0.3);
+    background-color: #fff;
     opacity: 1;
+    border-radius: 25px;
 }
 
 .testimonials-slider .swiper-pagination .swiper-pagination-bullet-active {
-    background-color: rgba(13, 30, 45, 0.6);
+    background-color: #fff;
+    border-radius: 25px;
 }
 
 .sticky-content {
@@ -535,4 +536,35 @@ h6,
 
 html {
     scroll-behavior: smooth;
+}
+
+/* Services */
+.services i {
+    font-size: 40px;
+}
+
+.services h4 {
+    padding-top: 10px;
+}
+
+.section.services .row.justify-content-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-center {
+    display: block;
+    margin: 0 auto;
+    max-width: 1080px;
+    width: 1080px; /* Adjust this value to make the image smaller */
+    height: 1080px;
+    object-fit: cover;
+}
+
+.item .item-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
