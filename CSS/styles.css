@@ -930,7 +930,7 @@ input.wgh-slider-target {
     }
 
     .circle-image-text p {
-        width: 60vw;
+        width: 65vw;
         height: 100%;
         color: #f1f1f1;
         font-family: Nexa-Light;
@@ -1119,7 +1119,7 @@ input.wgh-slider-target {
         font-size: 2vw;
         margin: 0;
         margin-left: 100%;
-        margin-top: 90%;
+        margin-top: 60%;
     }
 
     .about {
