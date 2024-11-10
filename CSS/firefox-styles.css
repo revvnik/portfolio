@@ -1,0 +1,38 @@
+@-moz-document url-prefix() {
+
+    .logocontent-small {
+        margin-top: -10%;
+    }
+    .bitmoji {
+        width: 20vw;
+        height: auto;
+        border: 5px solid #3a3a3a;
+        /* Circle border color */
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: calc(10vh + 30%); 
+    }
+
+    .circle-image-text {
+        width: 30rem;
+        height: 20rem;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        left: 120%
+    }
+
+    .circle-image-text p {
+        width: 65vw; 
+        height: 100%;
+        color: #f1f1f1;
+        font-family: Nexa-Light;
+        font-size: 1.6vw;
+        /* Adjust font size */
+        margin: 0;
+        margin-top: calc(10vh + 20%);  
+    }
+    .about {
+        height: 200px
+    }
+}

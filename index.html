@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="/CSS/reset.css"> <!-- Reset   Stylesheet -->
+    <link rel="stylesheet" href="/CSS/styles.css"> <!-- General Stylesheet -->
+    <link rel="stylesheet" href="/CSS/firefox-styles.css"> <!-- Firefox Stylesheet -->
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+
+<body>
+    <div class="preload-images" id="home"></div>
+    <div></div>
+    <div id="overlay">
+        <div class="loader"></div>
+    </div>
+
+    <div class="NavBar">
+        <ul class="NavBarUL">
+            <li><a href="javascript:document.body.scrollTop = document.documentElement.scrollTop = 0;">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <div class="logocontainer">
+        <img class="logo" src="Images/logo.png" alt="Logo" />
+        <div class="logocontent-container">
+            <p class="logocontent">Hey.</p>
+            <p class="logocontent-small">I'm Nikita.</p>
+        </div>
+    </div>
+
+    <div class="image-and-about-container">
+        <img class="divider1" src="/Images/divider-1.svg" alt="Divider 1" />
+
+        <div class="aboutMeText" id="about">
+            <p>About Me</p>
+        </div>
+        <!-- Circle Image Container with Text -->
+        <div class="circle-image-container">
+            <img src="/Images/taking a photo.png" class="bitmoji" alt="Profile Image">
+            <div class="circle-image-text">
+                <p>My name is Nikita.
+                    I am an adolescent based in <span class="highlighted">Berlin, Germany</span>.
+                    I discovered programming back in <span class="highlighted">2021</span> and photography in <span
+                        class="highlighted">2022</span>.
+                    Photography quickly became my biggest hobby, which is why you will see it a lot more often than
+                    things that have to do with programming.
+                    I started with <span class="highlighted">street photography</span>, and while I've always been a big
+                    fan of <span class="highlighted">cars and motorcycles</span>,
+                    I've started doing specifically <span class="highlighted">automotive photography in 2024</span>.
+                    Here, I want to <span class="highlighted">showcase some of my work</span> and maybe even attract new
+                    customers!
+                    Yes, <span class="highlighted">I also do photoshootings!</span>
+                    So if you feel like it: <span class="highlighted"><a href="https://instagram.com/revvnik"
+                            class="instagram-link">Text me on Instagram!</a></span>
+                    Make sure to follow as well to not miss anything. I promise, after you've seen my photos, you will
+                    view your car or bike in a whole new way.
+            </div>
+        </div>
+
+        <div class="about"></div>
+
+        <svg viewBox="0 0 500 500" preserveAspectRatio="xMinYMin meet">
+            <path d="M0,100 C150,200 350,0 500,100 L500,00 L0,0 Z" style="stroke: none; fill:#262223;"></path>
+        </svg>
+    </div>
+
+    <div class="work-container">
+        <div id="work" class="workText">
+            <p>My work</p>
+        </div>
+    </div>
+
+    <section>
+        <div class="rt-container">
+            <div class="col-rt-12">
+                <div class="Scriptcontent">
+
+                    <!-- partial:index.partial.html -->
+                    <div class="workImageContainer">
+                        <div class="wgh-slider">
+                            <input class="wgh-slider-target" type="radio" id="slide-1" name="slider" />
+                            <input class="wgh-slider-target" type="radio" id="slide-2" name="slider" />
+                            <input class="wgh-slider-target" type="radio" id="slide-3" name="slider" />
+                            <input class="wgh-slider-target" type="radio" id="slide-4" name="slider"
+                                checked="checked" />
+                            <input class="wgh-slider-target" type="radio" id="slide-5" name="slider" />
+                            <input class="wgh-slider-target" type="radio" id="slide-6" name="slider" />
+                            <input class="wgh-slider-target" type="radio" id="slide-7" name="slider" />
+                            <div class="wgh-slider__viewport">
+                                <div class="wgh-slider__viewbox">
+                                    <div class="wgh-slider__container">
+                                        <div class="wgh-slider-item">
+                                            <div class="wgh-slider-item__inner">
+                                                <figure class="wgh-slider-item-figure"><img
+                                                        class="wgh-slider-item-figure__image"
+                                                        src="Images/Slider/1-min.png" alt="The 5th Exotic" />
+                                                    <figcaption class="wgh-slider-item-figure__caption">
+                                                        Lamborghini</a><span>Huracán</span></figcaption>
+                                                </figure>
+                                                <label class="wgh-slider-item__trigger" for="slide-1"
+                                                    title="Show product 1"></label>
+                                            </div>
+                                        </div>
+                                        <div class="wgh-slider-item">
+                                            <div class="wgh-slider-item__inner">
+                                                <figure class="wgh-slider-item-figure"><img
+                                                        class="wgh-slider-item-figure__image"
+                                                        src="Images/Slider/2-min.jpg" alt="The 5th Exotic" />
+                                                    <figcaption class="wgh-slider-item-figure__caption">
+                                                        Bugatti</a><span>Chiron Sport</span></figcaption>
+                                                </figure>
+                                                <label class="wgh-slider-item__trigger" for="slide-2"
+                                                    title="Show product 2"></label>
+                                            </div>
+                                        </div>
+                                        <div class="wgh-slider-item">
+                                            <div class="wgh-slider-item__inner">
+                                                <figure class="wgh-slider-item-figure"><img
+                                                        class="wgh-slider-item-figure__image"
+                                                        src="Images/Slider/3-min.jpg" alt="The 5th Exotic" />
+                                                    <figcaption class="wgh-slider-item-figure__caption">
+                                                        Porsche</a><span>991 GT3</span></figcaption>
+                                                </figure>
+                                                <label class="wgh-slider-item__trigger" for="slide-3"
+                                                    title="Show product 3"></label>
+                                            </div>
+                                        </div>
+                                        <div class="wgh-slider-item">
+                                            <div class="wgh-slider-item__inner">
+                                                <figure class="wgh-slider-item-figure"><img
+                                                        class="wgh-slider-item-figure__image"
+                                                        src="Images/Slider/10-min.png" alt="The 5th Exotic" />
+                                                    <figcaption class="wgh-slider-item-figure__caption">
+                                                        Mercedes-Benz</a><span>GLC 300</span></figcaption>
+                                                </figure>
+                                                <label class="wgh-slider-item__trigger" for="slide-4"
+                                                    title="Show product 4"></label>
+                                            </div>
+                                        </div>
+                                        <div class="wgh-slider-item">
+                                            <div class="wgh-slider-item__inner">
+                                                <figure class="wgh-slider-item-figure"><img
+                                                        class="wgh-slider-item-figure__image"
+                                                        src="Images/Slider/5-min.jpg" alt="RYSY - Traveler LP" />
+                                                    <figcaption class="wgh-slider-item-figure__caption">
+                                                        Mercedes-Benz</a><span>Maybach GLS 600</span></figcaption>
+                                                </figure>
+                                                <label class="wgh-slider-item__trigger" for="slide-5"
+                                                    title="Show product 5"></label>
+                                            </div>
+                                        </div>
+                                        <div class="wgh-slider-item">
+                                            <div class="wgh-slider-item__inner">
+                                                <figure class="wgh-slider-item-figure"><img
+                                                        class="wgh-slider-item-figure__image"
+                                                        src="Images/Slider/6-min.jpg" alt="RYSY - Traveler LP" />
+                                                    <figcaption class="wgh-slider-item-figure__caption">
+                                                        Yamaha</a><span>R1 World GP</span></figcaption>
+                                                </figure>
+                                                <label class="wgh-slider-item__trigger" for="slide-6"
+                                                    title="Show product 6"></label>
+                                            </div>
+                                        </div>
+                                        <div class="wgh-slider-item">
+                                            <div class="wgh-slider-item__inner">
+                                                <figure class="wgh-slider-item-figure"><img
+                                                        class="wgh-slider-item-figure__image"
+                                                        src="Images/Slider/7-min.png" alt="RYSY - Traveler LP" />
+                                                    <figcaption class="wgh-slider-item-figure__caption">
+                                                        Ferrari</a><span>SF90XX</span></figcaption>
+                                                </figure>
+                                                <label class="wgh-slider-item__trigger" for="slide-7"
+                                                    title="Show product 7"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- partial -->
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--<div class="banner">
+        <div class="slider" style="--quantity: 10">
+            <div class="item" style="--position: 1"><img src="Images/Slider/1.png" alt=""></div>
+            <div class="item" style="--position: 2"><img src="Images/Slider/2.jpg" alt=""></div>
+            <div class="item" style="--position: 3"><img src="Images/Slider/3.jpg" alt=""></div>
+            <div class="item" style="--position: 4"><img src="Images/Slider/4.png" alt=""></div>
+            <div class="item" style="--position: 5"><img src="Images/Slider/5.jpg" alt=""></div>
+            <div class="item" style="--position: 6"><img src="Images/6.jpg" alt=""></div>
+            <div class="item" style="--position: 7"><img src="Images/Slider/7.png" alt=""></div>
+            <div class="item" style="--position: 8"><img src="Images/Slider/8.jpg" alt=""></div>
+            <div class="item" style="--position: 9"><img src="Images/Slider/9.png" alt=""></div>
+            <div class="item" style="--position: 10"><img src="Images/Slider/10.png" alt=""></div>
+        </div>
+    </div> -->
+
+
+
+    <div class="skew-cc"></div>
+    <div class="contact-container contactText" id="contact">
+        <p>Contact Me</p>
+
+        <div class="contactForm">
+            <input type="text" class="subject-input" name="subject" required minlength="2" maxlength="20"
+                placeholder="Subject" id="subject">
+            <input type="text" class="name-input" name="name" required minlength="2" maxlength="20" placeholder="Name"
+                id="name">
+        </div>
+        <div class="text-and-submit">
+            <textarea class="message-input" name="message" rows="4" cols="50" placeholder="Your message"
+                id="message"></textarea>
+            <button type="button" class="submit-input" id="send-email">Send</button>
+        </div>
+    </div>
+
+
+    <div class="footer">
+        <p>© revvnik 2021-2024 - Last edited: 10.11.2024 14:32</p>
+    </div>
+
+
+    <script src="/JS/loader.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/JS/mail.js"></script>
+
+</body>
