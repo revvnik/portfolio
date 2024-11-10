@@ -22,7 +22,7 @@ window.addEventListener("load", function () {
 
     // Generate a random time between 2000ms (2 seconds) and 5000ms (5 seconds)
     var randomDuration = Math.floor(Math.random() * 3000) + 2000; // 2000ms to 5000ms
-    var testing = true;
+    var testing = false;
     var scrollDuration = 2000;
 
     if (testing == true) { randomDuration = 0; scrollDuration = 0; }
