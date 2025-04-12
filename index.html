@@ -208,18 +208,13 @@
 
     <script>
         function useInputValue() {
-            // Get the value from the input field
             let userInput = document.getElementById('albumlinkInput').value;
 
             if(userInput.includes("https://files.revvnik.com/") || userInput.includes("files.revvnik.com/")) {
                 userInput = userInput.split(".com/").pop();
             }
-            // Now you can use the user input as needed
-            
             window.location.href = `https://files.revvnik.com/${userInput}`
             document.getElementById('albumlinkInput').value = "";
-
-
         }
     </script>
 </body>
