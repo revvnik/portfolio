@@ -176,12 +176,14 @@
         </div>
     </section>
 
-    <div class="container space1"></div>
+    <br>
     <div class="redirectToDownload" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <h1>Want to download your images instead?</h1>
+        <br>
+        <br>
         <div style="width: auto;" class="input-group mb-3">
             <span class="input-group-text" style="background-color: #3a3a3a" id="inputGroup-sizing-default">Album Link</span>
-            <input type="text" class="form-control" style="cursor: pointer;" aria-label="Sizing example input" id="albumlinkInput" aria-describedby="inputGroup-sizing-default">
+            <input type="text" class="form-control" placeholder="Enter 10-character code" aria-label="Sizing example input" id="albumlinkInput" aria-describedby="inputGroup-sizing-default">
             <button class="btn btn-outline-secondary" style="background-color: #3a3a3a" type="button" onclick="useInputValue()" id="button-addon1">Go!</button>
         </div>
     </div>
@@ -207,10 +209,17 @@
     <script>
         function useInputValue() {
             // Get the value from the input field
-            const userInput = document.getElementById('albumlinkInput').value;
+            let userInput = document.getElementById('albumlinkInput').value;
 
+            if(userInput.includes("https://files.revvnik.com/") || userInput.includes("files.revvnik.com/")) {
+                userInput = userInput.split(".com/").pop();
+            }
             // Now you can use the user input as needed
+            
             window.location.href = `https://files.revvnik.com/${userInput}`
+            document.getElementById('albumlinkInput').value = "";
+
+
         }
     </script>
 </body>
