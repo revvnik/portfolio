@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:type="TaskPaneApp">
+  <Id>a80f72c4-6357-4ca6-9d65-6601a7b462e2</Id>
+  <Version>0.1.0.0</Version>
+  <ProviderName>Nikita Sitter</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="OneNote to Obsidian Test"/>
+  <Description DefaultValue="Read the current OneNote web page and try a manual Markdown handoff to Obsidian. No Graph login or Entra registration."/>
+  <IconUrl DefaultValue="https://revvnik.com/onenote-bridge/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://revvnik.com/onenote-bridge/icon-64.png"/>
+  <SupportUrl DefaultValue="https://revvnik.com/onenote-bridge/"/>
+  <AppDomains><AppDomain>https://revvnik.com</AppDomain></AppDomains>
+  <Hosts><Host Name="Notebook"/></Hosts>
+  <DefaultSettings><SourceLocation DefaultValue="https://revvnik.com/onenote-bridge/taskpane.html"/></DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+</OfficeApp>

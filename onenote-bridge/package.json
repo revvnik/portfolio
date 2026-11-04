@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "jsdom": "26.1.0",
+    "turndown": "7.2.2",
+    "turndown-plugin-gfm": "1.0.2"
+  },
+  "name": "onenote-obsidian-access-test",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.cjs"
+  }
+}

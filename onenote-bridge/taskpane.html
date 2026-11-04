@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>OneNote to Obsidian · Access test</title>
+  <link rel="stylesheet" href="bridge.css">
+  <script data-cfasync="false" defer src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" id="office-js"></script>
+  <script data-cfasync="false" defer src="vendor/turndown.js"></script>
+  <script data-cfasync="false" defer src="vendor/turndown-plugin-gfm.js"></script>
+  <script data-cfasync="false" defer src="bridge-core.js"></script>
+  <script data-cfasync="false" defer src="onenote-reader.js"></script>
+  <script data-cfasync="false" defer src="app.js"></script>
+</head>
+<body>
+  <main class="pane">
+    <header>
+      <div class="eyebrow">ONENOTE → OBSIDIAN <span>TEST 0.1</span></div>
+      <h1>Try your shared page.</h1>
+      <p>Open a small text page in your shared notebook, then read it here.</p>
+    </header>
+    <section class="status" aria-live="polite" aria-atomic="true">
+      <span class="status-label" id="host-label">Connecting to OneNote</span>
+      <p id="status-text">Waiting for the Office runtime. This pane must be opened as an add-in inside OneNote on the web.</p>
+    </section>
+    <button type="button" class="primary wide" id="read-page" disabled>Read current page</button>
+    <p class="hint">Reads text, basic formatting and tables. Images, handwriting and attachments are marked as omitted. Keep the page open until the read finishes.</p>
+    <section id="result" hidden>
+      <div class="section-title"><h2>Page captured</h2><span class="pill">READ ONLY</span></div>
+      <p id="page-info" class="page-info"></p>
+      <p id="export-warning" class="notice" hidden></p>
+      <label for="markdown">Markdown preview</label>
+      <textarea id="markdown" readonly rows="9" spellcheck="false"></textarea>
+      <label for="vault">Obsidian vault name</label>
+      <input id="vault" type="text" placeholder="Exact name shown in Obsidian" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <a id="open-obsidian" class="button primary wide" target="_blank" rel="noopener noreferrer" aria-disabled="true">Open in Obsidian</a>
+      <p id="handoff-hint" class="hint">Enter your vault name to create a new test note.</p>
+      <div class="actions">
+        <button type="button" class="secondary" id="copy-markdown">Copy Markdown</button>
+        <button type="button" class="secondary" id="save-markdown">Save / share .md</button>
+      </div>
+      <p id="action-status" role="status" class="hint"></p>
+    </section>
+    <details>
+      <summary>What this test does</summary>
+      <p>Uses OneNote's document API in the open web page. No Graph login, Entra registration, API key or VPS. Your existing OneNote sign-in stays with Microsoft.</p>
+      <p>The bridge converts the page in this pane and passes Markdown to Obsidian only when you tap an export action. It does not upload your note to this website or store its content.</p>
+      <p>It creates a uniquely named note in <strong>OneNote Test</strong>. It does not change the OneNote page. This is a manual access test, with no automatic sync or write-back yet.</p>
+      <p>Office requires the manifest permission <strong>ReadWriteDocument</strong> for OneNote's document APIs. This test's code only calls read methods.</p>
+    </details>
+    <details>
+      <summary>Diagnostics</summary>
+      <pre id="diagnostics">Version: 0.1.0</pre>
+      <p class="hint">Diagnostics show runtime status and error codes, with no page contents.</p>
+    </details>
+    <footer><a href="index.html" target="_blank" rel="noopener noreferrer">Setup instructions</a><span>v0.1.0</span></footer>
+  </main>
+</body>
+</html>

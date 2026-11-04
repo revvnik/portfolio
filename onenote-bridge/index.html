@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>OneNote to Obsidian · iPad access test</title>
+  <link rel="stylesheet" href="bridge.css">
+</head>
+<body>
+  <main class="setup">
+    <header>
+      <div class="eyebrow">ONENOTE → OBSIDIAN <span>TEST 0.1</span></div>
+      <h1>Try the document API.</h1>
+      <p>A small test for your shared notebook. Runs in OneNote on the web and hands a Markdown copy to Obsidian. No Entra app registration, API key or VPS.</p>
+    </header>
+    <p class="notice"><strong>The part we still need to test:</strong> whether your organization allows a custom OneNote add-in, and whether your iPad's OneNote web editor exposes it. This has not been verified with your account.</p>
+    <ol class="steps">
+      <li>
+        <h2>Save the manifest to Files</h2>
+        <p>In Safari, download this XML file. If Safari displays XML instead, touch and hold the button, then choose <strong>Download Linked File</strong>. Keep the <code>.xml</code> extension.</p>
+        <a class="button primary" href="OneNote-Obsidian-Test.xml" download="OneNote-Obsidian-Test.xml">Download test manifest</a>
+        <p class="small">This is an Office add-in manifest. Its ID identifies this add-in locally; it is not a registered Entra OAuth application.</p>
+      </li>
+      <li>
+        <h2>Open your shared notebook in Safari</h2>
+        <p>Open OneNote on the web with your normal Microsoft sign-in. Open the shared notebook and a small page with typed text. Stay in Safari rather than opening the OneNote app.</p>
+        <p>If the full editor does not appear, use Safari's page menu and choose <strong>Request Desktop Website</strong>.</p>
+      </li>
+      <li>
+        <h2>Upload the add-in</h2>
+        <p>Look for <strong>Home → Add-ins → More Settings → Upload My Add-in</strong>. Some OneNote layouts use <strong>Insert → Office Add-ins → My Add-ins / My Organization → Upload My Add-in</strong>.</p>
+        <p>Choose <code>OneNote-Obsidian-Test.xml</code> from Files. If prompted, add <strong>OneNote to Obsidian Test</strong>.</p>
+        <p><strong>If Upload My Add-in is missing, disabled or denied:</strong> stop here and report the message or show the menu. This route depends on Office add-ins being allowed. It does not override your organization's policy.</p>
+      </li>
+      <li>
+        <h2>Read one page, then try Obsidian</h2>
+        <p>In the new pane, tap <strong>Read current page</strong>. A successful test shows your notebook, section, page title and a Markdown preview.</p>
+        <p>Enter your exact Obsidian vault name and tap <strong>Open in Obsidian</strong>. The test creates a uniquely named note under <strong>OneNote Test</strong>. If the app link is blocked, use <strong>Copy Markdown</strong> or <strong>Save / share .md</strong>.</p>
+      </li>
+    </ol>
+    <details open>
+      <summary>Scope and permissions</summary>
+      <p>This first version reads the active page. It preserves text, basic formatting and simple table cells; images, handwriting and attachments are explicitly marked as omitted. OneNote's freeform layout and list indentation can change in Markdown.</p>
+      <p>The code does not change your OneNote page or run automatic synchronization. The manifest uses <strong>ReadWriteDocument</strong> because Microsoft requires that permission for OneNote-specific document APIs, including reads. There is no Graph permission or additional login flow in the code.</p>
+      <p>The bridge processes the page inside the pane. It does not upload notebook content, store credentials or save page content on this website. Export happens when you choose a handoff action.</p>
+      <p>Validated with automated tests and a simulated Office host. Real OneNote access, shared-notebook access and the iPad handoff still need this test in your account.</p>
+    </details>
+    <details>
+      <summary>After the test</summary>
+      <p>If the page read works, it proves this route can read that shared page through OneNote's own document API. It does not yet prove reliable background sync or safe two-way editing. A fuller bridge would need page navigation, change tracking and conflict handling. On iPad, this browser-based route needs an open OneNote session.</p>
+      <p>You can remove the add-in from My Add-ins afterwards. Test notes in Obsidian can be deleted independently.</p>
+    </details>
+    <footer><a href="https://github.com/revvnik/portfolio/tree/main/onenote-bridge" target="_blank" rel="noopener noreferrer">Source code</a><span>v0.1.0</span></footer>
+  </main>
+</body>
+</html>
