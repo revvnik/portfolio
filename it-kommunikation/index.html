@@ -154,13 +154,23 @@ code { font-size: .9em; overflow-wrap: anywhere; }
 .recap { border-radius: 20px; background: var(--paper); border: 1px solid var(--line); padding: clamp(23px, 3.1vw, 39px); }
 .recap-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
 .recap-head .pill { flex: none; margin-top: 3px; }
-.recap-intro { color: var(--muted); margin-top: 11px; font-size: 18px; }
-.recap-grid { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
-.recap-grid li { display: grid; grid-template-columns: 35px 1fr; gap: 10px; align-content: start; align-items: start; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #f6f9fa; }
-.recap-icon { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 8px; color: var(--teal); background: var(--wash); }
-.recap-icon .icon { width: 19px; height: 19px; }
-.recap-grid h2 { font-size: 17px; line-height: 1.24; }
-.recap-grid p { margin-top: 3px; color: var(--muted); font-size: 15px; line-height: 1.36; }
+.recap-intro { color: var(--muted); margin-top: 9px; font-size: 17px; line-height: 1.42; }
+.recap-intro strong, .recap-link strong { color: var(--ink); }
+.recap-extra { margin-top: 6px; color: var(--muted); font-size: 15px; line-height: 1.42; }
+.recap-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+.recap-group { padding: 12px 14px 5px; border: 1px solid var(--line); border-radius: 11px; background: #f6f9fa; }
+.recap-direction { border-color: #b4d8ce; background: #eff8f5; }
+.recap-media .recap-icon { background: #e5edf3; color: #244960; }
+.recap-group h2 { font-size: 20px; line-height: 1.2; letter-spacing: -.022em; }
+.recap-question { margin: 3px 0 8px; color: var(--muted); font-size: 14px; }
+.recap-grid { list-style: none; margin: 0; padding: 0; }
+.recap-grid li { display: grid; grid-template-columns: 29px 1fr; gap: 8px; align-items: start; padding: 7px 0; border-top: 1px solid #cddde2; }
+.recap-grid li > div { line-height: 1.34; }
+.recap-icon { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 7px; color: var(--teal); background: var(--wash); }
+.recap-icon .icon { width: 17px; height: 17px; }
+.recap-grid h3 { display: inline; font-size: 16px; line-height: 1.35; }
+.recap-grid p { display: inline; color: var(--muted); font-size: 15px; line-height: 1.35; }
+.recap-link { margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.4; }
 .recall { margin-top: 13px; padding: 12px 14px; background: #e9f4f3; border: 1px solid #b8dcd4; border-radius: 10px; }
 .recall p { font-size: 16px; }
 .recall p + p { margin-top: 6px; }
@@ -221,8 +231,7 @@ dialog::backdrop { background: #071827ae; }
   .segment { min-height: 67px; }
   .control-hint { display: none; }
   .controls .button { padding-inline: 12px; font-size: 15px; }
-  .recap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .recap-grid li { grid-template-columns: 1fr; gap: 6px; padding: 10px; }
+  .recap-groups { grid-template-columns: 1fr; }
   .recap-head { flex-direction: column-reverse; gap: 7px; }
 }
 @media (max-width: 385px) {
@@ -250,9 +259,10 @@ dialog::backdrop { background: #071827ae; }
   :fullscreen .option { min-height: 55px; }
   :fullscreen .eyebrow, :fullscreen .lab-top, :fullscreen .lab-label { font-size: 14px; }
   :fullscreen .lab-foot, :fullscreen .lab-note, :fullscreen .signal-art figcaption, :fullscreen .flow-node { font-size: 16px; }
-  :fullscreen .recap-grid li { padding: 16px; }
-  :fullscreen .recap-grid h2, :fullscreen .recap-intro { font-size: 21px; }
-  :fullscreen .recap-grid p, :fullscreen .recall p, :fullscreen .controls .button { font-size: 19px; }
+  :fullscreen .recap-group { padding-inline: 18px; }
+  :fullscreen .recap-group h2, :fullscreen .recap-intro { font-size: 21px; }
+  :fullscreen .recap-grid h3, :fullscreen .recap-grid p, :fullscreen .recall p, :fullscreen .controls .button { font-size: 19px; }
+  :fullscreen .recap-question, :fullscreen .recap-extra, :fullscreen .recap-link { font-size: 17px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; }
@@ -318,7 +328,7 @@ dialog::backdrop { background: #071827ae; }
       <li><time>1:45–3:00</time> <strong>02 · Nikita · Glasfaser</strong><p>„Ein Modul sendet Licht durch die Faser. Das passt für die lange Strecke neben elektrischen Anlagen. Ein enger Knick oder ein verschmutzter Stecker kann aber die Lichtleistung am Empfänger senken.“</p></li>
       <li><time>3:00–4:15</time> <strong>03 · Turgut · Funk</strong><p>„Antennen übertragen das Signal ohne Kabel. Die Anzeige bleibt beweglich. Wände und Metall können den Empfang verschlechtern, und andere Sender auf derselben Frequenz können das Nutzsignal stören.“</p></li>
       <li><time>4:15–5:25</time> <strong>04 · Kiron · Senderichtungen</strong><p>„Wir schicken das Startsignal und wollen eine Antwort. Hier ist nur eine Richtung zur selben Zeit möglich. Das ist Halbduplex. Zeigt danach an den Pfeilen, was Simplex und Vollduplex unterscheidet.“</p></li>
-      <li><time>5:25–6:00</time> <strong>Abschluss · alle</strong><p>Lasst die Klasse die mögliche Funkstörung am Metallregal benennen und einen einfachen Test vorschlagen.</p></li>
+      <li><time>5:25–6:00</time> <strong>Abschluss · alle</strong><p>Lasst die Klasse beim Messgerät zuerst das Medium und dann die Betriebsart nennen. Fragt nach der Begründung und löst auf.</p></li>
     </ol>
     <p><strong>Tastatur</strong> · 1, 2 oder 3 wählt A, B oder C. Pfeil rechts führt die jeweilige Aktion aus, Pfeil links springt zur vorigen Station.</p>
   </div>
@@ -338,6 +348,8 @@ dialog::backdrop { background: #071827ae; }
       <li><a href="https://www.bluetooth.com/learn-about-bluetooth/key-attributes/range/" target="_blank" rel="noopener">Bluetooth SIG · Funk, Antennen und Reichweite</a></li>
       <li><a href="https://www.ti.com/lit/an/slla272d/slla272d.pdf" target="_blank" rel="noopener">Texas Instruments · Kupferleitungen und Störeinflüsse</a></li>
       <li><a href="https://www.analog.com/en/resources/app-notes/an-960.html" target="_blank" rel="noopener">Analog Devices · Simplex, Halbduplex und Vollduplex</a></li>
+      <li><a href="https://www.itu.int/rec/T-REC-X.200-199407-I" target="_blank" rel="noopener">ITU-T X.200 · Schnittstellen und Protokolle</a></li>
+      <li><a href="https://www.bluetooth.com/bluetooth-le-primer/" target="_blank" rel="noopener">Bluetooth SIG · Adressierung, Fehlerprüfung und Bestätigung</a></li>
     </ul>
   </div>
 </dialog>
@@ -413,13 +425,16 @@ const chapters = [
   }
 ];
 
-const recapItems = [
-  ["plug", "Kupfer", "Elektrische Signale. Lange Leitungen dämpfen, elektrische Geräte können Störsignale einkoppeln."],
-  ["light", "Glasfaser", "Lichtsignale. Enge Biegungen und verschmutzte Stecker schwächen den Empfang."],
-  ["wifi", "Funk", "Funkwellen. Hindernisse dämpfen oder reflektieren, andere Sender können stören."],
-  ["arrow", "Simplex", "Eine Senderichtung. Beispiel Rundfunk."],
-  ["exchange", "Halbduplex", "Beide Richtungen abwechselnd. Beispiel Sprechfunk."],
-  ["exchange", "Vollduplex", "Beide Richtungen gleichzeitig. Beispiel Telefon."]
+const mediaItems = [
+  ["plug", "Kupfer", "Elektrische Signale. Dämpfung und eingekoppelte Störungen."],
+  ["light", "Glasfaser", "Lichtsignale. Enge Biegungen und verschmutzte Stecker."],
+  ["wifi", "Funk", "Funkwellen. Hindernisse und andere Sender."]
+];
+
+const directionItems = [
+  ["arrow", "Simplex", "Eine Richtung, wie beim Rundfunk."],
+  ["exchange", "Halbduplex", "Beide Richtungen abwechselnd, wie beim Sprechfunk."],
+  ["exchange", "Vollduplex", "Beide Richtungen gleichzeitig, wie beim Telefon."]
 ];
 
 const steps = ["Start", ...chapters.map(chapter => chapter.label), "Merkliste"];
@@ -588,6 +603,17 @@ function renderChapter(index) {
     </section>`;
 }
 
+function renderRecapGroup(id, title, question, items) {
+  return `
+    <section class="recap-group recap-${id}" aria-labelledby="${id}-title">
+      <h2 id="${id}-title">${title}</h2>
+      <p class="recap-question">${question}</p>
+      <ul class="recap-grid">
+        ${items.map(([symbol, name, text]) => `<li><span class="recap-icon">${icon(symbol)}</span><div><h3>${name}.</h3> <p>${text}</p></div></li>`).join("")}
+      </ul>
+    </section>`;
+}
+
 function renderRecap() {
   return `
     <section class="recap" aria-labelledby="slide-title">
@@ -595,13 +621,16 @@ function renderRecap() {
         <div><p class="eyebrow">Abschluss · Alle</p><h1 id="slide-title" tabindex="-1">Was braucht IT-Kommunikation?</h1></div>
         <span class="pill">${icon("check")} Empfang bestätigt</span>
       </div>
-      <p class="recap-intro">Sender und Empfänger brauchen passende Schnittstellen, ein Übertragungsmedium und gemeinsame Regeln für das Senden und Empfangen.</p>
-      <ul class="recap-grid">
-        ${recapItems.map(([symbol, title, text]) => `<li><span class="recap-icon">${icon(symbol)}</span><div><h2>${title}</h2><p>${text}</p></div></li>`).join("")}
-      </ul>
+      <p class="recap-intro"><strong>Sender und Empfänger</strong> tauschen Daten als Signale über passende Schnittstellen aus. Ein gemeinsames <strong>Protokoll</strong> legt fest, wie Nachrichten aufgebaut sind, was sie bedeuten und wie der Austausch abläuft.</p>
+      <p class="recap-extra">Je nach Anwendung kommen Zieladressen, Fehlerprüfung, Empfangsbestätigungen oder Verschlüsselung hinzu.</p>
+      <div class="recap-groups">
+        ${renderRecapGroup("media", "Übertragungsmedium", "Wodurch läuft das Signal?", mediaItems)}
+        ${renderRecapGroup("direction", "Betriebsart (Senderichtung)", "Wer kann wann und in welche Richtung senden?", directionItems)}
+      </div>
+      <p class="recap-link"><strong>Zwei Eigenschaften derselben Verbindung.</strong> In der Aula nutzen Station und Anzeige Funk als Medium und Halbduplex als Betriebsart.</p>
       <div class="recall">
-        <p><strong>Frage an die Klasse.</strong> Hinter einem Metallregal fällt der Funkempfang aus. Mit freier Sicht funktioniert er. Welche Ursache liegt nahe und wie prüft ihr sie?</p>
-        ${recallRevealed ? '<p id="solution-title" tabindex="-1"><strong>Das Regal kann Funk abschirmen oder reflektieren.</strong> Versetzt die Anzeige so, dass das Regal aus dem Signalweg ist. Wiederholt den Test möglichst bei gleichem Abstand zur Station.</p>' : ""}
+        <p><strong>Frage an die Klasse.</strong> Ein Messgerät sendet über ein Kupferkabel laufend Messwerte. Das Bedienpult soll gleichzeitig Einstellungen zurückschicken. Welches Medium und welche Betriebsart braucht diese Verbindung?</p>
+        ${recallRevealed ? '<p id="solution-title" tabindex="-1"><strong>Kupfer und Vollduplex.</strong> Das Kabel ist das Medium. Im Vollduplexbetrieb können Messwerte und Einstellungen gleichzeitig in entgegengesetzte Richtungen laufen.</p>' : ""}
       </div>
     </section>`;
 }
