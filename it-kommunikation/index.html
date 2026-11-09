@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Eine interaktive Klassenpräsentation über IT-Kommunikation. Vier Stationen, vier Abstimmungen und der Weg einer Webanfrage.">
+<title>Netzwerk-Labor | Wie Geräte kommunizieren</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f2232'/%3E%3Cpath d='M11 20h18M20 11v18' stroke='%2366e2bd' stroke-width='2'/%3E%3Ccircle cx='20' cy='20' r='5' fill='%2366e2bd'/%3E%3Ccircle cx='11' cy='20' r='2.5' fill='%2366e2bd'/%3E%3Ccircle cx='29' cy='20' r='2.5' fill='%2366e2bd'/%3E%3C/svg%3E">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f3f6f8;
+  --paper: #fff;
+  --ink: #122638;
+  --muted: #455b6c;
+  --dim: #526879;
+  --line: #cfdbe3;
+  --navy: #102638;
+  --lab: #0b1c2c;
+  --mint: #80edc8;
+  --teal: #00654f;
+  --wash: #e1f7ef;
+  --warm: #ffd1a2;
+  --mono: ui-monospace, "SF Mono", Consolas, monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { min-width: 320px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.5 var(--sans); }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; cursor: pointer; }
+button:disabled { cursor: default; }
+:focus-visible { outline: 3px solid #06785e; outline-offset: 4px; }
+.lab :focus-visible, .hero :focus-visible { outline-color: var(--mint); }
+a { color: var(--teal); text-underline-offset: .19em; }
+a:hover { color: var(--ink); }
+h1, h2, h3, p, figure { margin: 0; }
+svg { display: block; }
+.icon { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.mono, code, kbd { font-family: var(--mono); }
+code { font-size: .9em; overflow-wrap: anywhere; }
+.shell { width: min(1232px, 100% - 64px); margin-inline: auto; }
+.topbar { border-bottom: 1px solid var(--line); background: var(--paper); }
+.topbar .shell { min-height: 69px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 11px; color: var(--ink); font-weight: 800; font-size: 18px; letter-spacing: -.035em; }
+.brand-mark { display: grid; place-items: center; height: 37px; width: 37px; border-radius: 10px; background: var(--navy); color: var(--mint); }
+.brand-mark .icon { width: 23px; height: 23px; }
+.utilities { display: flex; gap: 9px; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid transparent; border-radius: 10px; padding: 11px 16px; font-weight: 720; line-height: 1.25; min-height: 46px; text-align: center; }
+.button .icon { width: 19px; height: 19px; }
+.button-quiet { color: var(--ink); border-color: var(--line); background: var(--paper); }
+.button-quiet:hover:not(:disabled) { border-color: #7f9aa8; background: #eef4f7; }
+.button-quiet:disabled { opacity: .47; }
+.utility { padding: 8px 11px; min-height: 41px; font-size: 14px; }
+.button-primary { color: white; background: #00634e; border-color: #00634e; }
+.button-primary:hover { background: #004d3d; border-color: #004d3d; }
+.button-mint { color: #0b3329; background: var(--mint); border-color: var(--mint); }
+.button-mint:hover { background: #b6f8df; border-color: #b6f8df; }
+.progress { margin: 20px 0 18px; }
+.progress ol { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); list-style: none; gap: 7px; padding: 0; margin: 0; }
+.step { display: flex; align-items: center; gap: 9px; width: 100%; height: 100%; min-height: 43px; text-align: left; border: 1px solid transparent; border-radius: 9px; background: #e7edf1; color: #435868; padding: 6px 10px; font-size: 14px; font-weight: 720; }
+.step:hover { background: #dce8ed; }
+.step[aria-current="step"] { border-color: #9ad5c3; background: var(--wash); color: #084f3f; }
+.step.done:not([aria-current]) { background: #edf4f1; color: #366155; }
+.step-no { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 6px; background: #d5e1e7; color: #2f4859; font: 700 11px/1 var(--mono); flex: none; }
+.step[aria-current="step"] .step-no { background: #00634e; color: white; }
+.step.done:not([aria-current]) .step-no { background: #cee7dd; color: #075741; }
+.eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 750 12px/1.4 var(--mono); letter-spacing: .09em; text-transform: uppercase; }
+.eyebrow .icon { width: 17px; height: 17px; }
+.eyebrow .separator { opacity: .65; }
+.hero { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr .91fr; min-height: 530px; align-items: center; gap: clamp(25px, 4vw, 66px); padding: clamp(26px, 5vw, 66px); border-radius: 20px; color: #f5fbff; background: radial-gradient(ellipse at 86% 39%, #16394a 0, transparent 59%), #0c2132; }
+.hero::before, .lab::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(#c5e7ff10 1px, transparent 1px), linear-gradient(90deg, #c5e7ff10 1px, transparent 1px); background-size: 27px 27px; mask-image: linear-gradient(90deg, transparent 2%, #000 75%); }
+.hero-copy, .hero-visual { position: relative; }
+.hero .eyebrow { color: var(--mint); }
+.hero h1 { margin-top: 17px; font-size: clamp(3.1rem, 6.1vw, 5.6rem); font-weight: 820; line-height: 1; letter-spacing: -.058em; word-spacing: .025em; }
+.hero h1 span { display: block; color: var(--mint); }
+.hero .brief { font-size: clamp(17px, 1.7vw, 21px); line-height: 1.45; color: #d9e8ee; margin: 22px 0; max-width: 34rem; }
+.hero .prompt { color: #f3fbff; font-weight: 650; }
+.hero-start { margin-top: 27px; display: flex; flex-wrap: wrap; align-items: center; gap: 13px; }
+.hero-start .button { padding: 13px 18px; }
+.hero-start .key-hint { color: #c1d5de; font-size: 13px; }
+.browser-frame { overflow: hidden; border: 1px solid #507081; border-radius: 13px; background: #102637; box-shadow: 0 19px 46px #020a14a6; }
+.browser-bar { display: flex; align-items: center; gap: 12px; padding: 12px 13px; background: #183448; border-bottom: 1px solid #375769; }
+.dots { display: flex; gap: 5px; flex: none; }
+.dots i { display: block; height: 6px; width: 6px; border-radius: 50%; background: #82a2b4; }
+.address { min-width: 0; padding: 4px 8px; width: 100%; color: #e1edf3; border: 1px solid #446378; border-radius: 6px; background: #0e2435; font: 12px/1.6 var(--mono); overflow-wrap: anywhere; }
+.browser-main { display: grid; min-height: 192px; justify-items: start; align-content: center; gap: 8px; padding: 23px 26px; }
+.browser-main .eyebrow { color: var(--warm); }
+.browser-main h2 { font-size: clamp(21px, 2.3vw, 31px); line-height: 1.13; letter-spacing: -.035em; }
+.browser-main p { font-size: 15px; color: #c8dbe5; }
+.hero-map { display: grid; grid-template-columns: 1fr .38fr 1fr .38fr 1fr; align-items: center; margin-top: 17px; }
+.hero-map > div { display: grid; justify-items: center; gap: 5px; min-height: 65px; align-content: center; background: #112c3d; border: 1px solid #466477; border-radius: 9px; color: #cfe1eb; font: 700 11px/1.4 var(--mono); }
+.hero-map > div .icon { color: var(--mint); }
+.hero-map > .map-gap { border-top: 2px dashed #eaa777; }
+.hero-map > .map-line { border-top: 2px solid #54798b; }
+.hero-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 18px; border-bottom: 1px solid var(--line); padding: 16px 2px; }
+.hero-meta p { color: var(--muted); font-size: 15px; }
+.hero-meta strong { color: var(--ink); }
+.pill { display: inline-flex; align-items: center; gap: 6px; width: fit-content; color: #075943; background: var(--wash); border-radius: 999px; padding: 5px 10px; font-size: 13px; font-weight: 760; line-height: 1.3; }
+.pill .icon { width: 15px; height: 15px; }
+.slide { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .88fr); min-height: 480px; gap: clamp(18px, 3vw, 39px); padding: clamp(23px, 3.1vw, 39px); border: 1px solid var(--line); border-radius: 20px; background: var(--paper); }
+.slide-copy { min-width: 0; }
+.slide .eyebrow, .recap .eyebrow { color: var(--teal); }
+.slide h1, .recap h1 { margin-top: 9px; font-size: clamp(2.25rem, 4.45vw, 3.9rem); line-height: 1.04; font-weight: 820; letter-spacing: -.05em; word-spacing: .025em; }
+.story { color: var(--muted); font-size: clamp(17px, 1.55vw, 20px); line-height: 1.48; margin-top: 14px; }
+.question { margin-top: 17px; font-weight: 780; font-size: clamp(17px, 1.65vw, 22px); line-height: 1.28; letter-spacing: -.019em; }
+.vote-instruction { margin: 6px 0 10px; color: var(--muted); font-size: 14px; }
+.answers { display: grid; gap: 7px; }
+.option { display: flex; align-items: center; gap: 11px; min-height: 50px; width: 100%; text-align: left; border: 1px solid #c5d4de; border-radius: 9px; padding: 7px 11px; color: var(--ink); background: #f7f9fb; font-size: clamp(15px, 1.38vw, 18px); font-weight: 660; line-height: 1.25; }
+.option:hover { background: #edf4f7; border-color: #8ba9b9; }
+.option[aria-pressed="true"] { border-color: #23876f; box-shadow: inset 0 0 0 1px #23876f; background: var(--wash); }
+.option-letter { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 7px; background: #e4ecf2; color: #304d61; font: 800 14px/1 var(--mono); flex: none; }
+.option[aria-pressed="true"] .option-letter { background: #00634e; color: #fff; }
+.result { margin-top: 15px; }
+.result-title { display: flex; align-items: center; gap: 9px; font-size: clamp(16px, 1.55vw, 20px); line-height: 1.25; padding: 10px 12px; border: 1px solid #abddce; border-radius: 9px; background: var(--wash); color: #065443; }
+.result-title .icon { width: 21px; height: 21px; }
+.class-choice { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+.explain-list { display: grid; gap: 10px; list-style: none; margin: 14px 0 0; padding: 0; }
+.explain-list li { border-left: 3px solid #9cd6c5; padding-left: 11px; font-size: clamp(16px, 1.38vw, 18px); line-height: 1.38; color: var(--muted); }
+.explain-list strong { color: var(--ink); }
+.lab { overflow: hidden; position: relative; align-self: stretch; display: grid; grid-template-rows: auto 1fr auto; min-width: 0; min-height: 355px; border-radius: 14px; background: radial-gradient(ellipse at 90% 32%, #143749, transparent 68%), var(--lab); color: #edf7ff; }
+.lab::before { mask-image: linear-gradient(transparent 6%, #000 52%, transparent 98%); }
+.lab > * { position: relative; }
+.lab-top, .lab-foot { padding: 13px 15px; display: flex; align-items: center; gap: 10px; justify-content: space-between; flex-wrap: wrap; background: #0d2133d4; }
+.lab-top { border-bottom: 1px solid #365368; font: 700 11px/1.4 var(--mono); color: #bad0df; letter-spacing: .065em; }
+.lab-foot { border-top: 1px solid #365368; font-size: 13px; line-height: 1.38; color: #bed5e0; }
+.lab-status { display: inline-flex; align-items: center; gap: 6px; color: var(--warm); font-weight: 750; letter-spacing: 0; }
+.lab-status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.lab-status.good { color: var(--mint); }
+.lab-content { display: grid; align-content: center; gap: 14px; padding: clamp(15px, 2.15vw, 27px); }
+.lab-content h2 { color: #e9f5fb; font-size: clamp(17px, 1.55vw, 23px); line-height: 1.2; letter-spacing: -.025em; }
+.lab-label { color: #b4cbd9; font: 700 11px/1.45 var(--mono); letter-spacing: .075em; text-transform: uppercase; }
+.flow { display: grid; grid-template-columns: 1fr .32fr 1fr .32fr 1fr; align-items: center; }
+.flow-node { display: grid; justify-items: center; gap: 9px; align-content: center; text-align: center; border-radius: 9px; min-height: 89px; padding: 7px 3px; background: #17374b; border: 1px solid #507287; color: #edf7ff; font-size: 12px; line-height: 1.25; font-weight: 700; }
+.flow-node .icon { width: 28px; height: 28px; color: #a7efdb; }
+.wire { position: relative; display: block; height: 2px; background: #6b9aad; }
+.wire.gap { height: 0; border-top: 2px dashed #e2a376; background: none; }
+.wire.live { background: var(--mint); }
+.wire.live::after { content: ""; position: absolute; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 9px #80edc8; animation: packet 1.7s ease-in-out 2 forwards; }
+@keyframes packet { from { left: 0; opacity: .25; } to { left: calc(100% - 8px); opacity: 1; } }
+.lab-note, .terminal { border: 1px solid #486b80; background: #0d2233; padding: 10px 12px; border-radius: 8px; color: #d9e9f2; font: 13px/1.5 var(--mono); overflow-wrap: anywhere; }
+.lab-note strong, .terminal strong { color: var(--mint); }
+.lab-note .warn { color: var(--warm); }
+.mapping { display: grid; gap: 6px; margin: 0; }
+.mapping > div { display: grid; grid-template-columns: 74px 1fr; align-items: baseline; gap: 8px; padding: 9px 10px; background: #112c3e; border: 1px solid #426477; border-radius: 8px; }
+.mapping dt { color: #b9d2e0; font: 700 11px/1.4 var(--mono); letter-spacing: .04em; }
+.mapping dd { margin: 0; min-width: 0; color: #edf9ff; font: 700 clamp(12px, 1.25vw, 16px)/1.4 var(--mono); overflow-wrap: anywhere; }
+.mapping .warn { color: var(--warm); }
+.mapping .good { color: var(--mint); }
+.segments { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.segment { display: grid; align-content: center; min-height: 90px; gap: 5px; text-align: center; border-radius: 8px; border: 1px solid #538096; background: #143548; color: #d9edf8; font-size: 12px; line-height: 1.25; }
+.segment b { font: 800 23px/1 var(--mono); }
+.segment.lost { border: 1px dashed #f6aa7e; color: var(--warm); background: #392c31; }
+.segment.fixed { border-color: var(--mint); color: var(--mint); background: #143e3a; }
+.terminal { display: grid; gap: 4px; }
+.plan-preview { border-left: 3px solid var(--mint); padding-left: 10px; font-size: 14px; line-height: 1.4; color: #e5f0f5; }
+.plan-preview strong { color: var(--mint); }
+.controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 13px; }
+.control-hint { color: var(--muted); font-size: 14px; text-align: center; }
+.control-hint kbd { font-size: 12px; padding: 1px 4px; border-radius: 4px; border: 1px solid var(--line); background: var(--paper); }
+.recap { border-radius: 20px; background: var(--paper); border: 1px solid var(--line); padding: clamp(23px, 3.1vw, 39px); }
+.recap-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
+.recap-head .pill { flex: none; margin-top: 3px; }
+.recap-intro { color: var(--muted); margin-top: 11px; font-size: 18px; }
+.recap-grid { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+.recap-grid li { display: grid; grid-template-columns: 35px 1fr; gap: 10px; align-content: start; align-items: start; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #f6f9fa; }
+.recap-icon { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 8px; color: var(--teal); background: var(--wash); }
+.recap-icon .icon { width: 19px; height: 19px; }
+.recap-grid h2 { font-size: 17px; line-height: 1.24; }
+.recap-grid p { margin-top: 3px; color: var(--muted); font-size: 15px; line-height: 1.36; }
+.recall { margin-top: 13px; padding: 12px 14px; background: #e9f4f3; border: 1px solid #b8dcd4; border-radius: 10px; }
+.recall p { font-size: 16px; }
+.recall p + p { margin-top: 6px; }
+.site-footer { color: var(--dim); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 7px 16px; margin: 20px 0; padding: 12px 2px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.hero-meta + .site-footer { border-top: 0; }
+.site-footer button { border: 0; background: none; color: var(--teal); padding: 0; font: inherit; font-weight: 730; text-decoration: underline; text-underline-offset: .2em; }
+dialog { max-height: calc(100% - 34px); width: min(690px, 100% - 32px); max-width: none; overflow: auto; border: 1px solid var(--line); border-radius: 15px; padding: 0; color: var(--ink); background: var(--paper); box-shadow: 0 24px 65px #091d3755; }
+dialog::backdrop { background: #071827ae; }
+.dialog-head { position: sticky; top: 0; background: var(--paper); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 17px 22px; border-bottom: 1px solid var(--line); z-index: 1; }
+.dialog-head h2 { font-size: 25px; letter-spacing: -.04em; }
+.dialog-body { padding: 18px 22px 23px; font-size: 16px; }
+.dialog-body > p { color: var(--muted); }
+.agenda { list-style: none; margin: 13px 0 18px; padding: 0; display: grid; gap: 7px; }
+.agenda li { padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: #f7f9fb; }
+.agenda li p { color: var(--muted); margin-top: 3px; }
+.agenda time { color: var(--teal); font: 700 13px/1.4 var(--mono); }
+.dialog-body h3 { margin-top: 17px; font-size: 19px; }
+.sources { padding-left: 22px; margin: 5px 0 0; }
+.notes-text { margin: 10px 0; font-size: 18px; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 900px) {
+  .shell { width: min(1232px, 100% - 40px); }
+  .step { font-size: 13px; padding-inline: 7px; gap: 6px; }
+  .hero { min-height: 480px; padding: 32px; }
+  .hero h1 { font-size: clamp(3rem, 7.25vw, 4.7rem); }
+  .slide { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); padding: 23px; }
+  .flow { grid-template-columns: 1fr .2fr 1fr .2fr 1fr; }
+  .flow-node { font-size: 11px; }
+}
+@media (max-width: 680px) {
+  .shell { width: calc(100% - 28px); }
+  .topbar .shell { min-height: 61px; gap: 8px; }
+  .brand { font-size: 16px; gap: 7px; }
+  .brand-mark { width: 31px; height: 31px; }
+  .brand-mark .icon { width: 19px; height: 19px; }
+  .utilities { gap: 5px; }
+  .utility { padding: 7px 8px; font-size: 13px; }
+  .utility .icon { width: 16px; height: 16px; }
+  .progress { margin: 12px 0; }
+  .progress ol { gap: 4px; }
+  .step { justify-content: center; min-height: 37px; gap: 0; padding: 4px; }
+  .step-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .hero, .slide { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .hero { min-height: 0; padding: 23px 19px; }
+  .hero h1 { font-size: clamp(2.7rem, 10.9vw, 4.2rem); }
+  .hero .brief { margin: 15px 0; }
+  .hero-start { margin-top: 17px; }
+  .hero-start .key-hint { display: none; }
+  .browser-main { min-height: 134px; padding: 16px; }
+  .hero-map { margin-top: 11px; }
+  .hero-map > div { min-height: 56px; }
+  .slide, .recap { padding: 18px; }
+  .slide { min-height: 0; }
+  .lab { min-height: 0; }
+  .lab-content { gap: 10px; }
+  .lab-top, .lab-foot { padding: 10px 12px; }
+  .flow-node { min-height: 67px; }
+  .segment { min-height: 67px; }
+  .control-hint { display: none; }
+  .controls .button { padding-inline: 12px; font-size: 15px; }
+  .recap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .recap-grid li { grid-template-columns: 1fr; gap: 6px; padding: 10px; }
+  .recap-head { flex-direction: column-reverse; gap: 7px; }
+}
+@media (max-width: 385px) {
+  .utility .icon { display: none; }
+  .brand { font-size: 15px; }
+}
+@media (max-height: 810px) and (min-width: 681px) {
+  .topbar .shell { min-height: 61px; }
+  .progress { margin: 13px 0; }
+  .hero { min-height: 465px; padding-block: 34px; }
+  .slide, .recap { padding-block: 22px; }
+  .slide { min-height: 440px; }
+  .site-footer { margin-top: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; }
+}
+</style>
+</head>
+<body>
+<svg aria-hidden="true" width="0" height="0" style="position:absolute" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="network" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="5" rx="1"/><rect x="2.5" y="16.5" width="6" height="5" rx="1"/><rect x="15.5" y="16.5" width="6" height="5" rx="1"/><path d="M12 7.5v5m-6.5 4v-4h13v4"/></symbol>
+  <symbol id="laptop" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="13" rx="2"/><path d="M2 18l1.5 2h17l1.5-2M9 17h6"/></symbol>
+  <symbol id="wifi" viewBox="0 0 24 24"><path d="M2 8.5a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0m-11 3.5a6 6 0 0 1 8 0"/><circle cx="12" cy="19" r="1"/></symbol>
+  <symbol id="server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="8" rx="2"/><rect x="3" y="13" width="18" height="8" rx="2"/><path d="M7 7h.01M7 17h.01m4-10h6m-6 10h6"/></symbol>
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="back" viewBox="0 0 24 24"><path d="M20 12H5m6 6-6-6 6-6"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="book" viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h13v17H6a2 2 0 0 1 0-4h13M8 7h7m-7 4h6"/></symbol>
+  <symbol id="fullscreen" viewBox="0 0 24 24"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></symbol>
+  <symbol id="minimize" viewBox="0 0 24 24"><path d="M4 8h4V4m8 0v4h4M8 20v-4H4m16 0h-4v4"/></symbol>
+  <symbol id="alert" viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4L12 3Zm0 6v4m0 3h.01"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></symbol>
+  <symbol id="target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="data" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6V3Zm7 0v5h5M9 12h6m-6 4h6"/></symbol>
+  <symbol id="exchange" viewBox="0 0 24 24"><path d="M4 7h15m-4-4 4 4-4 4M20 17H5m4-4-4 4 4 4"/></symbol>
+  <symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+</svg>
+<header class="topbar">
+  <div class="shell">
+    <div class="brand"><span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#network"/></svg></span> Netzwerk-Labor</div>
+    <div class="utilities">
+      <button type="button" class="button button-quiet utility" data-open="guide"><svg class="icon" aria-hidden="true"><use href="#book"/></svg>Ablauf</button>
+      <button type="button" class="button button-quiet utility" id="fullscreen-button" hidden></button>
+    </div>
+  </div>
+</header>
+<main class="shell">
+  <nav class="progress" aria-label="Stationen"><ol id="progress"></ol></nav>
+  <div id="stage"></div>
+  <noscript><p>Aktiviere JavaScript, um die vier Stationen und die Abstimmungen zu öffnen.</p></noscript>
+  <div id="controls" class="controls" hidden></div>
+  <footer class="site-footer">
+    <span>IT-Kommunikation · Klassenpräsentation · fiktives Schulnetz</span>
+    <button type="button" data-open="sources">Fachquellen</button>
+  </footer>
+</main>
+<dialog id="guide" aria-labelledby="guide-title">
+  <div class="dialog-head">
+    <h2 id="guide-title">Ablauf für die Gruppe</h2>
+    <form method="dialog"><button class="button button-quiet utility" aria-label="Ablauf schließen"><svg class="icon" aria-hidden="true"><use href="#close"/></svg></button></form>
+  </div>
+  <div class="dialog-body">
+    <p><strong>Ca. 6 Minuten.</strong> Eine Person bedient die Seite am Beamer. Lest pro Station den Fall vor, lasst die Klasse A, B oder C per Handzeichen wählen und löst dann auf. Die Auswahl am Bildschirm ist optional.</p>
+    <ol class="agenda">
+      <li><time>0:00–0:35</time> <strong>Einstieg · Robin</strong><p>„Der Vertretungsplan lädt nicht. Was muss alles funktionieren, damit er im Browser erscheint?“</p></li>
+      <li><time>0:35–1:45</time> <strong>01 · Robin · Verbindung</strong><p>„Der Browser ist der Client. Er fragt beim Webserver an. Bevor überhaupt etwas gesendet werden kann, braucht das Gerät Zugang zum Netz, etwa per WLAN oder Netzwerkkabel.“</p></li>
+      <li><time>1:45–2:55</time> <strong>02 · Nikita · Zieladresse</strong><p>„DNS liefert zum Namen eine IP-Adresse. Router können IP-Pakete Richtung Ziel weiterleiten. Die Portnummer gibt an, an welchen Dienst die Verbindung gehen soll.“</p></li>
+      <li><time>2:55–4:05</time> <strong>03 · Turgut · Transport</strong><p>„TCP erkennt anhand von Sequenznummern und Bestätigungen, welche Daten noch fehlen. Es sendet sie erneut und liefert dem Empfänger die Bytes in der richtigen Reihenfolge.“</p></li>
+      <li><time>4:05–5:15</time> <strong>04 · Kiron · Schutz und Antwort</strong><p>„Mit TLS prüft der Browser die Identität des Servers und schützt die Verbindung. Über HTTP fragt der Browser die Seite an. Mit 200 OK und dem HTML liefert der Server hier den Vertretungsplan.“</p></li>
+      <li><time>5:15–6:00</time> <strong>Abschluss · alle</strong><p>Gebt der Klasse kurz Zeit für die letzte Frage. Lasst eine Person begründen und zeigt die Antwort. Fasst die sechs Bausteine zusammen.</p></li>
+    </ol>
+    <p><strong>Tastatur</strong> · 1, 2 oder 3 wählt A, B oder C. Pfeil rechts führt die jeweilige Aktion aus, Pfeil links springt zur vorigen Station.</p>
+  </div>
+</dialog>
+<dialog id="sources" aria-labelledby="sources-title">
+  <div class="dialog-head">
+    <h2 id="sources-title">Fachquellen</h2>
+    <form method="dialog"><button class="button button-quiet utility" aria-label="Fachquellen schließen"><svg class="icon" aria-hidden="true"><use href="#close"/></svg></button></form>
+  </div>
+  <div class="dialog-body">
+    <p>Die Simulation zeigt einen vereinfachten Abruf mit HTTPS und HTTP/1.1 über TCP. Die Domain und IP-Adresse sind Beispiele für Dokumentation.</p>
+    <ul class="sources">
+      <li><a href="https://www.rfc-editor.org/rfc/rfc1034" target="_blank" rel="noopener">RFC 1034 · DNS</a></li>
+      <li><a href="https://www.rfc-editor.org/rfc/rfc9293#section-2.2" target="_blank" rel="noopener">RFC 9293 · TCP</a></li>
+      <li><a href="https://www.rfc-editor.org/rfc/rfc9846" target="_blank" rel="noopener">RFC 9846 · TLS 1.3</a></li>
+      <li><a href="https://www.rfc-editor.org/rfc/rfc9110#section-15" target="_blank" rel="noopener">RFC 9110 · HTTP und Statuscodes</a></li>
+    </ul>
+  </div>
+</dialog>
+<script>
+"use strict";
+
+const hostname = "portal.schule.example";
+const resource = "/vertretungsplan";
+const exampleIp = "192.0.2.42";
+const letters = ["A", "B", "C"];
+
+const chapters = [
+  {
+    name: "Robin",
+    label: "Verbindung",
+    title: "Die Verbindung fehlt.",
+    story: "Robin öffnet den Vertretungsplan auf dem Schul-Laptop. Das WLAN ist ausgeschaltet und es steckt kein Netzwerkkabel.",
+    question: "Was muss Robin zuerst tun?",
+    options: ["Die Seite neu laden", "Sich mit dem Schul-WLAN verbinden", "Die Adresse des Webservers ändern"],
+    correct: 1,
+    explanation: [
+      ["Client und Server", "Der Browser ist der Client und stellt die Anfrage. Der Webserver empfängt sie und sendet die Antwort zurück."],
+      ["Übertragungsweg", "Der Laptop braucht einen Netzzugang. Beim WLAN gehen Signale per Funk zum Access Point. Ethernet kann Daten über ein Netzwerkkabel übertragen."],
+      ["Netzwerkgeräte", "Ein Access Point verbindet WLAN-Geräte mit dem Netz. Ein Router leitet IP-Pakete zwischen Netzen weiter."]
+    ],
+    status: ["Keine Verbindung", "WLAN verbunden"],
+    caption: "Der erste Abschnitt der Strecke führt vom Laptop zum Schulnetz."
+  },
+  {
+    name: "Nikita",
+    label: "Zieladresse",
+    title: "Wohin soll die Anfrage?",
+    story: "Das WLAN steht und andere Seiten laden. Beim Schulportal meldet der Browser einen Fehler bei der Namensauflösung.",
+    question: "Welcher Dienst liefert die IP-Adresse zum Namen?",
+    options: ["DNS", "TCP", "TLS"],
+    correct: 0,
+    explanation: [
+      ["DNS", "Das Domain Name System liefert zum Namen <code>" + hostname + "</code> hier die IP-Adresse <code>" + exampleIp + "</code>."],
+      ["IP-Adresse", "Sie steht als Zieladresse in den IP-Paketen. Router nutzen diese Adresse, um die Pakete weiterzuleiten."],
+      ["Port", "Die Portnummer bezeichnet den Dienst auf der Zielseite. In unserem Beispiel wartet der HTTPS-Webserver auf TCP-Port 443."]
+    ],
+    status: ["Name nicht aufgelöst", "Ziel aufgelöst"],
+    caption: "Der Name ist für Menschen lesbar. Die IP-Adresse dient als Ziel im Netzwerk."
+  },
+  {
+    name: "Turgut",
+    label: "Transport",
+    title: "Ein Teil geht verloren.",
+    story: "Die TCP-Verbindung zum Server steht. Beim Aufbau der verschlüsselten Verbindung kommen Teil 1 und Teil 3 an. Teil 2 fehlt.",
+    question: "Was sorgt in diesem Beispiel dafür, dass Teil 2 ankommt?",
+    options: ["Der Browser lädt die Seite komplett neu", "Der Router ergänzt die fehlenden Daten", "TCP überträgt die fehlenden Daten erneut"],
+    correct: 2,
+    explanation: [
+      ["Daten in Abschnitten", "TCP überträgt einen Bytestrom in Segmenten. Sequenznummern geben an, an welcher Stelle die Bytes hingehören."],
+      ["Bestätigung und Wiederholung", "Der Empfänger meldet per ACK, bis wohin die Bytes lückenlos angekommen sind. Der Sender kann fehlende Bytes erneut übertragen."],
+      ["Reihenfolge", "Teil 3 kann warten, bis Teil 2 angekommen ist. Die Anwendung erhält die Bytes in der richtigen Reihenfolge."]
+    ],
+    status: ["Lücke erkannt", "Daten nachgeliefert"],
+    caption: "Die Nummern 01 bis 03 stehen vereinfacht für Abschnitte im Bytestrom."
+  },
+  {
+    name: "Kiron",
+    label: "HTTPS",
+    title: "Ist die Verbindung sicher?",
+    story: "TCP hat die fehlenden Daten nachgeliefert. Bevor Kiron den Plan abruft, muss der Browser die Identität der Gegenstelle prüfen.",
+    question: "Was prüft den Server und schützt den Abruf?",
+    options: ["Die IP-Adresse allein", "TLS mit Zertifikatsprüfung", "Ein HTTP-Statuscode"],
+    correct: 1,
+    explanation: [
+      ["TLS", "Der Browser prüft unter anderem, ob das Zertifikat vertrauenswürdig ist und zum Servernamen passt. TLS verschlüsselt die Daten und schützt sie vor unbemerkter Veränderung."],
+      ["HTTP", "Der Browser sendet <code>GET " + resource + "</code> über die geschützte Verbindung. HTTP legt fest, wie Anfrage und Antwort aufgebaut sind."],
+      ["Rückmeldung", "Der Server liefert <code>200 OK</code> und HTML. HTML beschreibt den Seiteninhalt. UTF-8 legt fest, wie die Zeichen als Bytes kodiert werden."]
+    ],
+    status: ["Prüfung ausstehend", "200 OK · Plan geladen"],
+    caption: "HTTPS ist HTTP über eine mit TLS geschützte Verbindung."
+  }
+];
+
+const recapItems = [
+  ["laptop", "Sender und Empfänger", "Browser und Webserver übernehmen je nach Richtung beide Rollen."],
+  ["data", "Daten und Format", "Eine GET-Anfrage und eine Antwort mit HTML, hier als UTF-8 kodiert."],
+  ["wifi", "Übertragungsweg", "Funk oder Kabel zum Netz. Netzwerkgeräte leiten Daten weiter."],
+  ["target", "Adressierung", "DNS löst den Namen auf. IP und Port geben Ziel und Dienst an."],
+  ["lock", "Protokolle und Schutz", "HTTP für den Austausch, TCP für den Transport, TLS für sicheren Webzugriff."],
+  ["exchange", "Rückmeldung", "TCP bestätigt empfangene Bytes. HTTP meldet das Ergebnis der Anfrage."]
+];
+
+const steps = ["Start", ...chapters.map(chapter => chapter.label), "Merkliste"];
+const selections = Array(chapters.length).fill(null);
+const revealed = Array(chapters.length).fill(false);
+let current = 0;
+let recallRevealed = false;
+
+const stage = document.getElementById("stage");
+const progress = document.getElementById("progress");
+const controls = document.getElementById("controls");
+const fullscreenButton = document.getElementById("fullscreen-button");
+
+function icon(name) {
+  return `<svg class="icon" aria-hidden="true"><use href="#${name}"/></svg>`;
+}
+
+function button(label, action, iconName, variant = "quiet") {
+  const symbol = icon(iconName);
+  const content = iconName === "back" ? symbol + label : label + symbol;
+  return `<button type="button" class="button button-${variant}" data-action="${action}">${content}</button>`;
+}
+
+function renderProgress() {
+  progress.innerHTML = steps.map((step, index) => {
+    const active = index === current ? 'aria-current="step"' : "";
+    const done = index > 0 && index <= chapters.length && revealed[index - 1];
+    const number = index === 0 ? "00" : index === steps.length - 1 ? "✓" : "0" + index;
+    return `<li><button type="button" class="step${done ? " done" : ""}" data-step="${index}" ${active}>
+      <span class="step-no" aria-hidden="true">${number}</span><span class="step-text">${step}</span>
+    </button></li>`;
+  }).join("");
+}
+
+function renderIntro() {
+  return `
+    <section class="hero" aria-labelledby="slide-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Klassenpräsentation <span class="separator">/</span> IT-Kommunikation</p>
+        <h1 id="slide-title" tabindex="-1">Eine Anfrage.<span>Vier Stationen.</span></h1>
+        <p class="brief">Der Vertretungsplan lädt nicht. Findet mit Robin, Nikita, Turgut und Kiron heraus, was beim Abruf einer Website alles funktionieren muss.</p>
+        <p class="prompt">Welche Bausteine braucht erfolgreiche IT-Kommunikation?</p>
+        <div class="hero-start">${button("Fall starten", "primary", "arrow", "mint")} <span class="key-hint">oder Pfeil rechts</span></div>
+      </div>
+      <figure class="hero-visual" aria-label="Simulierter Browser mit Netzwerkfehler">
+        <div class="browser-frame">
+          <div class="browser-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="address">https://${hostname}${resource}</span></div>
+          <div class="browser-main">
+            <p class="eyebrow">${icon("alert")} Abruf fehlgeschlagen</p>
+            <h2>Kein Vertretungsplan.</h2>
+            <p>08:00 Uhr im Schulnetz. Wo hängt die Anfrage?</p>
+          </div>
+        </div>
+        <div class="hero-map" aria-hidden="true">
+          <div>${icon("laptop")} CLIENT</div><span class="map-gap"></span><div>${icon("network")} NETZ</div><span class="map-line"></span><div>${icon("server")} SERVER</div>
+        </div>
+      </figure>
+    </section>
+    <div class="hero-meta">
+      <p><strong>So läuft es ab</strong> · Die Klasse stimmt ab, ihr löst auf und erklärt.</p>
+      <span class="pill">${icon("clock")} 5–7 Minuten · 4 Vortragende</span>
+    </div>`;
+}
+
+function flowNode(iconName, label) {
+  return `<div class="flow-node">${icon(iconName)}<span>${label}</span></div>`;
+}
+
+function renderLabContent(index, solved) {
+  switch (index) {
+    case 0:
+      return `
+        <p class="lab-label">Strecke 01 · Netzzugang</p>
+        <h2>Vom Laptop ins Schulnetz</h2>
+        <div class="flow">
+          ${flowNode("laptop", "Laptop")}<span class="wire ${solved ? "live" : "gap"}" aria-hidden="true"></span>
+          ${flowNode("wifi", "Access Point")}<span class="wire" aria-hidden="true"></span>${flowNode("network", "Schulnetz")}
+        </div>
+        <p class="lab-note">WLAN <span class="${solved ? "" : "warn"}">${solved ? "<strong>verbunden</strong>" : "ausgeschaltet"}</span></p>`;
+    case 1:
+      return `
+        <p class="lab-label">Strecke 02 · Name und Ziel</p>
+        <h2>Was steht im Adressbuch?</h2>
+        <dl class="mapping">
+          <div><dt>NAME</dt><dd>${hostname}</dd></div>
+          <div><dt>ZIEL-IP</dt><dd class="${solved ? "good" : "warn"}">${solved ? exampleIp : "unbekannt"}</dd></div>
+          <div><dt>ZIELPORT</dt><dd>TCP 443 · HTTPS</dd></div>
+        </dl>`;
+    case 2:
+      return `
+        <p class="lab-label">Strecke 03 · TCP</p>
+        <h2>Webserver → Browser</h2>
+        <div class="segments">
+          <div class="segment"><b>01</b><span>empfangen</span></div>
+          <div class="segment ${solved ? "fixed" : "lost"}"><b>02</b><span>${solved ? "nachgesendet" : "fehlt"}</span></div>
+          <div class="segment"><b>03</b><span>${solved ? "jetzt bereit" : "wartet"}</span></div>
+        </div>
+        <p class="lab-note">${solved ? "<strong>ACK</strong> · durchgehend bis Teil 3" : "<span class='warn'>ACK</span> · durchgehend bis Teil 1"}</p>`;
+    case 3:
+      return `
+        <p class="lab-label">Strecke 04 · HTTPS</p>
+        <h2>${solved ? "Der Vertretungsplan ist da." : "Browser und Webserver"}</h2>
+        <div class="flow">
+          ${flowNode("laptop", "Browser")}<span class="wire ${solved ? "live" : "gap"}" aria-hidden="true"></span>
+          ${flowNode("lock", solved ? "TLS aktiv" : "TLS-Prüfung")}<span class="wire" aria-hidden="true"></span>${flowNode("server", "Webserver")}
+        </div>
+        ${solved
+          ? `<div class="terminal"><span>→ GET ${resource}</span><strong>← 200 OK</strong><span>Content-Type: text/html; charset=utf-8</span></div>
+             <p class="plan-preview"><strong>1. Stunde</strong> · IT-Grundlagen · Raum B204</p>`
+          : `<p class="lab-note"><span class="warn">Zertifikatsprüfung</span> · ausstehend</p>`}`;
+  }
+}
+
+function renderChapter(index) {
+  const chapter = chapters[index];
+  const solved = revealed[index];
+  const selection = selections[index];
+  const answerLabel = letters[chapter.correct] + " · " + chapter.options[chapter.correct];
+  const vote = selection === null ? "" : selection === chapter.correct
+    ? "<p class='class-choice'>Die Klasse lag richtig.</p>"
+    : `<p class="class-choice">Die Klasse hatte ${letters[selection]} gewählt.</p>`;
+
+  const choices = `
+    <h2 id="vote-question" class="question">${chapter.question}</h2>
+    <p class="vote-instruction">Kurz überlegen und dann A, B oder C per Handzeichen wählen.</p>
+    <div class="answers" role="group" aria-labelledby="vote-question">
+      ${chapter.options.map((option, optionIndex) => `<button type="button" class="option" data-option="${optionIndex}" aria-pressed="${optionIndex === selection}"><span class="option-letter">${letters[optionIndex]}</span><span>${option}</span></button>`).join("")}
+    </div>
+    <p id="vote-status" class="sr-only" aria-live="polite"></p>`;
+
+  const explanation = `
+    <div class="result">
+      <h2 id="solution-title" class="result-title" tabindex="-1">${icon("check")} ${answerLabel}</h2>
+      ${vote}
+      <ul class="explain-list">
+        ${chapter.explanation.map(([title, detail]) => `<li><strong>${title}.</strong> ${detail}</li>`).join("")}
+      </ul>
+    </div>`;
+
+  return `
+    <section class="slide" aria-labelledby="slide-title">
+      <div class="slide-copy">
+        <p class="eyebrow">Station 0${index + 1} / 04 <span class="separator">·</span> ${chapter.name} <span class="separator">·</span> ${chapter.label}</p>
+        <h1 id="slide-title" tabindex="-1">${chapter.title}</h1>
+        ${solved ? explanation : `<p class="story">${chapter.story}</p>${choices}`}
+      </div>
+      <figure class="lab">
+        <div class="lab-top"><span>LABORANSICHT / SIMULATION</span><span class="lab-status${solved ? " good" : ""}">${chapter.status[Number(solved)]}</span></div>
+        <div class="lab-content">${renderLabContent(index, solved)}</div>
+        <figcaption class="lab-foot">${chapter.caption}</figcaption>
+      </figure>
+    </section>`;
+}
+
+function renderRecap() {
+  return `
+    <section class="recap" aria-labelledby="slide-title">
+      <div class="recap-head">
+        <div><p class="eyebrow">Abschluss · Alle</p><h1 id="slide-title" tabindex="-1">Was braucht IT-Kommunikation?</h1></div>
+        <span class="pill">${icon("check")} 200 OK · Ziel erreicht</span>
+      </div>
+      <p class="recap-intro">Vom Browser zum Webserver und zurück. Sechs Bausteine, die beim Abruf zusammenspielen.</p>
+      <ul class="recap-grid">
+        ${recapItems.map(([symbol, title, text]) => `<li><span class="recap-icon">${icon(symbol)}</span><div><h2>${title}</h2><p>${text}</p></div></li>`).join("")}
+      </ul>
+      <div class="recall">
+        <p><strong>Frage an die Klasse.</strong> Der Server antwortet mit <code>404 Not Found</code>. Ist die HTTP-Kommunikation zustande gekommen? Woran erkennt ihr das?</p>
+        ${recallRevealed ? '<p id="solution-title" tabindex="-1"><strong>Ja.</strong> Der Browser hat eine HTTP-Antwort erhalten. Der Statuscode 404 meldet, dass der Server die angefragte Ressource nicht gefunden hat.</p>' : ""}
+      </div>
+    </section>`;
+}
+
+function renderControls() {
+  controls.hidden = current === 0;
+  if (current === 0) {
+    controls.replaceChildren();
+    return;
+  }
+
+  const final = current === steps.length - 1;
+  let label;
+  let hint;
+  if (final) {
+    label = recallRevealed ? "Neu starten" : "Antwort zeigen";
+    hint = recallRevealed ? "Ein Satz pro Baustein" : "Eine Begründung aus der Klasse hören";
+  } else if (revealed[current - 1]) {
+    const next = chapters[current];
+    label = next ? "Weiter zu " + next.name : "Zur Merkliste";
+    hint = chapters[current - 1].name + " erklärt die Lösung";
+  } else {
+    label = "Auflösen";
+    hint = '<kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Auswahl übernehmen';
+  }
+
+  controls.innerHTML = button("Zurück", "back", "back") + `<span class="control-hint">${hint}</span>` + button(label, "primary", "arrow", "primary");
+}
+
+function render(focusId) {
+  renderProgress();
+  if (current === 0) {
+    stage.innerHTML = renderIntro();
+  } else if (current === steps.length - 1) {
+    stage.innerHTML = renderRecap();
+  } else {
+    stage.innerHTML = renderChapter(current - 1);
+  }
+  renderControls();
+  if (focusId) document.getElementById(focusId)?.focus({preventScroll: true});
+}
+
+function goTo(index) {
+  if (index < 0 || index >= steps.length || index === current) return;
+  current = index;
+  render("slide-title");
+  window.scrollTo(0, 0);
+}
+
+function selectOption(index) {
+  const chapterIndex = current - 1;
+  if (!chapters[chapterIndex] || revealed[chapterIndex]) return;
+  selections[chapterIndex] = index;
+  for (const option of stage.querySelectorAll("[data-option]")) {
+    option.setAttribute("aria-pressed", String(Number(option.dataset.option) === index));
+  }
+  document.getElementById("vote-status").textContent = "Antwort " + letters[index] + " ausgewählt.";
+}
+
+function primaryAction() {
+  if (current === steps.length - 1) {
+    if (recallRevealed) {
+      selections.fill(null);
+      revealed.fill(false);
+      recallRevealed = false;
+      goTo(0);
+    } else {
+      recallRevealed = true;
+      render("solution-title");
+      document.getElementById("solution-title").scrollIntoView({block: "nearest"});
+    }
+    return;
+  }
+
+  if (current === 0 || revealed[current - 1]) {
+    goTo(current + 1);
+    return;
+  }
+
+  revealed[current - 1] = true;
+  render("solution-title");
+  window.scrollTo(0, 0);
+}
+
+document.addEventListener("click", event => {
+  const target = event.target.closest("button");
+  if (!target) return;
+  if ("step" in target.dataset) goTo(Number(target.dataset.step));
+  if ("option" in target.dataset) selectOption(Number(target.dataset.option));
+  if ("open" in target.dataset) document.getElementById(target.dataset.open).showModal();
+  if (target.dataset.action === "primary") primaryAction();
+  if (target.dataset.action === "back") goTo(current - 1);
+});
+
+document.addEventListener("keydown", event => {
+  if (event.defaultPrevented || event.repeat || event.altKey || event.metaKey || event.ctrlKey || document.querySelector("dialog[open]")) return;
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    primaryAction();
+  } else if (event.key === "ArrowLeft" && current > 0) {
+    event.preventDefault();
+    goTo(current - 1);
+  } else if (["1", "2", "3"].includes(event.key) && chapters[current - 1] && !revealed[current - 1]) {
+    event.preventDefault();
+    selectOption(Number(event.key) - 1);
+  }
+});
+
+function renderFullscreenButton() {
+  const active = Boolean(document.fullscreenElement);
+  fullscreenButton.innerHTML = icon(active ? "minimize" : "fullscreen") + (active ? "Vollbild aus" : "Vollbild");
+  fullscreenButton.setAttribute("aria-pressed", String(active));
+}
+
+if (document.fullscreenEnabled) {
+  fullscreenButton.hidden = false;
+  renderFullscreenButton();
+  document.addEventListener("fullscreenchange", renderFullscreenButton);
+  fullscreenButton.addEventListener("click", async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await document.documentElement.requestFullscreen();
+    } catch {
+      fullscreenButton.textContent = "Vollbild gesperrt";
+    }
+  });
+}
+
+render();
+</script>
+</body>
+</html>
