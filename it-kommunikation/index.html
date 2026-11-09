@@ -245,6 +245,23 @@ dialog::backdrop { background: #071827ae; }
   .slide { min-height: 440px; }
   .site-footer { margin-top: 14px; }
 }
+@media (min-width: 1200px) and (min-height: 800px) {
+  :fullscreen .shell { width: min(1560px, 100% - 80px); }
+  :fullscreen .hero { min-height: min(64vh, 665px); }
+  :fullscreen .hero h1 { font-size: clamp(4.2rem, 5.25vw, 6.3rem); }
+  :fullscreen .hero .brief { max-width: 39rem; font-size: clamp(21px, 1.38vw, 25px); }
+  :fullscreen .slide { min-height: min(57vh, 610px); }
+  :fullscreen .slide, :fullscreen .recap { padding: clamp(30px, 2.7vw, 46px); }
+  :fullscreen .slide h1, :fullscreen .recap h1 { font-size: clamp(3.6rem, 4.2vw, 4.75rem); }
+  :fullscreen .story, :fullscreen .question { font-size: clamp(21px, 1.4vw, 26px); }
+  :fullscreen .option, :fullscreen .explain-list li, :fullscreen .result-title { font-size: clamp(19px, 1.24vw, 23px); }
+  :fullscreen .option { min-height: 55px; }
+  :fullscreen .eyebrow, :fullscreen .lab-top, :fullscreen .lab-label { font-size: 14px; }
+  :fullscreen .lab-foot, :fullscreen .lab-note, :fullscreen .terminal, :fullscreen .plan-preview, :fullscreen .flow-node { font-size: 16px; }
+  :fullscreen .recap-grid li { padding: 16px; }
+  :fullscreen .recap-grid h2, :fullscreen .recap-intro { font-size: 21px; }
+  :fullscreen .recap-grid p, :fullscreen .recall p, :fullscreen .controls .button { font-size: 19px; }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; }
 }
