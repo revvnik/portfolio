@@ -328,7 +328,7 @@ dialog::backdrop { background: #071827ae; }
       <li><time>1:45–3:00</time> <strong>02 · Nikita · Glasfaser</strong><p>„Ein Modul sendet Licht durch die Faser. Das passt für die lange Strecke neben elektrischen Anlagen. Ein enger Knick oder ein verschmutzter Stecker kann aber die Lichtleistung am Empfänger senken.“</p></li>
       <li><time>3:00–4:15</time> <strong>03 · Turgut · Funk</strong><p>„Antennen übertragen das Signal ohne Kabel. Die Anzeige bleibt beweglich. Wände und Metall können den Empfang verschlechtern, und andere Sender auf derselben Frequenz können das Nutzsignal stören.“</p></li>
       <li><time>4:15–5:25</time> <strong>04 · Kiron · Senderichtungen</strong><p>„Wir schicken das Startsignal und wollen eine Antwort. Hier ist nur eine Richtung zur selben Zeit möglich. Das ist Halbduplex. Zeigt danach an den Pfeilen, was Simplex und Vollduplex unterscheidet.“</p></li>
-      <li><time>5:25–6:00</time> <strong>Abschluss · alle</strong><p>Lasst die Klasse beim Messgerät zuerst das Medium und dann die Betriebsart nennen. Fragt nach der Begründung und löst auf.</p></li>
+      <li><time>5:25–6:00</time> <strong>Abschluss · alle</strong><p>Lasst die Klasse für die Kamera im Prüfraum ein Medium und eine Betriebsart wählen. Fragt für beide Entscheidungen nach dem passenden Hinweis aus dem Fall.</p></li>
     </ol>
     <p><strong>Tastatur</strong> · 1, 2 oder 3 wählt A, B oder C. Pfeil rechts führt die jeweilige Aktion aus, Pfeil links springt zur vorigen Station.</p>
   </div>
@@ -344,6 +344,7 @@ dialog::backdrop { background: #071827ae; }
       <li><a href="https://www.cs.yale.edu/homes/yry/readings/general/shannon1948.pdf" target="_blank" rel="noopener">Claude Shannon · Sender, Kanal, Empfänger und Störung</a></li>
       <li><a href="https://www.usb.org/usb-charger-pd" target="_blank" rel="noopener">USB-IF · Daten und Strom über USB</a></li>
       <li><a href="https://www.corning.com/worldwide/en/innovation/the-glass-age/science-of-glass/how-it-works-optical-fiber.html" target="_blank" rel="noopener">Corning · Funktionsweise von Glasfaser</a></li>
+      <li><a href="https://www.corning.com/content/dam/corning/catalog/coc/documents/brochures/EVO-871-EN.pdf" target="_blank" rel="noopener">Corning · Elektrisch isolierende Glasfaserkabel</a></li>
       <li><a href="https://www.corning.com/data-center/worldwide/en/home/knowledge-center/connector-cleaning-faqs.html" target="_blank" rel="noopener">Corning · Verschmutzung an Glasfasersteckern</a></li>
       <li><a href="https://www.bluetooth.com/learn-about-bluetooth/key-attributes/range/" target="_blank" rel="noopener">Bluetooth SIG · Funk, Antennen und Reichweite</a></li>
       <li><a href="https://www.ti.com/lit/an/slla272d/slla272d.pdf" target="_blank" rel="noopener">Texas Instruments · Kupferleitungen und Störeinflüsse</a></li>
@@ -629,8 +630,8 @@ function renderRecap() {
       </div>
       <p class="recap-link"><strong>Zwei Eigenschaften derselben Verbindung.</strong> In der Aula nutzen Station und Anzeige Funk als Medium und Halbduplex als Betriebsart.</p>
       <div class="recall">
-        <p><strong>Frage an die Klasse.</strong> Ein Messgerät sendet über ein Kupferkabel laufend Messwerte. Das Bedienpult soll gleichzeitig Einstellungen zurückschicken. Welches Medium und welche Betriebsart braucht diese Verbindung?</p>
-        ${recallRevealed ? '<p id="solution-title" tabindex="-1"><strong>Kupfer und Vollduplex.</strong> Das Kabel ist das Medium. Im Vollduplexbetrieb können Messwerte und Einstellungen gleichzeitig in entgegengesetzte Richtungen laufen.</p>' : ""}
+        <p><strong>Frage an die Klasse.</strong> Eine Kamera filmt in einem Prüfraum. Bei geschlossener Tür fällt der drahtlose Empfang aus. Durch die Wand darf nur ein Kabel ohne elektrische Leiter verlaufen. Über dieselbe Verbindung soll das Pult Befehle senden können, während die Kamera ihr Signal weiter überträgt. Welches Medium und welche Betriebsart passen? Begründet beides.</p>
+        ${recallRevealed ? '<p id="solution-title" tabindex="-1"><strong>Glasfaser im Vollduplexbetrieb.</strong> Ein metallfreies Glasfaserkabel ist elektrisch isolierend und überträgt das Signal mit Licht. Im Vollduplexbetrieb laufen Bildsignal und Steuerbefehle zur selben Zeit in entgegengesetzte Richtungen.</p>' : ""}
       </div>
     </section>`;
 }
