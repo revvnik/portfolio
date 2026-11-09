@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Eine interaktive Klassenpräsentation über IT-Kommunikation. Verfolgt ein digitales Startsignal über Kupfer, Glasfaser und Funk.">
+<meta name="description" content="Eine interaktive Klassenpräsentation über IT-Kommunikation. Vergleicht Kupfer, Glasfaser und Funk, erkennt Störsignale und unterscheidet die Senderichtungen.">
 <title>Signal-Labor | Kupfer, Glasfaser und Funk</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f2232'/%3E%3Cpath d='M11 20h18M20 11v18' stroke='%2366e2bd' stroke-width='2'/%3E%3Ccircle cx='20' cy='20' r='5' fill='%2366e2bd'/%3E%3Ccircle cx='11' cy='20' r='2.5' fill='%2366e2bd'/%3E%3Ccircle cx='29' cy='20' r='2.5' fill='%2366e2bd'/%3E%3C/svg%3E">
 <style>
@@ -143,14 +143,9 @@ code { font-size: .9em; overflow-wrap: anywhere; }
 .lab-note { border: 1px solid #486b80; background: #0d2233; padding: 10px 12px; border-radius: 8px; color: #d9e9f2; font: 13px/1.5 var(--mono); overflow-wrap: anywhere; }
 .lab-note strong { color: var(--mint); }
 .lab-note .warn { color: var(--warm); }
-.segments { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.segment { display: grid; align-content: center; min-height: 90px; gap: 5px; text-align: center; border-radius: 8px; border: 1px solid #538096; background: #143548; color: #d9edf8; font-size: 12px; line-height: 1.25; }
-.segment b { font: 800 23px/1 var(--mono); }
-.segment code { color: var(--mint); font-size: clamp(10px, 1.1vw, 15px); }
 .signal-art { display: grid; gap: 6px; border: 1px solid #486b80; background: #0d2233; border-radius: 8px; padding: 9px 12px; color: #d9e9f2; }
 .signal-art svg { width: 100%; height: 41px; }
 .signal-art figcaption { font: 700 12px/1.4 var(--mono); }
-.signal-art.copper { color: var(--warm); }
 .signal-art.fiber { color: #b4ceff; }
 .signal-art.radio { color: var(--mint); }
 .controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 13px; }
@@ -262,10 +257,15 @@ dialog::backdrop { background: #071827ae; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; }
 }
-.tech-extra { margin-top: 12px; padding: 9px 13px; border: 1px solid var(--line); border-radius: 9px; background: #f6f9fa; font-size: 15px; }
-.tech-extra summary { cursor: pointer; color: var(--teal); font-weight: 720; }
-.tech-extra p { color: var(--muted); margin: 7px 0 2px; }
-.tech-extra strong { color: var(--ink); }
+.trace-key { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 700 12px/1.4 var(--mono); }
+.trace-key span { display: inline-flex; align-items: center; gap: 5px; }
+.trace-key span::before { content: ""; width: 14px; border-top: 2px solid currentColor; }
+.trace-key .useful { color: var(--mint); }
+.trace-key .disturbed { color: var(--warm); }
+.trace-key .disturbed::before { border-top-style: dashed; }
+.send-turns { list-style: none; display: grid; gap: 8px; padding: 0; margin: 0; }
+.send-turns li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 12px; }
+.send-turns span { color: #bad0df; }
 </style>
 </head>
 <body>
@@ -283,7 +283,6 @@ dialog::backdrop { background: #071827ae; }
   <symbol id="fullscreen" viewBox="0 0 24 24"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></symbol>
   <symbol id="minimize" viewBox="0 0 24 24"><path d="M4 8h4V4m8 0v4h4M8 20v-4H4m16 0h-4v4"/></symbol>
   <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
-  <symbol id="data" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6V3Zm7 0v5h5M9 12h6m-6 4h6"/></symbol>
   <symbol id="exchange" viewBox="0 0 24 24"><path d="M4 7h15m-4-4 4 4-4 4M20 17H5m4-4-4 4 4 4"/></symbol>
   <symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
 </svg>
@@ -314,12 +313,12 @@ dialog::backdrop { background: #071827ae; }
   <div class="dialog-body">
     <p><strong>Ca. 6 Minuten.</strong> Eine Person bedient die Seite am Beamer. Lest pro Station den Fall vor, lasst die Klasse A, B oder C per Handzeichen wählen und löst dann auf. Die Auswahl am Bildschirm ist optional.</p>
     <ol class="agenda">
-      <li><time>0:00–0:35</time> <strong>Einstieg · Robin</strong><p>„Die Regie will LOS an die Anzeige in der Aula schicken. Wie kommt dieselbe Nachricht über drei verschiedene Strecken ans Ziel?“</p></li>
-      <li><time>0:35–1:45</time> <strong>01 · Robin · Kodierung</strong><p>„Der Laptop sendet, die Anzeige empfängt. Beide verstehen UTF-8. Das L wird als Byte 01001100 gespeichert. Die Schnittstelle macht aus den Bits ein übertragbares Signal.“</p></li>
-      <li><time>1:45–2:55</time> <strong>02 · Nikita · Kupfer</strong><p>„Im USB-Kupferkabel übertragen elektrische Signale die Daten. Bei geeigneten Anschlüssen kann das Kabel zugleich Strom liefern. Die Strecke ist kurz und beide Geräte stehen fest.“</p></li>
-      <li><time>2:55–4:05</time> <strong>03 · Turgut · Glasfaser</strong><p>„Für die lange Strecke wechseln wir auf Glasfaser. Ein Modul sendet Licht durch die Faser. Am Ziel wandelt ein Empfänger das Licht wieder in elektrische Signale um.“</p></li>
-      <li><time>4:05–5:15</time> <strong>04 · Kiron · Funk</strong><p>„Die Anzeige bleibt beweglich. Antennen übertragen die Daten über Funkwellen. Beide Geräte sprechen dasselbe Protokoll. Die Anzeige meldet zurück, dass sie LOS dargestellt hat.“</p></li>
-      <li><time>5:15–6:00</time> <strong>Abschluss · alle</strong><p>Lasst die Klasse ein Medium für jede Teilstrecke im Scanner-Beispiel wählen. Fragt nach der Begründung und löst dann auf.</p></li>
+      <li><time>0:00–0:30</time> <strong>Einstieg · Robin</strong><p>„Das Signal soll von der Regie zur Anzeige. Wir wählen für jede Teilstrecke ein passendes Medium und prüfen, was die Übertragung stören kann.“</p></li>
+      <li><time>0:30–1:45</time> <strong>01 · Robin · Kupfer</strong><p>„Am Regiepult reichen zwei Meter Kupfer. Die Leitung überträgt elektrische Signale und bei USB auch Strom. Vergleicht die grüne und die orange Linie. Eine eingekoppelte Störung verändert den Pegel, den der Empfänger sieht.“</p></li>
+      <li><time>1:45–3:00</time> <strong>02 · Nikita · Glasfaser</strong><p>„Ein Modul sendet Licht durch die Faser. Das passt für die lange Strecke neben elektrischen Anlagen. Ein enger Knick oder ein verschmutzter Stecker kann aber die Lichtleistung am Empfänger senken.“</p></li>
+      <li><time>3:00–4:15</time> <strong>03 · Turgut · Funk</strong><p>„Antennen übertragen das Signal ohne Kabel. Die Anzeige bleibt beweglich. Wände und Metall können den Empfang verschlechtern, und andere Sender auf derselben Frequenz können das Nutzsignal stören.“</p></li>
+      <li><time>4:15–5:25</time> <strong>04 · Kiron · Senderichtungen</strong><p>„Wir schicken das Startsignal und wollen eine Antwort. Hier ist nur eine Richtung zur selben Zeit möglich. Das ist Halbduplex. Zeigt danach an den Pfeilen, was Simplex und Vollduplex unterscheidet.“</p></li>
+      <li><time>5:25–6:00</time> <strong>Abschluss · alle</strong><p>Lasst die Klasse die mögliche Funkstörung am Metallregal benennen und einen einfachen Test vorschlagen.</p></li>
     </ol>
     <p><strong>Tastatur</strong> · 1, 2 oder 3 wählt A, B oder C. Pfeil rechts führt die jeweilige Aktion aus, Pfeil links springt zur vorigen Station.</p>
   </div>
@@ -333,13 +332,12 @@ dialog::backdrop { background: #071827ae; }
     <p>Die Simulation vereinfacht die Signalformen und zeigt eine Beispielstrecke. Bei der Auswahl konkreter Hardware gelten die Datenblätter der Geräte und Leitungen.</p>
     <ul class="sources">
       <li><a href="https://www.cs.yale.edu/homes/yry/readings/general/shannon1948.pdf" target="_blank" rel="noopener">Claude Shannon · Sender, Kanal, Empfänger und Störung</a></li>
-      <li><a href="https://www.rfc-editor.org/rfc/rfc3629" target="_blank" rel="noopener">RFC 3629 · UTF-8</a></li>
       <li><a href="https://www.usb.org/usb-charger-pd" target="_blank" rel="noopener">USB-IF · Daten und Strom über USB</a></li>
       <li><a href="https://www.corning.com/worldwide/en/innovation/the-glass-age/science-of-glass/how-it-works-optical-fiber.html" target="_blank" rel="noopener">Corning · Funktionsweise von Glasfaser</a></li>
       <li><a href="https://www.corning.com/data-center/worldwide/en/home/knowledge-center/connector-cleaning-faqs.html" target="_blank" rel="noopener">Corning · Verschmutzung an Glasfasersteckern</a></li>
       <li><a href="https://www.bluetooth.com/learn-about-bluetooth/key-attributes/range/" target="_blank" rel="noopener">Bluetooth SIG · Funk, Antennen und Reichweite</a></li>
       <li><a href="https://www.ti.com/lit/an/slla272d/slla272d.pdf" target="_blank" rel="noopener">Texas Instruments · Kupferleitungen und Störeinflüsse</a></li>
-      <li><a href="https://www.ibm.com/docs/en/aix/7.1.0?topic=standards-full-half-duplex-transmissions" target="_blank" rel="noopener">IBM · Halbduplex und Vollduplex</a></li>
+      <li><a href="https://www.analog.com/en/resources/app-notes/an-960.html" target="_blank" rel="noopener">Analog Devices · Simplex, Halbduplex und Vollduplex</a></li>
     </ul>
   </div>
 </dialog>
@@ -351,77 +349,77 @@ const letters = ["A", "B", "C"];
 const chapters = [
   {
     name: "Robin",
-    label: "Kodierung",
-    title: "Vom Wort zu Bits",
-    story: "Robin tippt LOS am Regie-Laptop. Die Anzeige in der Aula soll genau diese drei Zeichen darstellen.",
-    question: "Wie bereitet der Laptop den Text für die Anzeige auf?",
-    options: ["Er sendet nur die Schriftgröße", "Er kodiert die Zeichen nach einer gemeinsamen Regel", "Jedes Gerät wählt eine eigene Zeichentabelle"],
-    correct: 1,
-    explanation: [
-      ["Sender und Empfänger", "Der Laptop sendet die Nachricht LOS. Die Anzeige empfängt sie und soll daraus denselben Text machen."],
-      ["Kodierung", "UTF-8 legt fest, welche Bytes für die Zeichen stehen. Das L wird hier zu <code>01001100</code>. Ein Byte besteht aus acht Bits."],
-      ["Signal", "Die Schnittstelle setzt die Bits in übertragbare Signale um. Je nach Medium sind das elektrische Signale, Lichtsignale oder Funkwellen."]
-    ],
-    status: ["Text eingegeben", "Drei Bytes kodiert"],
-    caption: "Die Nachricht bleibt LOS. Die physische Form des Signals ändert sich je nach Teilstrecke."
-  },
-  {
-    name: "Nikita",
     label: "Kupfer",
-    title: "Ein Kabel, zwei Aufgaben",
-    story: "Die Steuereinheit steht zwei Meter neben Nikitas Laptop. Sie hat einen USB-Anschluss und kann darüber auch Strom bekommen.",
-    question: "Was überträgt hier Daten und versorgt die Steuereinheit zugleich?",
+    title: "Zwei Meter am Regiepult",
+    story: "Der Laptop soll das Startsignal an die Steuereinheit schicken. Sie steht direkt daneben, hat USB und braucht auch Strom.",
+    question: "Welche Verbindung überträgt hier Daten und Strom?",
     options: ["Ein passendes USB-Kupferkabel", "Eine Glasfaser mit optischen Anschlüssen", "Eine Bluetooth-Funkverbindung"],
     correct: 0,
     explanation: [
-      ["Elektrisches Signal", "Die Daten werden als elektrische Signaländerungen über die Kupferadern übertragen. USB-Datenkabel sind ein Beispiel dafür."],
-      ["Daten und Strom", "Ein geeignetes USB-Kabel hat Leitungen für Daten und für die Stromversorgung. Die Anschlüsse und das Kabel müssen beides unterstützen."],
-      ["Störfaktoren", "Mit der Länge wird das Signal schwächer. Elektrische Geräte können Störungen verursachen. Deshalb sind die zulässige Kabellänge und eine passende Leitung wichtig."]
+      ["Elektrische Signale", "Der Sender gibt elektrische Signale auf die Kupferadern. Der Empfänger wertet sie aus. Ein passendes USB-Kabel kann zugleich Strom liefern."],
+      ["Störsignal", "Ein elektrisches Gerät kann eine zusätzliche Spannung in die Leitung einkoppeln. Sie überlagert das Nutzsignal. Der Empfänger kann dadurch einen falschen Pegel erkennen."],
+      ["Dämpfung", "Auf längeren Leitungen kommt das Nutzsignal schwächer an. Eine passende Kabellänge und Abstand zu Störquellen helfen."]
     ],
-    status: ["2 m · feste Geräte", "USB · Daten und Strom"],
-    caption: "Kupfer ist für diese kurze Strecke praktisch. Die zulässige Länge hängt vom Kabel und vom Übertragungsverfahren ab."
+    status: ["2 m · feste Geräte", "Kupfer · elektrisches Signal"],
+    caption: "Ein zu schwaches oder gestörtes Signal kann am Empfänger zu Fehlern führen."
   },
   {
-    name: "Turgut",
+    name: "Nikita",
     label: "Glasfaser",
     title: "300 Meter bis zur Aula",
-    story: "Turgut muss von der Regie zur Aula. Die feste Kabeltrasse ist rund 300 Meter lang und führt an elektrischen Anlagen vorbei.",
+    story: "Die feste Kabeltrasse von der Regie zur Aula ist rund 300 Meter lang und führt an elektrischen Anlagen vorbei.",
     question: "Welches Medium passt für diese lange, feste Strecke?",
     options: ["Das kurze USB-Kabel einfach verlängern", "Bluetooth durch mehrere Wände", "Glasfaser mit optischen Modulen"],
     correct: 2,
     explanation: [
-      ["Lichtsignal", "Das Sendemodul erzeugt Lichtsignale. Die Glasfaser führt das Licht zum Empfangsmodul, das es wieder in elektrische Signale umwandelt."],
-      ["Lange Strecken", "Die Faser dämpft das Licht vergleichsweise wenig. Gegen elektromagnetische Störungen von außen ist die Lichtübertragung in der Faser unempfindlich."],
-      ["Störfaktoren", "Enge Biegungen und Schmutz am Stecker können das Lichtsignal abschwächen. Deshalb sind der zulässige Biegeradius und saubere Anschlüsse wichtig."]
+      ["Lichtsignale", "Das Sendemodul erzeugt Lichtsignale. Die Faser führt das Licht zum Empfangsmodul, das es wieder in elektrische Signale umwandelt."],
+      ["Lange Strecken", "Die Faser dämpft das Licht vergleichsweise wenig. Die Lichtübertragung ist unempfindlich gegenüber äußeren elektromagnetischen Störfeldern."],
+      ["Störfaktoren", "Enge Biegungen und verschmutzte Stecker können das Lichtsignal abschwächen. Haltet den Biegeradius ein und prüft die Steckverbindungen."]
     ],
     status: ["300 m · feste Kabeltrasse", "Lichtsignal empfangen"],
     caption: "An beiden Enden müssen optische Module und Fasertyp zusammenpassen."
   },
   {
-    name: "Kiron",
+    name: "Turgut",
     label: "Funk",
     title: "Die Anzeige bleibt mobil",
-    story: "Das Signal ist an der Aula-Station angekommen. Kiron bewegt die Anzeige bei der Probe ein paar Meter durch den Raum.",
-    question: "Wie erreicht LOS die bewegliche Anzeige ohne Kabel?",
+    story: "Das Signal ist an der Aula-Station angekommen. Die Anzeige wird bei der Probe im Raum bewegt.",
+    question: "Wie erreicht das Startsignal die Anzeige ohne Kabel?",
     options: ["Über ein USB-Kabel", "Über eine passende Funkverbindung, etwa Bluetooth", "Über ein Glasfaserkabel"],
     correct: 1,
     explanation: [
-      ["Funkwellen", "Eine Antenne sendet elektromagnetische Wellen, eine andere empfängt sie. Änderungen an der Welle tragen die Daten. Beide Geräte brauchen ein kompatibles Funkverfahren."],
-      ["Störfaktoren", "Mit dem Abstand wird das Signal schwächer. Wände können es zusätzlich dämpfen, andere Sender können stören. Darum testen wir den Empfang am Einsatzort."],
-      ["Rückmeldung", "Die Anzeige dekodiert die Bytes, zeigt LOS an und meldet der Regie den Erfolg. Das ist eine Regel dieser Anwendung."]
+      ["Funkwellen", "Antennen senden und empfangen elektromagnetische Wellen. Änderungen an der Welle tragen die Information. Beide Geräte brauchen ein kompatibles Funkverfahren."],
+      ["Dämpfung", "Mit dem Abstand wird das Signal schwächer. Wände dämpfen es zusätzlich. Metall kann Funkwellen abschirmen oder reflektieren."],
+      ["Störsignal", "Ein anderer Sender auf derselben Frequenz kann das Nutzsignal überlagern. Darum prüfen wir Reichweite und Empfang am Einsatzort."]
     ],
-    status: ["Anzeige wartet", "LOS angezeigt"],
-    caption: "Bluetooth und WLAN sind Beispiele für Funk. Die Anwendung bestimmt, welche Rückmeldung sie sendet."
+    status: ["Anzeige wartet", "Startsignal angekommen"],
+    caption: "Kupfer und Glasfaser sind leitungsgebunden. Funk kommt ohne Leitung zwischen den Antennen aus."
+  },
+  {
+    name: "Kiron",
+    label: "Richtung",
+    title: "Hin und wieder zurück",
+    story: "Die Aula-Station sendet das Startsignal, die Anzeige meldet den Empfang. Die Verbindung lässt zu jedem Zeitpunkt nur eine Senderichtung zu.",
+    question: "Wie heißt die Übertragung in beide Richtungen im Wechsel?",
+    options: ["Simplex", "Halbduplex", "Vollduplex"],
+    correct: 1,
+    explanation: [
+      ["Simplex →", "Es gibt nur eine Senderichtung. Ein Beispiel ist die Aussendung von Rundfunk an einen Empfänger."],
+      ["Halbduplex ⇄", "Beide Geräte können senden, jeweils abwechselnd. So arbeitet die Verbindung hier. Beim Sprechfunk wechselt man ebenfalls zwischen Senden und Hören."],
+      ["Vollduplex ⇆", "Beide Seiten können gleichzeitig senden und empfangen, wie bei einem Telefongespräch."]
+    ],
+    status: ["Antwort vorgesehen", "Rückmeldung angekommen"],
+    caption: "Das Medium trägt das Signal. Die Übertragungsart beschreibt hier, in welche Richtungen gesendet werden kann."
   }
 ];
 
 const recapItems = [
-  ["laptop", "Sender und Empfänger", "Der Regie-Laptop schickt die Nachricht. Die Anzeige empfängt und verarbeitet sie."],
-  ["data", "Daten und Kodierung", "Die Nachricht LOS wird mit UTF-8 zu Bytes und am Ziel wieder zu Text."],
-  ["plug", "Schnittstellen", "USB-Anschlüsse, optische Module oder Antennen koppeln die Geräte an das Medium."],
-  ["wifi", "Übertragungsmedium", "Kupfer überträgt elektrische Signale, Glasfaser Lichtsignale und Funk nutzt Funkwellen."],
-  ["book", "Protokoll", "Gemeinsame Regeln bestimmen den Aufbau, die Reihenfolge und die Bedeutung der Nachrichten."],
-  ["exchange", "Kontrolle und Rückmeldung", "Prüfsummen können Fehler erkennen. Das Protokoll kann Wiederholungen und Bestätigungen vorsehen."]
+  ["plug", "Kupfer", "Elektrische Signale. Lange Leitungen dämpfen, elektrische Geräte können Störsignale einkoppeln."],
+  ["light", "Glasfaser", "Lichtsignale. Enge Biegungen und verschmutzte Stecker schwächen den Empfang."],
+  ["wifi", "Funk", "Funkwellen. Hindernisse dämpfen oder reflektieren, andere Sender können stören."],
+  ["arrow", "Simplex", "Eine Senderichtung. Beispiel Rundfunk."],
+  ["exchange", "Halbduplex", "Beide Richtungen abwechselnd. Beispiel Sprechfunk."],
+  ["exchange", "Vollduplex", "Beide Richtungen gleichzeitig. Beispiel Telefon."]
 ];
 
 const steps = ["Start", ...chapters.map(chapter => chapter.label), "Merkliste"];
@@ -461,9 +459,9 @@ function renderIntro() {
     <section class="hero" aria-labelledby="slide-title">
       <div class="hero-copy">
         <p class="eyebrow">Klassenpräsentation <span class="separator">/</span> IT-Kommunikation</p>
-        <h1 id="slide-title" tabindex="-1">Ein Startsignal.<span>Drei Medien.</span></h1>
-        <p class="brief">Die Regie schickt das Startsignal „LOS“ zur mobilen Anzeige in der Aula. Findet mit Robin, Nikita, Turgut und Kiron heraus, wie die Nachricht über drei Teilstrecken ankommt.</p>
-        <p class="prompt">Welche Bausteine braucht erfolgreiche IT-Kommunikation?</p>
+        <h1 id="slide-title" tabindex="-1">Ein Signal.<span>Drei Strecken.</span></h1>
+        <p class="brief">Zwei Meter am Regiepult, 300 Meter bis zur Aula und die letzten Meter zur mobilen Anzeige. Wählt mit Robin, Nikita, Turgut und Kiron die passende Verbindung für jede Strecke.</p>
+        <p class="prompt">Wie kommt ein Signal an, und was kann es unterwegs stören?</p>
         <div class="hero-start">${button("Technik-Check starten", "primary", "arrow", "mint")} <span class="key-hint">oder Pfeil rechts</span></div>
       </div>
       <figure class="hero-visual" aria-label="Anzeige in der Aula und die drei Teilstrecken">
@@ -472,7 +470,7 @@ function renderIntro() {
           <div class="display-main">
             <p class="eyebrow">${icon("screen")} Probe läuft</p>
             <h2>Wartet auf „LOS“</h2>
-            <p>Von der Regie bis zur Anzeige wechseln die Signale ihre Form.</p>
+            <p>Die Regie wartet auf die Empfangsbestätigung.</p>
           </div>
         </div>
         <div class="hero-map">
@@ -509,23 +507,19 @@ function renderLabContent(index, solved) {
   switch (index) {
     case 0:
       return `
-        <p class="lab-label">Regie · Nachricht</p>
-        <h2>Text vom Laptop zur Anzeige</h2>
-        <div class="segments">
-          <div class="segment"><b>L</b>${solved ? "<code>01001100</code>" : ""}</div>
-          <div class="segment"><b>O</b>${solved ? "<code>01001111</code>" : ""}</div>
-          <div class="segment"><b>S</b>${solved ? "<code>01010011</code>" : ""}</div>
-        </div>
-        <p class="lab-note">${solved ? "<strong>UTF-8</strong> · drei Zeichen, hier drei Bytes" : "Eingabe bereit · wie wird daraus ein Signal?"}</p>`;
-    case 1:
-      return `
         <p class="lab-label">Strecke 01 · Regiepult</p>
-        <h2>Zwei Meter am selben Tisch</h2>
+        <h2>Vom Laptop zur Steuereinheit</h2>
         ${flowDiagram(["laptop", "Regie-Laptop"], ["plug", solved ? "USB-Kupferkabel" : "2 m"], ["network", "Steuereinheit"], solved)}
         ${solved
-          ? signalSketch("copper", "Elektrische Signaländerungen", '<path d="M4 30h35V11h40v19h33V11h63v19h47V11h28v19h46" fill="none" stroke="currentColor" stroke-width="3"/>')
+          ? `<figure class="signal-art">
+              <svg viewBox="0 0 300 41" aria-hidden="true">
+                <path d="M4 30h35V11h54v19h60V11h55v19h48V11h40" fill="none" stroke="#80edc8" stroke-width="2.5"/>
+                <path d="M4 30l8-2 8 5 9-6 9 4 3-17 9-6 9 6 8-6 10 10 8-11 8 6 4 17 11-5 11 9 8-10 11 7 8-4 7 5 4-21 12 5 9-8 13 10 10-7 7 2 4 15 10 6 11-9 10 8 12-7 8 4 2-21 11 6 10-8 11 7 1-4" fill="none" stroke="#ffd1a2" stroke-width="1.6" stroke-dasharray="4 2"/>
+              </svg>
+              <figcaption class="trace-key"><span class="useful">Nutzsignal</span><span class="disturbed">Empfang mit Störung</span></figcaption>
+            </figure>`
           : '<p class="lab-note">Benötigt · Daten und Strom für die Steuereinheit</p>'}`;
-    case 2:
+    case 1:
       return `
         <p class="lab-label">Strecke 02 · Zwischen Gebäudeteilen</p>
         <h2>Von der Regie zur Aula</h2>
@@ -533,15 +527,23 @@ function renderLabContent(index, solved) {
         ${solved
           ? signalSketch("fiber", "Lichtsignale in der Faser", '<rect x="4" y="10" width="292" height="21" rx="10" fill="none" stroke="currentColor" opacity=".48"/><path d="M5 20.5h290" stroke="currentColor" opacity=".4"/><path d="M42 21h27m49 0h27m49 0h27m37 0h18" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>')
           : '<p class="lab-note">Kabeltrasse vorhanden · elektrische Anlagen in der Nähe</p>'}`;
-    case 3:
+    case 2:
       return `
         <p class="lab-label">Strecke 03 · In der Aula</p>
         <h2>${solved ? "Die Anzeige zeigt LOS" : "Aula-Station und mobile Anzeige"}</h2>
         ${flowDiagram(["network", "Aula-Station"], ["wifi", solved ? "Funkwellen" : "wenige Meter"], ["screen", "Anzeige"], solved)}
         ${solved
-          ? `${signalSketch("radio", "Funkwelle", '<path d="M4 21q12-29 24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0" fill="none" stroke="currentColor" stroke-width="3"/>')}
-            <p class="lab-note">→ LOS <strong>· ← Anzeige bestätigt</strong></p>`
+          ? signalSketch("radio", "Funkwelle zwischen den Antennen", '<path d="M4 21q12-29 24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0t24 0" fill="none" stroke="currentColor" stroke-width="3"/>')
           : '<p class="lab-note">Die Anzeige wird während der Probe bewegt.</p>'}`;
+    case 3:
+      return `
+        <p class="lab-label">Senderichtung · Signal und Antwort</p>
+        <h2>Zwei Geräte, zwei Zeitpunkte</h2>
+        <ol class="send-turns" aria-label="Senden im Wechsel">
+          <li class="lab-note"><span>Zeit 1</span> <strong>Station → Anzeige</strong> <span>Startsignal</span></li>
+          <li class="lab-note"><span>Zeit 2</span> <strong>Station ← Anzeige</strong> <span>Empfang bestätigt</span></li>
+        </ol>
+        ${solved ? '<p class="lab-note"><strong>Halbduplex</strong> · je eine Richtung zur selben Zeit</p>' : ""}`;
   }
 }
 
@@ -591,22 +593,16 @@ function renderRecap() {
     <section class="recap" aria-labelledby="slide-title">
       <div class="recap-head">
         <div><p class="eyebrow">Abschluss · Alle</p><h1 id="slide-title" tabindex="-1">Was braucht IT-Kommunikation?</h1></div>
-        <span class="pill">${icon("check")} LOS · Signal angekommen</span>
+        <span class="pill">${icon("check")} Empfang bestätigt</span>
       </div>
-      <p class="recap-intro">Sechs Bausteine vom Sender bis zum Empfänger. Kupfer, Glasfaser und Funk übernehmen jeweils eine Teilstrecke.</p>
+      <p class="recap-intro">Sender und Empfänger brauchen passende Schnittstellen, ein Übertragungsmedium und gemeinsame Regeln für das Senden und Empfangen.</p>
       <ul class="recap-grid">
         ${recapItems.map(([symbol, title, text]) => `<li><span class="recap-icon">${icon(symbol)}</span><div><h2>${title}</h2><p>${text}</p></div></li>`).join("")}
       </ul>
       <div class="recall">
-        <p><strong>Frage an die Klasse.</strong> Ein Handscanner soll in einer Halle beweglich bleiben. Die feste Strecke von der Halle zur Leitstelle ist 300 Meter lang. Welche zwei Medien wählt ihr und warum?</p>
-        ${recallRevealed ? '<p id="solution-title" tabindex="-1"><strong>Eine passende Lösung.</strong> Funk verbindet den beweglichen Scanner mit einer Station in der Halle. Glasfaser eignet sich für die lange, fest verlegte Strecke zur Leitstelle.</p>' : ""}
+        <p><strong>Frage an die Klasse.</strong> Hinter einem Metallregal fällt der Funkempfang aus. Mit freier Sicht funktioniert er. Welche Ursache liegt nahe und wie prüft ihr sie?</p>
+        ${recallRevealed ? '<p id="solution-title" tabindex="-1"><strong>Das Regal kann Funk abschirmen oder reflektieren.</strong> Versetzt die Anzeige so, dass das Regal aus dem Signalweg ist. Wiederholt den Test möglichst bei gleichem Abstand zur Station.</p>' : ""}
       </div>
-      <details class="tech-extra">
-        <summary>Übertragungsarten im Überblick</summary>
-        <p><strong>Medium.</strong> Kupfer und Glasfaser sind leitungsgebunden. Funk überträgt drahtlos. Bei der Wahl zählen Strecke, Datenrate, Störumgebung, Beweglichkeit und Strombedarf.</p>
-        <p><strong>Analog und digital.</strong> Bei einer analogen Übertragung kann eine Spannung einen Messwert stufenlos abbilden. Digital werden Werte durch Bits dargestellt, die ein Signal überträgt.</p>
-        <p><strong>Richtung.</strong> Simplex sendet nur in eine Richtung. Halbduplex erlaubt beide Richtungen abwechselnd, etwa beim Sprechfunk. Vollduplex erlaubt beide gleichzeitig, wie bei einem Telefongespräch.</p>
-      </details>
     </section>`;
 }
 
