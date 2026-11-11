@@ -1,3 +1,5 @@
+import { createSlideMotion } from "./slide-motion.js";
+
 const presentation = document.getElementById("presentation");
 const stageWindow = document.getElementById("stage-window");
 const slides = Array.from(presentation.querySelectorAll(".slide"));
@@ -12,6 +14,7 @@ const replay = document.getElementById("replay");
 const modelLayer = presentation.querySelector(".model-layer");
 const building = document.getElementById("building");
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const slideMotion = createSlideMotion(presentation, slides, reducedMotion);
 const cameraShots = [
   { start: "-42deg 50deg 118%", end: "24deg 64deg 89%" },
   { start: "34deg 69deg 108%", end: "-16deg 26deg 85%" },
@@ -75,10 +78,12 @@ function loadBuilding() {
 function updateMotionPreference() {
   replay.hidden = reducedMotion.matches;
   cancelAnimationFrame(cameraFrame);
+  if (reducedMotion.matches) slideMotion.reset();
   setCamera();
 }
 
 reducedMotion.addEventListener("change", updateMotionPreference);
+window.addEventListener("resize", slideMotion.reset);
 replay.addEventListener("click", () => {
   for (const animation of slides[current].getAnimations({ subtree: true })) {
     if (!("animationName" in animation)) continue;
@@ -86,6 +91,7 @@ replay.addEventListener("click", () => {
     animation.play();
   }
   replayCamera();
+  slideMotion.replay();
 });
 
 function slideFromUrl() {
@@ -96,6 +102,10 @@ function slideFromUrl() {
 
 function goTo(index, { focus = true, updateUrl = true } = {}) {
   if (index < 0 || index >= slides.length || index === current) return;
+
+  const handoff = slideMotion.capture(current, index);
+  if (handoff) presentation.dataset.handoff = handoff.name;
+  else delete presentation.dataset.handoff;
 
   const hadModel = current >= 0 && current < cameraShots.length;
   cancelAnimationFrame(cameraFrame);
@@ -124,6 +134,7 @@ function goTo(index, { focus = true, updateUrl = true } = {}) {
   }
   if (focus) headings[index].focus({ preventScroll: true });
   stageWindow.scrollTop = 0;
+  slideMotion.play(handoff);
 }
 
 previous.addEventListener("click", () => goTo(current - 1));

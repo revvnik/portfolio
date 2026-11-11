@@ -176,7 +176,7 @@ a:hover { text-decoration-thickness: 2px; }
 .model-layer {
   pointer-events: none;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   inset: var(--stage-padding) 0 calc(var(--stage-padding) + 47px) calc(44% + var(--gap) * .56);
   opacity: 0;
   visibility: hidden;
@@ -200,6 +200,29 @@ a:hover { text-decoration-thickness: 2px; }
 
 .presentation[data-current="0"] .model-layer { transform: none; }
 .presentation[data-current="1"] .model-layer { transform: translateY(-19%) scale(.75); }
+.presentation[data-handoff="locations-qsolid"][data-current="2"] .model-layer {
+  transform: translateY(-13%) scale(.58);
+}
+
+.handoff-layer {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.handoff-outgoing, .handoff-portrait, .handoff-outline { position: absolute; }
+.handoff-poster .model-fallback { opacity: 1; }
+.handoff-portrait {
+  object-fit: cover;
+  object-position: center 27%;
+  transform-origin: top left;
+}
+.handoff-outline {
+  border: 2px solid var(--gold);
+  border-radius: 9px;
+  transform-origin: top left;
+}
 
 .gallery {
   display: grid;
@@ -408,11 +431,13 @@ html:not(.deck-ready) .count { display: none; }
 @media (prefers-reduced-motion: no-preference) {
   .presentation { --slide-distance: clamp(16px, 3.4vw, 46px); --slide-shift: var(--slide-distance); --clip-start: 34%; --clip-end: 0%; }
   .presentation[data-direction="back"] { --slide-shift: calc(-1 * var(--slide-distance)); --clip-start: 0%; --clip-end: 34%; }
-  .deck-ready .slide:not([hidden]) .copy { animation: copy-arrival .62s var(--camera-ease) both; }
-  .deck-ready .slide:not([hidden]) .plate { animation: plate-arrival .76s var(--camera-ease) both; }
+  .deck-ready .presentation:not([data-handoff]) .slide:not([hidden]) .copy { animation: copy-arrival .62s var(--camera-ease) both; }
+  .deck-ready .presentation:not([data-handoff]) :is(#slide-1, #slide-2):not([hidden]) .plate { animation: plate-arrival .76s var(--camera-ease) both; }
   .deck-ready .cover:not([hidden]) .title-rule { transform-origin: left; animation: rule-arrival .66s var(--camera-ease) both; }
   .deck-ready .slide:not([hidden]) .chip-core { animation: chip-start .78s var(--camera-ease) .12s both; }
+  .deck-ready .slide:not([hidden]) .portrait img { animation: portrait-focus .84s var(--camera-ease) both; }
   .deck-ready .slide:not([hidden]) .computer-screen span { animation: screen-start .53s ease-out .24s both; }
+  .deck-ready [data-handoff="portrait-workstation"] .slide:not([hidden]) .computer-screen span { animation-delay: .62s; }
   .segment::before { transition: transform .22s var(--camera-ease), background-color .22s ease; }
 
   @keyframes copy-arrival {
@@ -441,10 +466,17 @@ html:not(.deck-ready) .count { display: none; }
     to { opacity: 1; transform: scaleY(1); }
   }
 
+  @keyframes portrait-focus {
+    from { transform: scale(1.065); }
+    to { transform: scale(1); }
+  }
+
   @supports (width: 1cqw) {
     .connections { container-type: size; }
     .deck-ready .slide:not([hidden]) .packet { animation: packet-travel 1.86s linear .34s both; }
     .deck-ready .slide:not([hidden]) .virtual-switch { animation: switch-activity .42s ease 1.13s both; }
+    .deck-ready [data-handoff="workstation-lab"] .slide:not([hidden]) .packet { animation-delay: .98s; }
+    .deck-ready [data-handoff="workstation-lab"] .slide:not([hidden]) .virtual-switch { animation-delay: 1.75s; }
 
     @keyframes switch-activity {
       50% { background-color: var(--teal); }
