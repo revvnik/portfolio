@@ -1,5 +1,3 @@
-import { createBuilding } from "./building.js";
-
 const presentation = document.getElementById("presentation");
 const slides = Array.from(presentation.querySelectorAll(".slide"));
 const headings = slides.map(slide => slide.querySelector("h1, h2"));
@@ -11,6 +9,9 @@ const next = document.getElementById("next");
 const nextLabel = document.getElementById("next-label");
 const fullscreen = document.getElementById("fullscreen");
 const modelLayer = presentation.querySelector(".model-layer");
+const building = document.getElementById("building");
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const cameraOrbits = ["24deg 64deg 89%", "-16deg 26deg 85%"];
 
 const navigation = headings.map((heading, index) => {
   const button = document.createElement("button");
@@ -23,14 +24,43 @@ const navigation = headings.map((heading, index) => {
 });
 
 let current = -1;
-modelLayer.hidden = false;
-const building = createBuilding(document.getElementById("building"));
-if (building) {
-  presentation.classList.add("model-ready");
-  presentation.querySelector(".model-label").hidden = false;
-} else {
-  modelLayer.hidden = true;
+let modelRequested = false;
+let modelReady = false;
+
+function setCamera() {
+  const orbit = cameraOrbits[current];
+  if (!modelReady || !orbit) return;
+  building.cameraOrbit = orbit;
+  if (reducedMotion.matches) building.jumpCameraToGoal();
 }
+
+function loadBuilding() {
+  if (modelRequested) return;
+  modelRequested = true;
+  modelLayer.hidden = false;
+
+  function showPoster() {
+    modelReady = false;
+    presentation.classList.remove("model-ready");
+    modelLayer.hidden = true;
+  }
+
+  building.addEventListener("error", showPoster, { once: true });
+  building.addEventListener("load", () => {
+    modelReady = true;
+    if (current !== 0 || reducedMotion.matches) {
+      setCamera();
+      building.jumpCameraToGoal();
+    } else {
+      requestAnimationFrame(setCamera);
+    }
+    presentation.classList.add("model-ready");
+  }, { once: true });
+
+  import("./vendor/model-viewer.min.js").catch(showPoster);
+}
+
+reducedMotion.addEventListener("change", setCamera);
 
 function slideFromUrl() {
   const match = /^#slide-([1-9]\d*)$/.exec(location.hash);
@@ -41,10 +71,13 @@ function slideFromUrl() {
 function goTo(index, { focus = true, updateUrl = true } = {}) {
   if (index < 0 || index >= slides.length || index === current) return;
 
-  const enteringOrLeavingCover = current === 0 || index === 0;
-  building?.turn(index === 0, current < 0 || !enteringOrLeavingCover);
+  presentation.dataset.direction = index < current ? "back" : "forward";
   current = index;
   presentation.dataset.current = String(index);
+  if (index < cameraOrbits.length) {
+    loadBuilding();
+    setCamera();
+  }
 
   slides.forEach((slide, slideIndex) => {
     const active = slideIndex === index;

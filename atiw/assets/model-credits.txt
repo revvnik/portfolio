@@ -1,0 +1,16 @@
+BMFTR Berlin 3D model
+
+BMFTR-Berlin-Official.glb and the two stills come from the PowerPoint
+My-Job-My-Company-Photo-Derived-3D-Updated. The website uses the original GLB.
+
+Building geometry: Geoportal Berlin, LoD2 building DEBE01YYK00005iG.
+https://gdi.berlin.de/data/a_lod2/atom/LoD2_389_5820.zip
+Rooftop imagery: Geoportal Berlin, TrueDOP 2025 summer RGB, 20 cm.
+https://gdi.berlin.de/services/wms/truedop_2025_sommer
+Data licence Germany, Zero, version 2.0.
+https://www.govdata.de/dl-de/zero-2-0
+
+Façade photographs: Ansgar Koreng, 1 January 2015, CC BY 3.0 DE.
+https://commons.wikimedia.org/wiki/File:Berlin_Bundesministerium_f%C3%BCr_Bildung_und_Forschung.jpg
+https://creativecommons.org/licenses/by/3.0/de/
+The photographs were cropped, perspective-corrected and mapped onto the exterior.

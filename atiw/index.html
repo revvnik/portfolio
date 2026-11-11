@@ -27,12 +27,11 @@
           <p class="ministry-name">Federal Ministry of Research,<br class="wide-break"> Technology and Space</p>
           <p class="subtitle">IT Specialist for System Integration</p>
         </div>
-        <figure class="plate cover-plate">
-          <img class="model-fallback" src="./assets/berlin-panorama.webp" alt="The ministry’s two wings and recessed entrance across the Spree" width="1920" height="492">
+        <figure class="plate cover-plate" aria-label="3D model of the ministry’s Berlin office">
+          <img class="model-fallback" src="./assets/bmftr-front.webp" alt="Front and rooftops of the Berlin ministry" width="1250" height="458">
           <figcaption>
             <span>Kapelle-Ufer, Berlin</span>
-            <span class="model-label" hidden>Simplified architectural model</span>
-            <span class="fallback-credit credit"><a href="https://commons.wikimedia.org/wiki/File:Berlin_Bundesministerium_f%C3%BCr_Bildung_und_Forschung.jpg">Ansgar Koreng</a> · <a href="https://creativecommons.org/licenses/by/3.0/de/">CC BY 3.0 DE</a></span>
+            <a class="credit" href="./assets/model-credits.txt" target="_blank" rel="noopener">3D model credits</a>
           </figcaption>
         </figure>
       </section>
@@ -46,6 +45,9 @@
           </ul>
         </div>
         <div class="plate gallery">
+          <div class="gallery-model" role="img" aria-label="Aerial view of the ministry’s roofs and courtyards">
+            <img class="model-fallback" src="./assets/bmftr-aerial.webp" alt="" width="1150" height="541">
+          </div>
           <figure>
             <img src="./assets/kapelle-ufer.webp" alt="Street-level view of the ministry’s windowed façade and recessed entrance in Berlin" width="1500" height="1125">
             <figcaption>
@@ -135,7 +137,7 @@
               <div class="vm"><span class="vm-screen"></span>VM A</div>
               <div class="vm"><span class="vm-screen"></span>VM B</div>
             </div>
-            <div class="connections" aria-hidden="true"><span></span></div>
+            <div class="connections" aria-hidden="true"><span></span><i class="packet"></i></div>
             <div class="virtual-switch" aria-hidden="true"><span class="ports"><i></i><i></i><i></i><i></i></span>Virtual switch</div>
           </div>
           <figcaption>Example lab</figcaption>
@@ -143,7 +145,12 @@
       </section>
 
       <div class="model-layer" hidden aria-hidden="true">
-        <canvas id="building"></canvas>
+        <model-viewer id="building" src="./assets/bmftr-berlin.glb"
+          alt="Photo-derived model of the ministry building at Kapelle-Ufer"
+          loading="eager" reveal="auto" interaction-prompt="none"
+          camera-orbit="43deg 49deg 119%" min-camera-orbit="auto auto 72%" max-camera-orbit="auto auto 140%"
+          field-of-view="34deg" interpolation-decay="180" exposure="1.08" shadow-intensity="0.35">
+        </model-viewer>
       </div>
     </main>
 
