@@ -1,4 +1,4 @@
-import { createSlideMotion } from "./slide-motion.js?v=5";
+import { createSlideMotion } from "./slide-motion.js?v=7";
 
 const presentation = document.getElementById("presentation");
 const stageWindow = document.getElementById("stage-window");
@@ -16,15 +16,8 @@ const building = document.getElementById("building");
 const cameraFrames = slides.map(slide => slide.querySelector("[data-camera-frame]"));
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const slideMotion = createSlideMotion(presentation, slides, reducedMotion);
-const openingOrbit = "-42deg 50deg 88%";
-const cameraOrbits = [
-  "24deg 64deg 58%",
-  "-16deg 28deg 72%",
-  "-59deg 70deg 58%",
-  "-105deg 56deg 74%",
-  "-149deg 64deg 60%",
-  "-191deg 40deg 73%",
-];
+const openingOrbit = building.getAttribute("camera-orbit");
+const cameraOrbits = slides.map(slide => slide.dataset.cameraOrbit);
 
 navigation.forEach((link, index) => {
   link.addEventListener("click", event => {
@@ -135,9 +128,7 @@ function waitForTransition(finished) {
 }
 
 function slideFromUrl() {
-  const match = /^#slide-([1-9]\d*)$/.exec(location.hash);
-  const index = match ? Number(match[1]) - 1 : 0;
-  return index < slides.length ? index : 0;
+  return Math.max(0, slides.findIndex(slide => `#${slide.id}` === location.hash));
 }
 
 function goTo(index, { focus = true, updateUrl = true } = {}) {
@@ -173,7 +164,7 @@ function goTo(index, { focus = true, updateUrl = true } = {}) {
   counter.textContent = `${index + 1} / ${slides.length}`;
 
   if (updateUrl) {
-    history.replaceState(null, "", index === 0 ? location.pathname + location.search : `#slide-${index + 1}`);
+    history.replaceState(null, "", index === 0 ? location.pathname + location.search : `#${slides[index].id}`);
   }
   if (focus) headings[index].focus({ preventScroll: true });
   stageWindow.scrollTop = 0;

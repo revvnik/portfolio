@@ -1,21 +1,19 @@
 const ease = "cubic-bezier(.4, .08, .3, 1)";
 
-const handoffs = [
-  null,
-  "locations-qsolid",
-  "qsolid-portrait",
-  "portrait-workstation",
-  "workstation-lab",
-];
+const handoffs = {
+  "slide-2/slide-3": "locations-qsolid",
+  "slide-3/slide-4": "qsolid-portrait",
+  "slide-4/slide-5": "portrait-workstation",
+  "slide-5/slide-6": "workstation-lab",
+};
 
-const subjects = [
-  null,
-  ".gallery-model",
-  ".chip-core",
-  ".portrait img",
-  ".computer-screen",
-  ".vm",
-];
+const subjects = {
+  "slide-2": ".gallery-model",
+  "slide-3": ".chip-core",
+  "slide-4": ".portrait img",
+  "slide-5": ".computer-screen",
+  "slide-6": ".vm",
+};
 
 function box(element, stage) {
   const { left, top, width, height } = element.getBoundingClientRect();
@@ -71,16 +69,19 @@ export function createSlideMotion(stage, slides, reducedMotion) {
   function capture(from, to) {
     finish();
     last = undefined;
-    const name = handoffs[Math.min(from, to)];
-    if (!name || Math.abs(from - to) !== 1 || reducedMotion.matches || !stage.animate) return null;
+    if (from < 0 || reducedMotion.matches || !stage.animate) return null;
+    const first = slides[Math.min(from, to)].id;
+    const second = slides[Math.max(from, to)].id;
+    const name = handoffs[`${first}/${second}`];
+    if (!name && Math.abs(from - to) !== 1) return null;
 
     return {
-      name,
+      name: name ?? "crossfade",
       from,
       to,
       plate: box(plates[from], stage),
       copy: box(copies[from], stage),
-      subject: box(slides[from].querySelector(subjects[from]), stage),
+      subject: name ? box(slides[from].querySelector(subjects[slides[from].id]), stage) : null,
     };
   }
 
@@ -91,8 +92,8 @@ export function createSlideMotion(stage, slides, reducedMotion) {
     last = { transition, destination: box(plates[to], stage) };
     const forward = to > from;
     const incoming = slides[to];
-    const target = incoming.querySelector(subjects[to]);
-    const targetBox = box(target, stage);
+    const target = subject ? incoming.querySelector(subjects[incoming.id]) : null;
+    const targetBox = target ? box(target, stage) : null;
 
     const layer = document.createElement("div");
     layer.className = "handoff-layer";
@@ -101,13 +102,13 @@ export function createSlideMotion(stage, slides, reducedMotion) {
 
     const outgoing = plates[from].cloneNode(true);
     outgoing.classList.add("handoff-outgoing");
-    if (from === 1 && getComputedStyle(modelLayer).visibility === "hidden") {
+    if (slides[from].id === "slide-2" && getComputedStyle(modelLayer).visibility === "hidden") {
       outgoing.classList.add("handoff-poster");
     }
     place(outgoing, plate);
     const outgoingCopy = copies[from].cloneNode(true);
     outgoingCopy.classList.add("handoff-copy");
-    outgoingCopy.querySelector("h2").removeAttribute("id");
+    outgoingCopy.querySelector("h1, h2").removeAttribute("id");
     place(outgoingCopy, copy);
     layer.append(outgoing, outgoingCopy);
     stage.append(layer);
@@ -153,7 +154,9 @@ export function createSlideMotion(stage, slides, reducedMotion) {
     animate(outgoingCopy, [{ opacity: 1 }, { opacity: 0 }], 260);
     animate(copies[to], [{ opacity: 0 }, { opacity: 1 }], 350, 150);
 
-    if (name === "locations-qsolid") {
+    if (name === "crossfade") {
+      fadeOutgoing(620);
+    } else if (name === "locations-qsolid") {
       const start = forward ? aerialFocus(subject) : subject;
       const end = forward ? targetBox : aerialFocus(targetBox);
       const frame = document.createElement("div");
@@ -236,7 +239,7 @@ export function createSlideMotion(stage, slides, reducedMotion) {
       ...transition,
       plate: reposition(transition.plate),
       copy: reposition(transition.copy),
-      subject: reposition(transition.subject),
+      subject: transition.subject ? reposition(transition.subject) : null,
     });
   }
 
