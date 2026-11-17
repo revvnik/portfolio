@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#f5f2e9">
   <title>My Job, my Company</title>
   <link rel="canonical" href="https://revvnik.com/atiw/">
-  <link rel="stylesheet" href="./presentation.css?v=7">
+  <link rel="stylesheet" href="./presentation.css?v=8">
   <script data-cfasync="false" type="module" src="./presentation.js?v=7"></script>
 </head>
 <body>
@@ -50,8 +50,28 @@
               <li>High-Tech Agenda</li>
             </ul>
           </div>
-          <figure class="plate divider-plate" data-camera-frame aria-hidden="true">
-            <img class="model-fallback" src="./assets/bmftr-front.webp" alt="" width="1250" height="458">
+          <figure class="plate divider-plate ministry-history">
+            <div class="history-model" data-camera-frame aria-hidden="true">
+              <img class="model-fallback" src="./assets/bmftr-front.webp" alt="" width="1250" height="458">
+            </div>
+            <figcaption>
+              <ol class="history-dates" aria-label="Ministry history">
+                <li>
+                  <time datetime="1955">1955</time>
+                  <strong>Federal Ministry for Atomic Affairs</strong>
+                  <p>Research into peaceful uses of nuclear energy</p>
+                </li>
+                <li>
+                  <time datetime="2025">2025</time>
+                  <strong>Research, Technology and Space</strong>
+                  <p>New name and responsibility for space policy</p>
+                </li>
+              </ol>
+              <p class="history-sources credit">
+                <a href="https://dserver.bundestag.de/btd/02/022/0202226.pdf" target="_blank" rel="noopener">1955 Bundestag record</a>
+                <a href="https://www.gesetze-im-internet.de/bkorgerl_2025/BJNR0830A0025.html" target="_blank" rel="noopener">2025 reorganisation</a>
+              </p>
+            </figcaption>
           </figure>
         </section>
 
@@ -223,6 +243,35 @@
           </figure>
         </section>
 
+        <section class="slide with-building" id="apprenticeship" aria-labelledby="title-apprenticeship-review" data-camera-orbit="-278deg 55deg 84%">
+          <div class="copy">
+            <h2 id="title-apprenticeship-review" tabindex="-1">My apprenticeship</h2>
+            <p class="subtitle">Questions?</p>
+          </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
+          <figure class="plate apprenticeship-review">
+            <div class="apprenticeship-columns">
+              <div>
+                <h3>Pros</h3>
+                <ul>
+                  <li>Good pay and extra courses with certificates</li>
+                  <li>Supplementary pension for eligible staff</li>
+                  <li>Nice location, building and offices</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Cons</h3>
+                <ul>
+                  <li>Extra care with official information</li>
+                  <li>Many regulations and procedures to follow</li>
+                  <li>Frequent mandatory meetings</li>
+                </ul>
+              </div>
+            </div>
+            <figcaption><a class="credit" href="https://www.vbl.de/en/en-vblklassik" target="_blank" rel="noopener">VBL supplementary pension</a></figcaption>
+          </figure>
+        </section>
+
         <div class="model-layer" hidden aria-hidden="true">
           <model-viewer id="building" src="./assets/bmftr-berlin.glb"
             alt="Photo-derived model of the ministry building at Kapelle-Ufer"
@@ -251,6 +300,7 @@
           <a class="segment" href="#slide-5" aria-label="Slide 8: PCs and workstations"><span aria-hidden="true">8</span></a>
           <a class="segment" href="#slide-6" aria-label="Slide 9: My virtual machine lab"><span aria-hidden="true">9</span></a>
           <a class="segment" href="#networking" aria-label="Slide 10: Explaining networking"><span aria-hidden="true">10</span></a>
+          <a class="segment" href="#apprenticeship" aria-label="Slide 11: My apprenticeship, pros and cons"><span aria-hidden="true">11</span></a>
         </nav>
       </div>
       <button class="button next" id="next" type="button" hidden>

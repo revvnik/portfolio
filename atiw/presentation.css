@@ -185,6 +185,35 @@ a:hover { text-decoration-thickness: 2px; }
 .model-ready .model-fallback { opacity: 0; }
 .cover-plate figcaption { align-self: end; margin: 0 16px 13px; padding: 12px 0 0; border-top: 1px solid #bdc6b8; }
 
+.ministry-history { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+.history-model { min-height: 0; }
+.ministry-history figcaption {
+  display: grid;
+  gap: 12px;
+  margin: 0 clamp(16px, 2.8vw, 40px) 16px;
+  padding: 14px 0 0;
+  border-top: 1px solid #a4beb4;
+  color: #e9f1e8;
+  font-size: clamp(.94rem, 1.45vw, 1.16rem);
+}
+.history-dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 2.4vw, 34px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.history-dates time {
+  display: block;
+  margin-bottom: .12em;
+  color: #f0ca79;
+  font: 400 clamp(2rem, 3.7vw, 3.45rem)/1 var(--display);
+}
+.history-dates strong { display: block; margin-bottom: .22em; color: var(--paper); }
+.history-sources { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.history-sources a:focus-visible { outline-color: var(--paper); }
+
 .building-frame { display: none; }
 .deck-ready .with-building {
   height: var(--stage-height);
@@ -281,7 +310,7 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .portrait figcaption { align-items: baseline; }
 
-.agenda, .networking {
+.agenda, .networking, .apprenticeship-review {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   background: #e1e8df;
@@ -300,7 +329,33 @@ a:hover { text-decoration-thickness: 2px; }
   font: 400 clamp(1.8rem, 3.6vw, 3.55rem)/1.08 var(--display);
 }
 .agenda-fields li:last-child { border-bottom: 1px solid #adbdb1; }
-.agenda figcaption, .networking figcaption { border-top: 1px solid #bdc6b8; margin: 0 16px 13px; padding: 12px 0 0; }
+.agenda figcaption, .networking figcaption, .apprenticeship-review figcaption {
+  border-top: 1px solid #bdc6b8;
+  margin: 0 16px 13px;
+  padding: 12px 0 0;
+}
+
+.apprenticeship-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-self: center;
+  gap: clamp(18px, 3vw, 44px);
+  margin: 24px clamp(16px, 2.8vw, 40px);
+}
+.apprenticeship-columns h3 {
+  margin: 0 0 .32em;
+  color: var(--teal-deep);
+  font: 400 clamp(2rem, 3.7vw, 3.45rem)/1 var(--display);
+}
+.apprenticeship-columns ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(1rem, 1.48vw, 1.28rem);
+  line-height: 1.35;
+}
+.apprenticeship-columns li { padding: .65em 0; border-top: 1px solid #adbdb1; }
+.apprenticeship-columns li:last-child { border-bottom: 1px solid #adbdb1; }
 
 .network-path {
   position: relative;
@@ -593,6 +648,7 @@ html:not(.deck-ready) .count { display: none; }
   .copy { padding-block: 14px 0; }
   .plate { height: auto; min-height: 325px; }
   .cover-plate, .divider-plate { min-height: 280px; }
+  .ministry-history { grid-template-rows: clamp(190px, 50vw, 300px) auto; }
   .gallery { height: var(--gallery-height); }
   .portrait { height: 470px; }
   .deck-ready .with-building { height: auto; grid-template-rows: auto 102px auto; row-gap: 12px; }
@@ -613,6 +669,7 @@ html:not(.deck-ready) .count { display: none; }
   .deck-ready .segments { display: none; }
   .presentation { --gallery-height: 360px; }
   .deck-ready .with-building .portrait { height: 390px; }
+  .apprenticeship-columns { grid-template-columns: 1fr; }
   .copy h1 { font-size: clamp(3.6rem, 14vw, 4.2rem); }
 }
 
