@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#f5f2e9">
   <title>My Job, my Company</title>
   <link rel="canonical" href="https://revvnik.com/atiw/">
-  <link rel="stylesheet" href="./presentation.css?v=5">
-  <script data-cfasync="false" type="module" src="./presentation.js?v=5"></script>
+  <link rel="stylesheet" href="./presentation.css?v=6">
+  <script data-cfasync="false" type="module" src="./presentation.js?v=6"></script>
 </head>
 <body>
   <div class="shell">
@@ -32,7 +32,7 @@
             <p class="subtitle">IT Specialist for System Integration</p>
           </div>
           <figure class="plate cover-plate" aria-label="3D model of the ministry’s Berlin office">
-            <img class="model-fallback" src="./assets/bmftr-front.webp" alt="Front and rooftops of the Berlin ministry" width="1250" height="458">
+            <img class="model-fallback" data-camera-frame src="./assets/bmftr-front.webp" alt="Front and rooftops of the Berlin ministry" width="1250" height="458">
             <figcaption>
               <span>Kapelle-Ufer, Berlin</span>
               <a class="credit" href="./assets/model-credits.txt" target="_blank" rel="noopener">3D model credits</a>
@@ -49,7 +49,7 @@
             </ul>
           </div>
           <div class="plate gallery">
-            <div class="gallery-model" role="img" aria-label="Aerial view of the ministry’s roofs and courtyards">
+            <div class="gallery-model" data-camera-frame role="img" aria-label="Aerial view of the ministry’s roofs and courtyards">
               <img class="model-fallback" src="./assets/bmftr-aerial.webp" alt="" width="1150" height="541">
             </div>
             <figure>
@@ -69,7 +69,7 @@
           </div>
         </section>
 
-        <section class="slide" id="slide-3" aria-labelledby="title-ministry">
+        <section class="slide with-building" id="slide-3" aria-labelledby="title-ministry">
           <div class="copy">
             <h2 id="title-ministry" tabindex="-1">What the ministry does</h2>
             <ul class="points">
@@ -78,6 +78,7 @@
               <li>Space programmes and cooperation</li>
             </ul>
           </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
           <figure class="plate project">
             <div class="chip" aria-hidden="true">
               <span class="chip-core"></span>
@@ -89,7 +90,7 @@
           </figure>
         </section>
 
-        <section class="slide" id="slide-4" aria-labelledby="title-minister">
+        <section class="slide with-building" id="slide-4" aria-labelledby="title-minister">
           <div class="copy">
             <h2 id="title-minister" tabindex="-1">Dorothee Bär</h2>
             <ul class="points">
@@ -98,6 +99,7 @@
               <li>Former Federal Government Commissioner for Digitalisation</li>
             </ul>
           </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
           <figure class="plate portrait">
             <img src="./assets/dorothee-baer.webp?v=5" alt="Dorothee Bär visiting Fraunhofer IKTS in Hermsdorf" width="1120" height="902">
             <figcaption>
@@ -107,7 +109,7 @@
           </figure>
         </section>
 
-        <section class="slide" id="slide-5" aria-labelledby="title-apprenticeship">
+        <section class="slide with-building" id="slide-5" aria-labelledby="title-apprenticeship">
           <div class="copy">
             <h2 id="title-apprenticeship" tabindex="-1">My apprenticeship</h2>
             <p class="subtitle">IT Specialist for System Integration</p>
@@ -117,6 +119,7 @@
               <li>Short presentations on networking</li>
             </ul>
           </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
           <figure class="plate workstation" aria-label="Illustration of a PC, monitor and keyboard on a desk">
             <div class="desk" aria-hidden="true">
               <div class="computer-tower"><span></span></div>
@@ -126,7 +129,7 @@
           </figure>
         </section>
 
-        <section class="slide" id="slide-6" aria-labelledby="title-vms">
+        <section class="slide with-building" id="slide-6" aria-labelledby="title-vms">
           <div class="copy">
             <h2 id="title-vms" tabindex="-1">My virtual machine lab</h2>
             <ul class="points">
@@ -135,6 +138,7 @@
               <li>Testing communication between VMs</li>
             </ul>
           </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
           <figure class="plate vm-lab">
             <div class="topology" role="img" aria-label="Example lab: virtual machine A and virtual machine B connected through a virtual switch">
               <div class="endpoints" aria-hidden="true">
@@ -152,8 +156,8 @@
           <model-viewer id="building" src="./assets/bmftr-berlin.glb"
             alt="Photo-derived model of the ministry building at Kapelle-Ufer"
             loading="eager" reveal="auto" interaction-prompt="none"
-            camera-orbit="-42deg 50deg 118%" min-camera-orbit="auto auto 72%" max-camera-orbit="auto auto 140%"
-            field-of-view="34deg" interpolation-decay="340" exposure="1.08" shadow-intensity="0.35">
+            camera-orbit="-42deg 50deg 88%" min-camera-orbit="auto auto 50%" max-camera-orbit="auto auto 140%"
+            camera-target="0m -0.065m 0m" field-of-view="34deg" interpolation-decay="245" exposure="1.08" shadow-intensity="0.35">
           </model-viewer>
         </div>
       </main>

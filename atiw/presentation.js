@@ -13,11 +13,17 @@ const fullscreen = document.getElementById("fullscreen");
 const replay = document.getElementById("replay");
 const modelLayer = presentation.querySelector(".model-layer");
 const building = document.getElementById("building");
+const cameraFrames = slides.map(slide => slide.querySelector("[data-camera-frame]"));
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const slideMotion = createSlideMotion(presentation, slides, reducedMotion);
-const cameraShots = [
-  { start: "-42deg 50deg 118%", end: "24deg 64deg 89%" },
-  { start: "34deg 69deg 108%", end: "-16deg 26deg 85%" },
+const openingOrbit = "-42deg 50deg 88%";
+const cameraOrbits = [
+  "24deg 64deg 58%",
+  "-16deg 28deg 72%",
+  "-59deg 70deg 58%",
+  "-105deg 56deg 74%",
+  "-149deg 64deg 60%",
+  "-191deg 40deg 73%",
 ];
 
 navigation.forEach((link, index) => {
@@ -29,25 +35,39 @@ navigation.forEach((link, index) => {
 });
 
 let current = -1;
+let previousSlide = -1;
 let modelRequested = false;
 let modelReady = false;
 let cameraFrame;
 let runningTransition;
 let queuedSlide;
 
+function placeCamera() {
+  if (modelLayer.hidden || current < 0) return;
+
+  const frame = cameraFrames[current].getBoundingClientRect();
+  const stage = presentation.getBoundingClientRect();
+  const width = modelLayer.offsetWidth;
+  const height = modelLayer.offsetHeight;
+  if (!width || !height || !frame.width || !frame.height) return;
+
+  const scale = Math.min(frame.width / width, frame.height / height);
+  const left = frame.left - stage.left + (frame.width - width * scale) / 2;
+  const top = frame.top - stage.top + (frame.height - height * scale) / 2;
+  modelLayer.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+}
+
 function setCamera() {
-  const shot = cameraShots[current];
-  if (!modelReady || !shot) return;
-  building.cameraOrbit = shot.end;
+  if (!modelReady) return;
+  building.cameraOrbit = cameraOrbits[current];
   if (reducedMotion.matches) building.jumpCameraToGoal();
 }
 
 function replayCamera() {
-  const shot = cameraShots[current];
-  if (!modelReady || !shot || reducedMotion.matches) return;
+  if (!modelReady || reducedMotion.matches) return;
 
   cancelAnimationFrame(cameraFrame);
-  building.cameraOrbit = shot.start;
+  building.cameraOrbit = cameraOrbits[previousSlide] ?? cameraOrbits[current - 1] ?? openingOrbit;
   building.jumpCameraToGoal();
   // Let the viewer render the starting orbit before it interpolates to the next one.
   cameraFrame = requestAnimationFrame(() => {
@@ -76,6 +96,11 @@ function loadBuilding() {
 
   import("./vendor/model-viewer.min.js").catch(showPoster);
 }
+
+const cameraResize = new ResizeObserver(placeCamera);
+cameraResize.observe(presentation);
+cameraResize.observe(modelLayer);
+cameraFrames.forEach(frame => cameraResize.observe(frame));
 
 function updateMotionPreference() {
   replay.hidden = reducedMotion.matches;
@@ -130,16 +155,11 @@ function goTo(index, { focus = true, updateUrl = true } = {}) {
   if (handoff) presentation.dataset.handoff = handoff.name;
   else delete presentation.dataset.handoff;
 
-  const hadModel = current >= 0 && current < cameraShots.length;
   cancelAnimationFrame(cameraFrame);
   presentation.dataset.direction = index < current ? "back" : "forward";
+  previousSlide = current;
   current = index;
   presentation.dataset.current = String(index);
-  if (index < cameraShots.length) {
-    loadBuilding();
-    if (hadModel || reducedMotion.matches) setCamera();
-    else replayCamera();
-  }
 
   slides.forEach((slide, slideIndex) => {
     const active = slideIndex === index;
@@ -157,12 +177,16 @@ function goTo(index, { focus = true, updateUrl = true } = {}) {
   }
   if (focus) headings[index].focus({ preventScroll: true });
   stageWindow.scrollTop = 0;
-  const finished = slideMotion.play(handoff);
-  if (finished) {
-    waitForTransition(finished);
-  } else if (hadModel && index < cameraShots.length && modelReady && !reducedMotion.matches) {
-    const move = modelLayer.getAnimations().find(animation => animation.transitionProperty === "transform");
-    waitForTransition(move?.finished.catch(() => {}));
+
+  loadBuilding();
+  modelLayer.classList.toggle("camera-moving", modelReady && !reducedMotion.matches);
+  placeCamera();
+  setCamera();
+
+  const slide = slideMotion.play(handoff);
+  const move = modelLayer.getAnimations().find(animation => animation.transitionProperty === "transform");
+  if (slide || move) {
+    waitForTransition(Promise.allSettled([slide, move?.finished]));
   }
 }
 
