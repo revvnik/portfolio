@@ -1,4 +1,4 @@
-import { createSlideMotion } from "./slide-motion.js";
+import { createSlideMotion } from "./slide-motion.js?v=5";
 
 const presentation = document.getElementById("presentation");
 const stageWindow = document.getElementById("stage-window");
@@ -32,6 +32,8 @@ let current = -1;
 let modelRequested = false;
 let modelReady = false;
 let cameraFrame;
+let runningTransition;
+let queuedSlide;
 
 function setCamera() {
   const shot = cameraShots[current];
@@ -83,16 +85,29 @@ function updateMotionPreference() {
 }
 
 reducedMotion.addEventListener("change", updateMotionPreference);
-window.addEventListener("resize", slideMotion.reset);
 replay.addEventListener("click", () => {
+  if (runningTransition) return;
+
   for (const animation of slides[current].getAnimations({ subtree: true })) {
     if (!("animationName" in animation)) continue;
     animation.currentTime = 0;
     animation.play();
   }
   replayCamera();
-  slideMotion.replay();
+  waitForTransition(slideMotion.replay());
 });
+
+function waitForTransition(finished) {
+  if (!finished) return;
+  runningTransition = finished;
+  finished.then(() => {
+    if (runningTransition !== finished) return;
+    runningTransition = undefined;
+    const pending = queuedSlide;
+    queuedSlide = undefined;
+    if (pending) goTo(pending.index, pending.options);
+  });
+}
 
 function slideFromUrl() {
   const match = /^#slide-([1-9]\d*)$/.exec(location.hash);
@@ -101,7 +116,15 @@ function slideFromUrl() {
 }
 
 function goTo(index, { focus = true, updateUrl = true } = {}) {
-  if (index < 0 || index >= slides.length || index === current) return;
+  if (index < 0 || index >= slides.length) return;
+  if (index === current) {
+    queuedSlide = undefined;
+    return;
+  }
+  if (runningTransition) {
+    queuedSlide = { index, options: { focus, updateUrl } };
+    return;
+  }
 
   const handoff = slideMotion.capture(current, index);
   if (handoff) presentation.dataset.handoff = handoff.name;
@@ -134,7 +157,13 @@ function goTo(index, { focus = true, updateUrl = true } = {}) {
   }
   if (focus) headings[index].focus({ preventScroll: true });
   stageWindow.scrollTop = 0;
-  slideMotion.play(handoff);
+  const finished = slideMotion.play(handoff);
+  if (finished) {
+    waitForTransition(finished);
+  } else if (hadModel && index < cameraShots.length && modelReady && !reducedMotion.matches) {
+    const move = modelLayer.getAnimations().find(animation => animation.transitionProperty === "transform");
+    waitForTransition(move?.finished.catch(() => {}));
+  }
 }
 
 previous.addEventListener("click", () => goTo(current - 1));
@@ -183,6 +212,10 @@ window.addEventListener("wheel", event => {
   }, 165);
 
   if (wheelFinished) return;
+  if (runningTransition) {
+    wheelFinished = true;
+    return;
+  }
   wheelDistance += event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
   if (Math.abs(wheelDistance) >= 48) {
     goTo(current + Math.sign(wheelDistance));

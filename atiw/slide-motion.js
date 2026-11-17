@@ -1,4 +1,4 @@
-const ease = "cubic-bezier(.25, .7, .25, 1)";
+const ease = "cubic-bezier(.4, .08, .3, 1)";
 
 const handoffs = [
   null,
@@ -55,6 +55,7 @@ function aerialFocus(bounds) {
 
 export function createSlideMotion(stage, slides, reducedMotion) {
   const plates = slides.map(slide => slide.querySelector(".plate"));
+  const copies = slides.map(slide => slide.querySelector(".copy"));
   const modelLayer = stage.querySelector(".model-layer");
   let active;
   let last;
@@ -78,6 +79,7 @@ export function createSlideMotion(stage, slides, reducedMotion) {
       from,
       to,
       plate: box(plates[from], stage),
+      copy: box(copies[from], stage),
       subject: box(slides[from].querySelector(subjects[from]), stage),
     };
   }
@@ -85,9 +87,8 @@ export function createSlideMotion(stage, slides, reducedMotion) {
   function play(transition) {
     if (!transition || reducedMotion.matches) return;
     finish();
-    last = transition;
-
-    const { name, from, to, plate, subject } = transition;
+    const { name, from, to, plate, copy, subject } = transition;
+    last = { transition, destination: box(plates[to], stage) };
     const forward = to > from;
     const incoming = slides[to];
     const target = incoming.querySelector(subjects[to]);
@@ -104,7 +105,11 @@ export function createSlideMotion(stage, slides, reducedMotion) {
       outgoing.classList.add("handoff-poster");
     }
     place(outgoing, plate);
-    layer.append(outgoing);
+    const outgoingCopy = copies[from].cloneNode(true);
+    outgoingCopy.classList.add("handoff-copy");
+    outgoingCopy.querySelector("h2").removeAttribute("id");
+    place(outgoingCopy, copy);
+    layer.append(outgoing, outgoingCopy);
     stage.append(layer);
 
     const animations = [];
@@ -145,7 +150,8 @@ export function createSlideMotion(stage, slides, reducedMotion) {
       ], duration);
     }
 
-    animate(incoming.querySelector(".copy"), [{ opacity: .58 }, { opacity: 1 }], 320, 85);
+    animate(outgoingCopy, [{ opacity: 1 }, { opacity: 0 }], 260);
+    animate(copies[to], [{ opacity: 0 }, { opacity: 1 }], 350, 150);
 
     if (name === "locations-qsolid") {
       const start = forward ? aerialFocus(subject) : subject;
@@ -169,17 +175,17 @@ export function createSlideMotion(stage, slides, reducedMotion) {
       }
     } else if (name === "qsolid-portrait") {
       if (forward) {
-        fadeOutgoing(600);
+        fadeOutgoing(835);
         animate(target, [
           { clipPath: cropTo(targetBox, subject), opacity: .7 },
-          { clipPath: "inset(0)", opacity: 1 },
+          { clipPath: "inset(0px 0px 0px 0px round 0px)", opacity: 1 },
         ], 900, 90);
       } else {
-        fadeOutgoing(490);
+        fadeOutgoing(670);
         movePortrait(outgoing.querySelector("img"), targetBox, 790, .68);
       }
     } else if (name === "portrait-workstation") {
-      fadeOutgoing(530);
+      fadeOutgoing(730);
       if (forward) {
         movePortrait(outgoing.querySelector("img"), targetBox, 900, .66);
         animate(incoming.querySelector(".desk"), [
@@ -209,8 +215,28 @@ export function createSlideMotion(stage, slides, reducedMotion) {
       }
     }
 
-    Promise.allSettled(animations.map(animation => animation.finished)).then(() => {
+    return Promise.allSettled(animations.map(animation => animation.finished)).then(() => {
       if (active === motion) finish();
+    });
+  }
+
+  function replay() {
+    if (!last) return;
+    const { transition, destination } = last;
+    const current = box(plates[transition.to], stage);
+    const scaleX = current.width / destination.width;
+    const scaleY = current.height / destination.height;
+    const reposition = bounds => ({
+      x: current.x + (bounds.x - destination.x) * scaleX,
+      y: current.y + (bounds.y - destination.y) * scaleY,
+      width: bounds.width * scaleX,
+      height: bounds.height * scaleY,
+    });
+    return play({
+      ...transition,
+      plate: reposition(transition.plate),
+      copy: reposition(transition.copy),
+      subject: reposition(transition.subject),
     });
   }
 
@@ -219,10 +245,5 @@ export function createSlideMotion(stage, slides, reducedMotion) {
     last = undefined;
   }
 
-  return {
-    capture,
-    play,
-    replay: () => play(last),
-    reset,
-  };
+  return { capture, play, replay, reset };
 }

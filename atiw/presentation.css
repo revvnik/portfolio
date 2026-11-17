@@ -211,7 +211,7 @@ a:hover { text-decoration-thickness: 2px; }
   overflow: hidden;
   pointer-events: none;
 }
-.handoff-outgoing, .handoff-portrait, .handoff-outline { position: absolute; }
+.handoff-outgoing, .handoff-portrait, .handoff-outline, .handoff-copy { position: absolute; }
 .handoff-poster .model-fallback { opacity: 1; }
 .handoff-portrait {
   object-fit: cover;
@@ -429,13 +429,17 @@ html:not(.deck-ready) .controls { grid-template-columns: 1fr; }
 html:not(.deck-ready) .count { display: none; }
 
 @media (prefers-reduced-motion: no-preference) {
+  .presentation[data-handoff="locations-qsolid"][data-current="2"] .model-layer {
+    transition-duration: .76s, 1.08s, 0s;
+    transition-delay: 0s, 0s, .76s;
+  }
   .presentation { --slide-distance: clamp(16px, 3.4vw, 46px); --slide-shift: var(--slide-distance); --clip-start: 34%; --clip-end: 0%; }
   .presentation[data-direction="back"] { --slide-shift: calc(-1 * var(--slide-distance)); --clip-start: 0%; --clip-end: 34%; }
   .deck-ready .presentation:not([data-handoff]) .slide:not([hidden]) .copy { animation: copy-arrival .62s var(--camera-ease) both; }
   .deck-ready .presentation:not([data-handoff]) :is(#slide-1, #slide-2):not([hidden]) .plate { animation: plate-arrival .76s var(--camera-ease) both; }
   .deck-ready .cover:not([hidden]) .title-rule { transform-origin: left; animation: rule-arrival .66s var(--camera-ease) both; }
   .deck-ready .slide:not([hidden]) .chip-core { animation: chip-start .78s var(--camera-ease) .12s both; }
-  .deck-ready .slide:not([hidden]) .portrait img { animation: portrait-focus .84s var(--camera-ease) both; }
+  .deck-ready .presentation:not([data-handoff]) .slide:not([hidden]) .portrait img { animation: portrait-focus .84s var(--camera-ease) both; }
   .deck-ready .slide:not([hidden]) .computer-screen span { animation: screen-start .53s ease-out .24s both; }
   .deck-ready [data-handoff="portrait-workstation"] .slide:not([hidden]) .computer-screen span { animation-delay: .62s; }
   .segment::before { transition: transform .22s var(--camera-ease), background-color .22s ease; }
