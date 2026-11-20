@@ -12,11 +12,14 @@ const oldSlideIds = new Set([
   "my-it-work", "slide-5", "slide-6", "networking", "apprenticeship"
 ]);
 
-if (oldSlideIds.has(location.hash.slice(1))) {
+function redirectOldSlide() {
+  if (!oldSlideIds.has(location.hash.slice(1))) return false;
   location.replace("./presentation/" + location.hash);
-} else {
-  startSimulator();
+  return true;
 }
+
+window.addEventListener("hashchange", redirectOldSlide);
+if (!redirectOldSlide()) startSimulator();
 
 function startSimulator() {
   const byId = (id) => document.getElementById(id);
