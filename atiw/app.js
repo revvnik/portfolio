@@ -4,8 +4,8 @@ import {
   JohnnyMachine, RAM_SIZE, WORD_MAX, MICRO_SIZE, SLOTS_PER_INSTRUCTION,
   blankRam, defaultMicrocode, formatWord, microName, opcodeOf, operandOf,
   operations, pad, parseMicrocode, parseRam, readWord, standardHelp
-} from "./machine.js";
-import { wireDiagram } from "./diagram.js";
+} from "./machine.js?v=3";
+import { wireDiagram } from "./diagram.js?v=3";
 
 const oldSlideIds = new Set([
   "slide-1", "ministry-section", "slide-2", "slide-3", "slide-4", "high-tech-agenda",
@@ -1058,7 +1058,7 @@ function startSimulator() {
     byId("install").hidden = false;
   });
   window.addEventListener("appinstalled", () => { byId("install").hidden = true; });
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" }).catch(() => {});
 
   applyMicrocode(cpu.microcode, preferences.mode);
   applyControlView(preferences.controlVisible);

@@ -1,16 +1,21 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+const version = "3";
 const prefix = "atiw-johnny-";
-const cacheName = prefix + "v2";
+const cacheName = prefix + "v" + version;
 const root = new URL(self.registration.scope);
 const shell = new URL("./index.html", root).href;
 const assets = new Set([
-  "./index.html", "./style.css", "./app.js", "./machine.js", "./diagram.js",
-  "./icons.svg", "./johnny.webmanifest", "./icons/app-192.png", "./icons/app-512.png"
-].map((path) => new URL(path, root).href));
+  shell,
+  ...["style.css", "app.js", "machine.js", "diagram.js", "icons.svg", "johnny.webmanifest"]
+    .map((name) => new URL(name + "?v=" + version, root).href),
+  ...["icons/app-192.png", "icons/app-512.png"].map((name) => new URL(name, root).href)
+]);
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(cacheName).then((cache) => cache.addAll([...assets])));
+  event.waitUntil(caches.open(cacheName)
+    .then((cache) => cache.addAll([...assets].map((url) => new Request(url, { cache: "reload" }))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (event) => {

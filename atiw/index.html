@@ -14,28 +14,28 @@
   <title>Johnny · CPU simulator</title>
   <link rel="icon" href="./icons/app-192.png">
   <link rel="apple-touch-icon" href="./icons/app-192.png">
-  <link rel="manifest" href="./johnny.webmanifest">
+  <link rel="manifest" href="./johnny.webmanifest?v=3">
   <link rel="canonical" href="https://revvnik.com/atiw/">
-  <link rel="stylesheet" href="./style.css">
-  <script data-cfasync="false" type="module" src="./app.js"></script>
+  <link rel="stylesheet" href="./style.css?v=3">
+  <script data-cfasync="false" type="module" src="./app.js?v=3"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="header-inner">
       <div class="brand">
-        <span class="brand-mark"><svg aria-hidden="true"><use href="./icons.svg#chip"/></svg></span>
+        <span class="brand-mark"><svg aria-hidden="true"><use href="./icons.svg?v=3#chip"/></svg></span>
         <h1>Johnny</h1>
         <span class="brand-label">Von Neumann simulator</span>
       </div>
       <div class="header-actions">
         <button class="button button-quiet" data-dialog="guide">
-          <svg aria-hidden="true"><use href="./icons.svg#book"/></svg> Guide
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#book"/></svg> Guide
         </button>
         <button class="button button-quiet" data-dialog="settings">
-          <svg aria-hidden="true"><use href="./icons.svg#gear"/></svg> Settings
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#gear"/></svg> Settings
         </button>
         <button class="button button-quiet button-icon" id="moreButton" popovertarget="moreMenu" aria-label="More actions" title="More actions">
-          <svg aria-hidden="true"><use href="./icons.svg#more"/></svg>
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#more"/></svg>
         </button>
       </div>
     </div>
@@ -53,20 +53,20 @@
     <section class="execution" aria-label="Execution controls">
       <div class="execution-buttons">
         <button class="button button-primary" id="run" data-action="run" title="Run or resume. Press E to reset and run." aria-keyshortcuts="E">
-          <svg aria-hidden="true"><use href="./icons.svg#play"/></svg><span id="runLabel">Run</span>
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#play"/></svg><span id="runLabel">Run</span>
         </button>
         <button class="button" id="pause" data-action="pause" disabled title="Pause (P)" aria-keyshortcuts="P">
-          <svg aria-hidden="true"><use href="./icons.svg#pause"/></svg>Pause
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#pause"/></svg>Pause
         </button>
         <span class="divider"></span>
         <button class="button" id="step" data-action="step" title="Execute one instruction (S)" aria-keyshortcuts="S" aria-label="Step instruction">
-          <svg aria-hidden="true"><use href="./icons.svg#step"/></svg><span>Step<span class="long-label"> instruction</span></span>
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#step"/></svg><span>Step<span class="long-label"> instruction</span></span>
         </button>
         <button class="button" id="microstep" data-action="microstep" title="Execute one micro-operation (Shift + S)" aria-keyshortcuts="Shift+S">
-          <svg aria-hidden="true"><use href="./icons.svg#micro"/></svg>Microstep
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#micro"/></svg>Microstep
         </button>
         <button class="button button-quiet" data-action="reset" title="Reset registers and counters (R)" aria-keyshortcuts="R" aria-label="Reset CPU">
-          <svg aria-hidden="true"><use href="./icons.svg#reset"/></svg><span>Reset<span class="long-label"> CPU</span></span>
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#reset"/></svg><span>Reset<span class="long-label"> CPU</span></span>
         </button>
       </div>
       <div class="execution-meta">
@@ -82,7 +82,7 @@
     <section class="board" aria-labelledby="boardTitle">
       <div class="board-top">
         <div class="board-title">
-          <svg aria-hidden="true"><use href="./icons.svg#diagram"/></svg>
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#diagram"/></svg>
           <h2 id="boardTitle">CPU diagram</h2>
         </div>
         <div class="board-nav" role="tablist" aria-label="CPU components">
@@ -92,7 +92,7 @@
         </div>
         <div class="board-actions">
           <button class="button button-board" data-action="example">
-            <svg aria-hidden="true"><use href="./icons.svg#flask"/></svg>Load example
+            <svg aria-hidden="true"><use href="./icons.svg?v=3#flask"/></svg>Load example
           </button>
           <label class="switch">
             <input type="checkbox" id="manualVisible" aria-controls="machine">
@@ -132,9 +132,9 @@
             <path id="zeroToPc" class="wire wire-zero"/>
           </svg>
 
-          <h3 class="lane-heading memory-heading" id="memoryHeading"><svg aria-hidden="true"><use href="./icons.svg#memory"/></svg>Memory</h3>
-          <h3 class="lane-heading control-heading" id="controlHeading"><svg aria-hidden="true"><use href="./icons.svg#sliders"/></svg>Control unit</h3>
-          <h3 class="lane-heading alu-heading" id="aluHeading"><svg aria-hidden="true"><use href="./icons.svg#alu"/></svg>Arithmetic logic unit</h3>
+          <h3 class="lane-heading memory-heading" id="memoryHeading"><svg aria-hidden="true"><use href="./icons.svg?v=3#memory"/></svg>Memory</h3>
+          <h3 class="lane-heading control-heading" id="controlHeading"><svg aria-hidden="true"><use href="./icons.svg?v=3#sliders"/></svg>Control unit</h3>
+          <h3 class="lane-heading alu-heading" id="aluHeading"><svg aria-hidden="true"><use href="./icons.svg?v=3#alu"/></svg>Arithmetic logic unit</h3>
 
           <div class="bus address-bus" id="addressRail">
             <div class="bus-content">
@@ -215,7 +215,7 @@
               </div>
             </div>
             <div class="control-off" id="controlOff" hidden>
-              <svg aria-hidden="true"><use href="./icons.svg#sliders"/></svg>
+              <svg aria-hidden="true"><use href="./icons.svg?v=3#sliders"/></svg>
               <p>Control unit hidden</p>
               <button class="button button-board" data-action="showControl">Show control unit</button>
             </div>
@@ -257,7 +257,7 @@
 
       <div class="board-bottom">
         <div class="signal-line">
-          <svg aria-hidden="true"><use href="./icons.svg#pulse"/></svg>
+          <svg aria-hidden="true"><use href="./icons.svg?v=3#pulse"/></svg>
           <span id="lastAction" aria-live="polite">Load an example or select a RAM word.</span>
         </div>
       </div>
@@ -270,7 +270,7 @@
   <dialog id="ramTools" class="modal ram-tools" aria-labelledby="ramToolsTitle">
     <div class="modal-head">
       <h2 id="ramToolsTitle">Edit RAM</h2>
-      <button class="button button-quiet button-icon" data-close aria-label="Close RAM editor"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+      <button class="button button-quiet button-icon" data-close aria-label="Close RAM editor"><svg aria-hidden="true"><use href="./icons.svg?v=3#close"/></svg></button>
     </div>
     <div class="dialog-content">
       <form class="ram-editor" id="ramEditor">
@@ -291,9 +291,9 @@
         <button class="text-button" data-action="redo" title="Redo (Ctrl + Y)" disabled>Redo</button>
       </div>
       <div class="file-buttons">
-        <button class="button" data-action="openRam" title="Open a .ram file (Ctrl + O)"><svg aria-hidden="true"><use href="./icons.svg#folder"/></svg>Open</button>
-        <button class="button" data-action="saveRam" title="Save a .ram file (Ctrl + S)"><svg aria-hidden="true"><use href="./icons.svg#save"/></svg>Save</button>
-        <button class="button" data-action="clearRam" title="Clear RAM (Alt + C)" aria-label="Clear RAM"><svg aria-hidden="true"><use href="./icons.svg#file"/></svg>Clear</button>
+        <button class="button" data-action="openRam" title="Open a .ram file (Ctrl + O)"><svg aria-hidden="true"><use href="./icons.svg?v=3#folder"/></svg>Open</button>
+        <button class="button" data-action="saveRam" title="Save a .ram file (Ctrl + S)"><svg aria-hidden="true"><use href="./icons.svg?v=3#save"/></svg>Save</button>
+        <button class="button" data-action="clearRam" title="Clear RAM (Alt + C)" aria-label="Clear RAM"><svg aria-hidden="true"><use href="./icons.svg?v=3#file"/></svg>Clear</button>
       </div>
       <p id="ramToolStatus" role="status" hidden></p>
     </div>
@@ -311,7 +311,7 @@
   <dialog id="recordDialog" class="modal" aria-labelledby="recordTitle">
     <div class="modal-head">
       <h2 id="recordTitle">Record instruction</h2>
-      <button class="button button-quiet button-icon" data-close aria-label="Close recorder"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+      <button class="button button-quiet button-icon" data-close aria-label="Close recorder"><svg aria-hidden="true"><use href="./icons.svg?v=3#close"/></svg></button>
     </div>
     <form id="recordPanel" class="record-panel dialog-content">
       <label>Opcode <input id="recordOpcode" type="number" inputmode="numeric" min="1" max="19" value="11" required></label>
@@ -324,7 +324,7 @@
   <dialog id="commandDialog" class="modal command-dialog" aria-labelledby="commandTitle">
     <div class="modal-head">
       <h2 id="commandTitle">Command mode</h2>
-      <button class="button button-quiet button-icon" data-close aria-label="Close command mode"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+      <button class="button button-quiet button-icon" data-close aria-label="Close command mode"><svg aria-hidden="true"><use href="./icons.svg?v=3#close"/></svg></button>
     </div>
     <form id="commandLine" class="dialog-content">
       <label for="commandInput">Command</label>
@@ -337,7 +337,7 @@
   <dialog id="settings" class="modal" aria-labelledby="settingsTitle">
     <div class="modal-head">
       <h2 id="settingsTitle">Settings</h2>
-      <button class="button button-quiet button-icon" data-close aria-label="Close settings"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+      <button class="button button-quiet button-icon" data-close aria-label="Close settings"><svg aria-hidden="true"><use href="./icons.svg?v=3#close"/></svg></button>
     </div>
     <div class="dialog-content">
       <label class="setting-row"><span>Instruction set <small>Bonsai provides a smaller set of instructions.</small></span>
@@ -357,7 +357,7 @@
   <dialog id="guide" class="modal guide" aria-labelledby="guideTitle">
     <div class="modal-head">
       <h2 id="guideTitle">Johnny guide</h2>
-      <button class="button button-quiet button-icon" data-close aria-label="Close guide"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+      <button class="button button-quiet button-icon" data-close aria-label="Close guide"><svg aria-hidden="true"><use href="./icons.svg?v=3#close"/></svg></button>
     </div>
     <div class="dialog-content">
       <h3>Run your first program</h3>
