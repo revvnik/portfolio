@@ -49,6 +49,7 @@ function startSimulator() {
     historyMaxLength: 30,
     mode: "standard",
     controlVisible: true,
+    manualVisible: false,
     delay: 1300,
     ...read("preferences", {})
   };
@@ -68,9 +69,13 @@ function startSimulator() {
   const lastAction = byId("lastAction");
   const stateBadge = byId("executionStatus");
   const prompt = byId("prompt");
+  const ramTools = byId("ramTools");
+  const commandDialog = byId("commandDialog");
+  const recordDialog = byId("recordDialog");
   const recordPanel = byId("recordPanel");
   const machine = byId("machine");
-  const ramRows = makeRows(byId("ramRows"), RAM_SIZE, 4, "address");
+  const showPane = wireDiagram();
+  const ramRows = makeRows(byId("ramRows"), RAM_SIZE, 3, "address");
   const mcRows = makeRows(byId("mcRows"), MICRO_SIZE, 2, "micro");
   const microButtons = mcRows.map((row, address) => {
     const button = document.createElement("button");
@@ -105,7 +110,17 @@ function startSimulator() {
   }
 
   function notify(message) {
-    if (lastAction.textContent !== message) lastAction.textContent = message;
+    if (lastAction.textContent !== message) {
+      lastAction.textContent = message;
+      lastAction.title = message;
+    }
+    for (const [dialog, id] of [[ramTools, "ramToolStatus"], [recordDialog, "recordStatus"], [commandDialog, "commandStatus"]]) {
+      if (dialog.open) {
+        const status = byId(id);
+        status.hidden = false;
+        status.textContent = message;
+      }
+    }
   }
 
   function setPhase(next) {
@@ -132,8 +147,7 @@ function startSimulator() {
     const name = opcode ? microName(cpu.microcode, opcode) : "";
     const cells = ramRows[address].cells;
     cells[1].textContent = formatWord(word);
-    cells[2].textContent = name;
-    cells[3].textContent = name ? pad(operandOf(word)) : "";
+    cells[2].textContent = name ? name + " " + pad(operandOf(word)) : "";
   }
 
   function renderRam() {
@@ -218,7 +232,7 @@ function startSimulator() {
     row.tabIndex = 0;
     editSelection();
     if (reveal) revealRow(row, byId("ramScroll"), preferences.linesAheadTop, preferences.linesAheadBottom);
-    if (focus) ramInput.focus({ preventScroll: true });
+    if (focus) (ramTools.open ? ramInput : row).focus({ preventScroll: true });
   }
 
   let previousPc;
@@ -314,6 +328,7 @@ function startSimulator() {
   }
 
   function performOperation(code) {
+    const wasRecording = Boolean(recording);
     cpu.apply(code);
     operationApplied(code);
     if (code === 19) {
@@ -322,7 +337,7 @@ function startSimulator() {
     }
     renderCpu();
     flash(code);
-    notify(operations[code][1] + ".");
+    if (!wasRecording || recording) notify(operations[code][1] + ".");
   }
 
   function runMicrostep() {
@@ -438,9 +453,29 @@ function startSimulator() {
     store("preferences", preferences);
   }
 
+  function applyManualView(visible) {
+    preferences.manualVisible = visible;
+    byId("manualVisible").checked = visible;
+    machine.dataset.manual = visible;
+    store("preferences", preferences);
+  }
+
+  function openRamEditor() {
+    showPane("memory");
+    if (!ramTools.open) {
+      byId("ramToolStatus").hidden = true;
+      ramTools.showModal();
+    }
+    ramInput.focus({ preventScroll: true });
+    ramInput.select();
+  }
+
   function updateHistory() {
-    byId("undo").disabled = !undoStack.length || Boolean(recording);
-    byId("redo").disabled = !redoStack.length || Boolean(recording);
+    for (const [action, stack] of [["undo", undoStack], ["redo", redoStack]]) {
+      for (const button of document.querySelectorAll('[data-action="' + action + '"]')) {
+        button.disabled = !stack.length || Boolean(recording);
+      }
+    }
   }
 
   function remember(entry) {
@@ -542,7 +577,6 @@ function startSimulator() {
     preferences.mode = mode;
     byId("mode").value = mode;
     machine.dataset.mode = mode;
-    byId("instructionMode").textContent = mode === "bonsai" ? "Bonsai instruction set" : "Standard instruction set";
     renderMicrocode();
     renderRam();
     editSelection();
@@ -633,16 +667,15 @@ function startSimulator() {
     notify("Renamed " + oldName + " to " + name + ".");
   }
 
-  function showRecorder(visible) {
-    if (!visible && recording) finishRecording();
-    if (visible) applyControlView(true);
-    recordPanel.hidden = !visible;
-    byId("recordToggle").setAttribute("aria-pressed", visible);
-    if (visible) byId("recordName").focus({ preventScroll: true });
+  function openRecorder() {
+    if (recording || recordDialog.open) return;
+    byId("recordStatus").hidden = true;
+    recordDialog.showModal();
+    byId("recordName").focus();
   }
 
   async function startRecording() {
-    if (recording) return finishRecording();
+    if (recording) return;
     const opcode = Number(byId("recordOpcode").value);
     const name = byId("recordName").value.trim().toUpperCase();
     if (!recordPanel.reportValidity()) return;
@@ -660,12 +693,14 @@ function startSimulator() {
     }
     if (phase === "running") pause();
     recording = { before: cpu.microcode.slice(), name, start, offset: 0 };
+    recordDialog.close();
+    applyControlView(true);
+    applyManualView(true);
+    showPane("control");
     cpu.microcode.fill(0, start, start + SLOTS_PER_INSTRUCTION);
     cpu.microcode[MICRO_SIZE + opcode] = name;
-    recordPanel.dataset.recording = "true";
-    byId("recordOpcode").disabled = true;
-    byId("recordName").disabled = true;
-    byId("recordAction").textContent = "Finish";
+    byId("microToolsButton").hidden = true;
+    byId("finishRecording").hidden = false;
     renderMicrocode();
     revealRow(mcRows[start], byId("mcScroll"));
     updateHistory();
@@ -681,12 +716,11 @@ function startSimulator() {
   }
 
   function finishRecording() {
+    if (!recording) return;
     const { before, name, offset } = recording;
     recording = undefined;
-    byId("recordOpcode").disabled = false;
-    byId("recordName").disabled = false;
-    recordPanel.dataset.recording = "false";
-    byId("recordAction").textContent = "Start";
+    byId("finishRecording").hidden = true;
+    byId("microToolsButton").hidden = false;
     if (!offset) {
       applyMicrocode(before, preferences.mode);
       updateHistory();
@@ -781,19 +815,19 @@ function startSimulator() {
   }
 
   function enterCommand() {
-    byId("commandLine").hidden = false;
+    if (ramTools.open) ramTools.close();
+    byId("commandStatus").hidden = true;
+    commandDialog.showModal();
     byId("commandInput").focus();
   }
 
   function leaveCommand() {
-    byId("commandLine").hidden = true;
-    byId("commandInput").value = "";
+    commandDialog.close();
   }
 
   function recordShortcut() {
     if (recording) return finishRecording();
-    showRecorder(true);
-    if (byId("recordName").value && recordPanel.checkValidity()) return startRecording();
+    openRecorder();
   }
 
   const actions = {
@@ -803,6 +837,7 @@ function startSimulator() {
     microstep: runMicrostep,
     reset: () => resetCpu(),
     example: loadExample,
+    editRam: openRamEditor,
     openRam: () => byId("ramFile").click(),
     openMc: () => byId("mcFile").click(),
     saveRam: () => downloadFile("ram"),
@@ -814,9 +849,9 @@ function startSimulator() {
     undo: () => stepHistory(undoStack, redoStack, "undo"),
     redo: () => stepHistory(redoStack, undoStack, "redo"),
     showControl: () => applyControlView(true),
-    toggleRecorder: () => showRecorder(recordPanel.hidden),
+    openRecorder,
+    finishRecording,
     command: enterCommand,
-    leaveCommand,
     install: async () => {
       if (!installPrompt) return;
       await installPrompt.prompt();
@@ -857,7 +892,10 @@ function startSimulator() {
 
   document.addEventListener("click", (event) => {
     const button = event.target.closest("button");
-    if (button?.dataset.action) return invoke(actions[button.dataset.action]);
+    if (button?.dataset.action) {
+      button.closest("[popover]:popover-open")?.hidePopover();
+      return invoke(actions[button.dataset.action]);
+    }
     if (button?.dataset.op) return invoke(() => performOperation(Number(button.dataset.op)));
     if (button?.dataset.dialog) return byId(button.dataset.dialog).showModal();
     if (button?.hasAttribute("data-close")) return button.closest("dialog").close();
@@ -873,6 +911,23 @@ function startSimulator() {
     const row = event.target.closest("[data-address]");
     if (row) selectRam(Number(row.dataset.address), { focus: true });
   });
+  byId("ramRows").addEventListener("dblclick", (event) => {
+    if (event.target.closest("[data-address]")) openRamEditor();
+  });
+
+  for (const [menuId, buttonId] of [["moreMenu", "moreButton"], ["microTools", "microToolsButton"]]) {
+    const menu = byId(menuId);
+    menu.addEventListener("toggle", (event) => {
+      if (event.newState !== "open") return;
+      const trigger = byId(buttonId).getBoundingClientRect();
+      const width = menu.offsetWidth;
+      const height = menu.offsetHeight;
+      menu.style.left = Math.max(8, Math.min(innerWidth - width - 8, trigger.right - width)) + "px";
+      const below = trigger.bottom + 5;
+      menu.style.top = Math.max(8, below + height <= innerHeight - 8 ? below : trigger.top - height - 5) + "px";
+    });
+  }
+  commandDialog.addEventListener("close", () => { byId("commandInput").value = ""; });
 
   const forms = {
     ramEditor: writeRam,
@@ -906,6 +961,7 @@ function startSimulator() {
   }
 
   byId("controlVisible").addEventListener("change", (event) => applyControlView(event.target.checked));
+  byId("manualVisible").addEventListener("change", (event) => applyManualView(event.target.checked));
   speed.value = 3000 - preferences.delay;
   speed.addEventListener("input", updateSpeed);
 
@@ -930,6 +986,8 @@ function startSimulator() {
   });
 
   function focusField(id) {
+    if (id === "ramInput") return openRamEditor();
+    if (id === "addressInput" || id === "dataInput") applyManualView(true);
     const field = byId(id);
     field.focus();
     if (field.type === "text") field.select();
@@ -939,8 +997,8 @@ function startSimulator() {
     e: () => run(true), p: actions.pause, r: actions.reset, s: actions.step, S: actions.microstep,
     u: () => applyControlView(!preferences.controlVisible),
     a: () => focusField("addressInput"), d: () => focusField("dataInput"), w: () => focusField("ramInput"),
-    A: () => { showRecorder(true); focusField("recordOpcode"); },
-    N: () => { showRecorder(true); focusField("recordName"); },
+    A: () => { openRecorder(); focusField("recordOpcode"); },
+    N: () => { openRecorder(); focusField("recordName"); },
     Q: recordShortcut, ":": enterCommand, v: enterCommand,
     "+": () => { speed.valueAsNumber += 150; updateSpeed(); },
     "-": () => { speed.valueAsNumber -= 150; updateSpeed(); },
@@ -952,16 +1010,16 @@ function startSimulator() {
   };
   const fileShortcuts = { o: actions.openRam, O: actions.openMc, s: actions.saveRam, S: actions.saveMc, z: actions.undo, y: actions.redo, Z: actions.redo };
   document.addEventListener("keydown", (event) => {
-    if (event.defaultPrevented || document.querySelector("dialog[open]")) return;
+    if (event.defaultPrevented || document.querySelector("dialog[open]:not(#commandDialog, #ramTools, #recordDialog)")) return;
     const { target, key } = event;
-    if (target === byId("commandInput") || !byId("commandLine").hidden) {
-      if (key === "Escape" || (event.ctrlKey && key === "c")) {
+    if (commandDialog.open) {
+      if (event.ctrlKey && key === "c") {
         event.preventDefault();
         leaveCommand();
       }
       return;
     }
-    if (target.closest("#recordPanel")) {
+    if (recordDialog.open) {
       if (key === "Enter" && event.shiftKey) {
         event.preventDefault();
         invoke(startRecording);
@@ -974,8 +1032,9 @@ function startSimulator() {
     } else if (event.altKey && /^c$/i.test(event.code.slice(-1))) {
       action = event.shiftKey ? actions.resetMc : actions.clearRam;
     } else if (!event.altKey) {
-      if (target.matches("select, input[type=range], #mcScroll, #mcScroll *")) return;
-      if (key === "Enter" && target.closest("[data-address]")) action = () => focusField("ramInput");
+      if (target.matches("select, input[type=range], #mcScroll, #mcScroll *, [role=tab]")) return;
+      if (ramTools.open && !["ArrowUp", "ArrowDown", "Delete", "Insert"].includes(key)) return;
+      if (key === "Enter" && target.closest("[data-address]")) action = openRamEditor;
       else if (key === "Delete" && (event.shiftKey || preferences.useDeleteForDeleteRow)) action = actions.delete;
       else if (Object.hasOwn(shortcutActions, key)) action = shortcutActions[key];
     }
@@ -1003,8 +1062,8 @@ function startSimulator() {
 
   applyMicrocode(cpu.microcode, preferences.mode);
   applyControlView(preferences.controlVisible);
+  applyManualView(preferences.manualVisible);
   selectRam(0, { reveal: false });
   renderCpu();
   updateSpeed();
-  wireDiagram();
 }

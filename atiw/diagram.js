@@ -1,113 +1,138 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export function wireDiagram() {
-  const machine = document.getElementById("machine");
-  const board = document.getElementById("boardScroll");
-  const sections = [...document.querySelectorAll("[data-pan]")].map((button) => ({
-    button,
-    lane: document.getElementById(button.dataset.pan)
-  }));
-
   const byId = (id) => document.getElementById(id);
-  const operation = (code) => machine.querySelector('[data-op="' + code + '"]');
+  const machine = byId("machine");
+  const wiring = byId("wiring");
+  const compact = matchMedia("(max-width: 1010px), (max-height: 608px)");
+  const tabs = [...document.querySelectorAll(".board-nav [data-pane]")];
+  const names = tabs.map((tab) => tab.dataset.pane);
+  const paths = new Map([...wiring.querySelectorAll(".wire")].map((path) => [path.id, path]));
+
+  function showPane(name) {
+    if (!names.includes(name)) return;
+    machine.dataset.pane = name;
+    for (const tab of tabs) {
+      const selected = tab.dataset.pane === name;
+      tab.setAttribute("aria-selected", selected);
+      tab.tabIndex = selected ? 0 : -1;
+      const pane = byId(tab.dataset.pane);
+      pane.setAttribute("role", compact.matches ? "tabpanel" : "region");
+      pane.setAttribute("aria-labelledby", compact.matches ? tab.id : tab.dataset.pane + "Heading");
+    }
+    schedule();
+  }
+
+  for (const [index, tab] of tabs.entries()) {
+    tab.addEventListener("click", () => showPane(tab.dataset.pane));
+    tab.addEventListener("keydown", (event) => {
+      const target = {
+        ArrowLeft: (index + tabs.length - 1) % tabs.length,
+        ArrowRight: (index + 1) % tabs.length,
+        Home: 0,
+        End: tabs.length - 1
+      }[event.key];
+      if (target === undefined) return;
+      event.preventDefault();
+      showPane(names[target]);
+      tabs[target].focus();
+    });
+  }
+
+  compact.addEventListener("change", () => showPane(machine.dataset.pane));
 
   function draw() {
     const origin = machine.getBoundingClientRect();
-    const bounds = (element) => {
-      const rect = element.getBoundingClientRect();
-      const left = rect.left - origin.left;
-      const top = rect.top - origin.top;
-      return {
-        left, top, right: left + rect.width, bottom: top + rect.height,
-        x: left + rect.width / 2, y: top + rect.height / 2
-      };
+    if (!origin.width || !origin.height) return;
+    wiring.setAttribute("viewBox", "0 0 " + origin.width + " " + origin.height);
+
+    const route = new Map();
+    const box = (element) => {
+      const { left, top, width, height } = element.getBoundingClientRect();
+      if (!width || !height) return null;
+      const x = left - origin.left;
+      const y = top - origin.top;
+      return { left: x, top: y, right: x + width, bottom: y + height, width, centerY: y + height / 2 };
     };
+    const at = (rect, fraction) => rect.left + rect.width * fraction;
+    const add = (id, points) => route.set(id, points);
 
-    const line = (id, points) => {
-      const path = points.map(([x, y]) => x.toFixed(2) + " " + y.toFixed(2)).join(" L");
-      byId(id).setAttribute("d", "M" + path);
-    };
+    const address = box(byId("addressRail"));
+    const data = box(byId("dataRail"));
+    const ram = box(byId("ramPanel"));
+    const ir = box(byId("irBlock"));
+    const pc = box(byId("pcBlock"));
+    const mc = box(byId("mcBlock"));
+    const acc = box(byId("accBlock"));
+    const zero = box(byId("zeroFlag"));
 
-    const address = bounds(byId("addressRail"));
-    const data = bounds(byId("dataRail"));
-    const ram = bounds(byId("ramPanel"));
-    const acc = bounds(byId("accBlock"));
-    const write = bounds(operation(1)).x;
-    const read = bounds(operation(2)).x;
-    const input = bounds(operation(18)).x;
-    const output = bounds(operation(15)).x;
+    if (ram) {
+      const addressPort = at(ram, 0.5);
+      const write = at(ram, 0.25);
+      const read = at(ram, 0.75);
+      add("addressToRam", [[addressPort, address.bottom], [addressPort, ram.top - 1]]);
+      add("dataToRam", [[write, data.top], [write, ram.bottom + 1]]);
+      add("ramToData", [[read, ram.bottom], [read, data.top - 1]]);
+    }
 
-    line("addressToRam", [[ram.x, address.bottom], [ram.x, ram.top - 1]]);
-    line("dataToRam", [[write, data.top], [write, ram.bottom + 1]]);
-    line("ramToData", [[read, ram.bottom], [read, data.top - 1]]);
-    line("dataToAcc", [[input, data.top], [input, acc.bottom + 1]]);
-    line("accToData", [[output, acc.bottom], [output, data.top - 1]]);
+    if (ir && pc && mc) {
+      const dataLink = box(byId("control")).left + 2;
+      const irPort = at(ir, 0.5);
+      const pcPort = at(pc, 0.5);
+      add("dataToIr", [[dataLink, data.top], [dataLink, ir.centerY], [ir.left - 1, ir.centerY]]);
+      add("irToAddress", [[irPort, ir.top], [irPort, address.bottom + 1]]);
+      add("pcToAddress", [[pcPort, pc.top], [pcPort, address.bottom + 1]]);
+      add("irToPc", [[ir.right, ir.centerY], [pc.left - 1, pc.centerY]]);
 
-    if (machine.dataset.control !== "true") return;
-    const ir = bounds(byId("irBlock"));
-    const pc = bounds(byId("pcBlock"));
-    const mc = bounds(byId("mcBlock"));
-    const control = bounds(byId("control"));
-    const flag = bounds(byId("zeroFlag"));
-    const test = bounds(operation(10));
-    const irRail = bounds(operation(4)).x;
-    const pcRail = bounds(operation(8)).x;
-    const dataLink = control.left - 5;
-    const zeroLink = Math.max(test.right + 6, acc.left - 8);
-
-    line("dataToIr", [[dataLink, data.top], [dataLink, ir.y], [ir.left - 1, ir.y]]);
-    line("irToAddress", [[irRail, ir.top], [irRail, address.bottom + 1]]);
-    line("pcToAddress", [[pcRail, pc.top], [pcRail, address.bottom + 1]]);
-    line("irToPc", [[ir.right, ir.y], [pc.left - 1, pc.y]]);
-    line("irToMc", [[ir.x, ir.bottom], [ir.x, mc.top - 1]]);
-    line("zeroToPc", [[acc.left, flag.y], [zeroLink, flag.y], [zeroLink, test.y], [test.right + 1, test.y]]);
-  }
-
-  function laneOffset(lane) {
-    const boardRect = board.getBoundingClientRect();
-    const inset = parseFloat(getComputedStyle(machine).paddingLeft);
-    const left = lane.getBoundingClientRect().left - boardRect.left + board.scrollLeft - inset;
-    return Math.max(0, Math.min(left, board.scrollWidth - board.clientWidth));
-  }
-
-  function markSection() {
-    if (!board.clientWidth) return;
-    let active = sections[0];
-    let distance = Infinity;
-    for (const section of sections) {
-      const current = Math.abs(board.scrollLeft - laneOffset(section.lane));
-      if (current < distance) {
-        active = section;
-        distance = current;
+      if (mc.left > pc.right) {
+        const outlet = ir.right - 11;
+        const turn = ir.bottom + 3;
+        const gutter = mc.left - 11;
+        add("irToMc", [[outlet, ir.bottom], [outlet, turn], [gutter, turn], [gutter, mc.centerY], [mc.left - 1, mc.centerY]]);
+      } else if (machine.dataset.manual === "true") {
+        const outlet = ir.right - 9;
+        const turn = ir.bottom + 3;
+        const gutter = at(mc, 0.5);
+        add("irToMc", [[outlet, ir.bottom], [outlet, turn], [gutter, turn], [gutter, mc.top - 1]]);
+      } else {
+        add("irToMc", [[irPort, ir.bottom], [irPort, mc.top - 1]]);
       }
     }
-    for (const section of sections) {
-      if (section === active) section.button.setAttribute("aria-current", "true");
-      else section.button.removeAttribute("aria-current");
+
+    if (acc) {
+      const input = at(acc, 0.25);
+      const output = at(acc, 0.75);
+      add("dataToAcc", [[input, data.top], [input, acc.bottom + 1]]);
+      add("accToData", [[output, acc.bottom], [output, data.top - 1]]);
+    }
+    if (pc && zero) {
+      const gutter = pc.right + 12;
+      add("zeroToPc", [[zero.left - 1, zero.centerY], [gutter, zero.centerY], [gutter, pc.centerY], [pc.right + 1, pc.centerY]]);
+    }
+
+    for (const [id, path] of paths) {
+      const points = route.get(id);
+      if (!points) path.removeAttribute("d");
+      else path.setAttribute("d", points.map(([x, y], index) => (index ? "L" : "M") + x.toFixed(2) + " " + y.toFixed(2)).join(" "));
     }
   }
 
-  for (const { button, lane } of sections) {
-    button.addEventListener("click", () => {
-      const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      board.scrollTo({ left: laneOffset(lane), behavior: reduced ? "instant" : "smooth" });
-    });
-  }
-
-  let pending = false;
-  function layout() {
-    if (pending) return;
-    pending = true;
-    requestAnimationFrame(() => {
-      pending = false;
+  let frame;
+  function schedule() {
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      frame = undefined;
       draw();
-      markSection();
     });
   }
 
-  const observer = new ResizeObserver(layout);
-  for (const element of [machine, byId("controlBody"), byId("recordPanel"), byId("accBlock")]) observer.observe(element);
-  new MutationObserver(layout).observe(machine, { attributes: true, attributeFilter: ["data-control", "data-mode"] });
-  board.addEventListener("scroll", markSection, { passive: true });
-  layout();
+  const resize = new ResizeObserver(schedule);
+  for (const id of ["machine", "addressRail", "dataRail", "ramPanel", "irBlock", "pcBlock", "mcBlock", "accBlock", "zeroFlag"]) {
+    resize.observe(byId(id));
+  }
+  new MutationObserver(schedule).observe(machine, {
+    attributes: true, attributeFilter: ["data-pane", "data-control", "data-manual", "data-mode"]
+  });
+  showPane("memory");
+  return showPane;
 }

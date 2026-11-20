@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 const prefix = "atiw-johnny-";
-const cacheName = prefix + "v1";
+const cacheName = prefix + "v2";
 const root = new URL(self.registration.scope);
 const shell = new URL("./index.html", root).href;
 const assets = new Set([

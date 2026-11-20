@@ -8,7 +8,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="Explore a Von Neumann computer with Johnny’s interactive CPU diagram, RAM and microcode editor.">
   <meta name="theme-color" content="#101b29">
   <title>Johnny · CPU simulator</title>
@@ -34,7 +34,16 @@
         <button class="button button-quiet" data-dialog="settings">
           <svg aria-hidden="true"><use href="./icons.svg#gear"/></svg> Settings
         </button>
+        <button class="button button-quiet button-icon" id="moreButton" popovertarget="moreMenu" aria-label="More actions" title="More actions">
+          <svg aria-hidden="true"><use href="./icons.svg#more"/></svg>
+        </button>
       </div>
+    </div>
+    <div class="menu-flyout" id="moreMenu" popover>
+      <button data-action="command" title="Open command mode (: or V)">Command mode</button>
+      <button id="install" data-action="install" hidden>Install app</button>
+      <a href="./presentation/">ATIW presentation</a>
+      <a href="https://github.com/revvnik/portfolio/tree/main/atiw">Source &amp; license</a>
     </div>
   </header>
 
@@ -50,14 +59,14 @@
           <svg aria-hidden="true"><use href="./icons.svg#pause"/></svg>Pause
         </button>
         <span class="divider"></span>
-        <button class="button" id="step" data-action="step" title="Execute one instruction (S)" aria-keyshortcuts="S">
-          <svg aria-hidden="true"><use href="./icons.svg#step"/></svg>Step instruction
+        <button class="button" id="step" data-action="step" title="Execute one instruction (S)" aria-keyshortcuts="S" aria-label="Step instruction">
+          <svg aria-hidden="true"><use href="./icons.svg#step"/></svg><span>Step<span class="long-label"> instruction</span></span>
         </button>
         <button class="button" id="microstep" data-action="microstep" title="Execute one micro-operation (Shift + S)" aria-keyshortcuts="Shift+S">
           <svg aria-hidden="true"><use href="./icons.svg#micro"/></svg>Microstep
         </button>
-        <button class="button button-quiet" data-action="reset" title="Reset registers and counters (R)" aria-keyshortcuts="R">
-          <svg aria-hidden="true"><use href="./icons.svg#reset"/></svg>Reset CPU
+        <button class="button button-quiet" data-action="reset" title="Reset registers and counters (R)" aria-keyshortcuts="R" aria-label="Reset CPU">
+          <svg aria-hidden="true"><use href="./icons.svg#reset"/></svg><span>Reset<span class="long-label"> CPU</span></span>
         </button>
       </div>
       <div class="execution-meta">
@@ -76,62 +85,62 @@
           <svg aria-hidden="true"><use href="./icons.svg#diagram"/></svg>
           <h2 id="boardTitle">CPU diagram</h2>
         </div>
+        <div class="board-nav" role="tablist" aria-label="CPU components">
+          <button role="tab" id="memoryTab" data-pane="memory" aria-controls="memory" aria-selected="true">Memory</button>
+          <button role="tab" id="controlTab" data-pane="control" aria-controls="control" aria-selected="false">Control unit</button>
+          <button role="tab" id="aluTab" data-pane="alu" aria-controls="alu" aria-selected="false">ALU</button>
+        </div>
         <div class="board-actions">
           <button class="button button-board" data-action="example">
             <svg aria-hidden="true"><use href="./icons.svg#flask"/></svg>Load example
           </button>
-          <label class="switch" title="Show or hide the control unit (U)">
-            <input type="checkbox" id="controlVisible" checked aria-controls="controlBody">
+          <label class="switch">
+            <input type="checkbox" id="manualVisible" aria-controls="machine">
             <span class="switch-track" aria-hidden="true"></span>
-            <span>Control unit</span>
+            <span>Manual controls</span>
           </label>
         </div>
       </div>
 
-      <nav class="board-nav" aria-label="Diagram sections">
-        <button data-pan="memory" aria-current="true">Memory</button>
-        <button data-pan="control">Control unit</button>
-        <button data-pan="alu">ALU</button>
-      </nav>
-      <div class="board-scroll" id="boardScroll" tabindex="0" role="region" aria-label="CPU diagram, scroll to view all components">
-        <div class="machine" id="machine">
+      <div class="board-body">
+        <div class="machine" id="machine" data-pane="memory" data-manual="false">
           <svg class="wiring" id="wiring" aria-hidden="true">
             <defs>
-              <marker id="addressArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-                <path d="M0 0 L10 5 L0 10 Z" fill="#528af0"/>
+              <marker id="addressArrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0 0 L8 4 L0 8 Z"/>
               </marker>
-              <marker id="dataArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-                <path d="M0 0 L10 5 L0 10 Z" fill="#3aab8a"/>
+              <marker id="dataArrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0 0 L8 4 L0 8 Z"/>
               </marker>
-              <marker id="controlArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-                <path d="M0 0 L10 5 L0 10 Z" fill="#a8798b"/>
+              <marker id="controlArrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0 0 L8 4 L0 8 Z"/>
               </marker>
-              <marker id="zeroArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-                <path d="M0 0 L10 5 L0 10 Z" fill="#ac924e"/>
+              <marker id="zeroArrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0 0 L8 4 L0 8 Z"/>
               </marker>
             </defs>
             <path id="addressToRam" class="wire wire-address"/>
             <path id="dataToRam" class="wire wire-data"/>
             <path id="ramToData" class="wire wire-data"/>
-            <path id="dataToIr" class="wire wire-data wire-control-unit"/>
-            <path id="irToAddress" class="wire wire-address wire-control-unit"/>
-            <path id="pcToAddress" class="wire wire-address wire-control-unit"/>
-            <path id="irToPc" class="wire wire-address wire-control-unit"/>
-            <path id="irToMc" class="wire wire-instruction wire-control-unit"/>
+            <path id="dataToIr" class="wire wire-data"/>
+            <path id="irToAddress" class="wire wire-address"/>
+            <path id="pcToAddress" class="wire wire-address"/>
+            <path id="irToPc" class="wire wire-address"/>
+            <path id="irToMc" class="wire wire-instruction"/>
             <path id="dataToAcc" class="wire wire-data"/>
             <path id="accToData" class="wire wire-data"/>
-            <path id="zeroToPc" class="wire wire-zero wire-control-unit"/>
+            <path id="zeroToPc" class="wire wire-zero"/>
           </svg>
 
-          <h3 class="lane-heading memory-heading" id="memoryHeading"><svg aria-hidden="true"><use href="./icons.svg#memory"/></svg>Memory <span>RAM</span></h3>
-          <h3 class="lane-heading control-heading" id="controlHeading"><svg aria-hidden="true"><use href="./icons.svg#sliders"/></svg>Control unit <span>CU</span></h3>
-          <h3 class="lane-heading alu-heading" id="aluHeading"><svg aria-hidden="true"><use href="./icons.svg#alu"/></svg>Arithmetic logic unit <span>ALU</span></h3>
+          <h3 class="lane-heading memory-heading" id="memoryHeading"><svg aria-hidden="true"><use href="./icons.svg#memory"/></svg>Memory</h3>
+          <h3 class="lane-heading control-heading" id="controlHeading"><svg aria-hidden="true"><use href="./icons.svg#sliders"/></svg>Control unit</h3>
+          <h3 class="lane-heading alu-heading" id="aluHeading"><svg aria-hidden="true"><use href="./icons.svg#alu"/></svg>Arithmetic logic unit</h3>
 
           <div class="bus address-bus" id="addressRail">
             <div class="bus-content">
               <span class="bus-label"><i aria-hidden="true"></i>Address bus</span>
               <output class="bus-value" id="addressValue" aria-label="Address bus value">000</output>
-              <form class="bus-editor" id="addressForm">
+              <form class="bus-editor manual-control" id="addressForm">
                 <input id="addressInput" type="text" inputmode="numeric" autocomplete="off" placeholder="000" aria-label="New address bus value">
                 <button class="button button-board" title="Set address bus" aria-label="Set address bus">Set</button>
               </form>
@@ -141,41 +150,17 @@
           <section class="lane memory-lane" id="memory" aria-labelledby="memoryHeading">
             <div class="instrument ram" id="ramPanel">
               <div class="instrument-head">
-                <div>
-                  <h4>RAM</h4>
-                  <p>1,000 words</p>
-                </div>
-                <div class="file-buttons">
-                  <button class="button button-board" data-action="openRam" title="Open a .ram file (Ctrl + O)"><svg aria-hidden="true"><use href="./icons.svg#folder"/></svg>Open</button>
-                  <button class="button button-board" data-action="saveRam" title="Save a .ram file (Ctrl + S)"><svg aria-hidden="true"><use href="./icons.svg#save"/></svg>Save</button>
-                  <button class="button button-board" data-action="clearRam" title="Clear RAM (Alt + C)" aria-label="Clear RAM"><svg aria-hidden="true"><use href="./icons.svg#file"/></svg>Clear</button>
-                </div>
+                <h4>RAM</h4>
+                <button class="button button-board" data-action="editRam">Edit RAM</button>
               </div>
               <div class="table-scroll ram-scroll" id="ramScroll" tabindex="0" role="region" aria-label="RAM words">
                 <table class="machine-table ram-table">
-                  <thead><tr><th scope="col">Address</th><th scope="col">Value</th><th scope="col">Instruction</th><th scope="col">Operand</th></tr></thead>
+                  <thead><tr><th scope="col">Address</th><th scope="col">Word</th><th scope="col">Instruction</th></tr></thead>
                   <tbody id="ramRows"></tbody>
                 </table>
               </div>
-              <form class="ram-editor" id="ramEditor">
-                <label for="ramInput">Edit word <span class="editor-address" id="editorAddress">000</span></label>
-                <div class="edit-fields">
-                  <input id="ramInput" type="text" inputmode="decimal" autocomplete="off" value="00.000" aria-label="RAM word">
-                  <select id="commandSelect" aria-label="Insert instruction">
-                    <option value="">Instruction</option>
-                  </select>
-                  <button class="button button-board button-write">Write</button>
-                </div>
-              </form>
-              <div class="ram-actions">
-                <button class="text-button" data-action="insert" title="Insert a word above the selection (Insert)">Insert row</button>
-                <button class="text-button" data-action="delete" title="Delete the selected word (Shift + Delete)">Delete row</button>
-                <span class="small-divider"></span>
-                <button class="text-button" id="undo" data-action="undo" title="Undo (Ctrl + Z)" disabled>Undo</button>
-                <button class="text-button" id="redo" data-action="redo" title="Redo (Ctrl + Y)" disabled>Redo</button>
-              </div>
             </div>
-            <div class="ram-wires">
+            <div class="ram-wires manual-control">
               <button class="operation" data-op="1" title="Write the data bus value to the addressed RAM word">Data → RAM</button>
               <button class="operation" data-op="2" title="Read the addressed RAM word onto the data bus">RAM → Data</button>
             </div>
@@ -183,31 +168,39 @@
 
           <section class="lane control-lane" id="control" aria-labelledby="controlHeading">
             <div class="control-body" id="controlBody">
-              <div class="register-wires">
+              <div class="register-wires manual-control">
                 <button class="operation" data-op="4" title="Copy the instruction operand to the address bus">IR → Address</button>
                 <button class="operation" data-op="8" title="Copy the program counter to the address bus">PC → Address</button>
               </div>
               <div class="registers">
                 <div class="instrument register" id="irBlock">
-                  <h4>Instruction register</h4>
+                  <h4 aria-label="Instruction register">Instruction <span class="register-long">register</span><span class="register-short" aria-hidden="true">reg.</span></h4>
                   <output id="irValue" aria-label="Instruction register"><span id="irOpcode">00</span><span class="register-dot">.</span><span id="irOperand">000</span></output>
                 </div>
-                <button class="operation ir-to-pc" data-op="11" title="Copy the instruction operand to the program counter">IR → PC</button>
                 <div class="instrument register" id="pcBlock">
                   <h4>Program counter</h4>
                   <output id="pcValue" aria-label="Program counter">000</output>
                 </div>
               </div>
-              <div class="control-links">
-                <button class="operation" data-op="3" title="Copy the data bus value to the instruction register">Data → IR</button>
-                <button class="operation" data-op="9" title="Advance the program counter">PC + 1</button>
-                <button class="operation" data-op="5" title="Jump to the microcode for this opcode">IR → µPC</button>
-                <button class="operation" data-op="10" title="Advance the program counter if the accumulator is zero">If zero, PC + 1</button>
+              <div class="control-links manual-control">
+                <div class="instruction-operations">
+                  <button class="operation" data-op="3" title="Copy the data bus value to the instruction register">Data → IR</button>
+                  <button class="operation" data-op="5" title="Jump to the microcode for this opcode">IR → µPC</button>
+                </div>
+                <div class="counter-operations">
+                  <button class="operation" data-op="11" title="Copy the instruction operand to the program counter">IR → PC</button>
+                  <button class="operation" data-op="9" title="Advance the program counter">PC + 1</button>
+                  <button class="operation" data-op="10" title="Advance the program counter if the accumulator is zero">If zero, PC + 1</button>
+                </div>
               </div>
               <div class="instrument microcode" id="mcBlock">
                 <div class="instrument-head">
                   <h4>Microcode</h4>
-                  <span class="micro-counter">µPC <output id="mcValue" aria-label="Microcode counter">000</output></span>
+                  <div class="micro-heading-controls">
+                    <span class="micro-counter">µPC <output id="mcValue" aria-label="Microcode counter">000</output></span>
+                    <button class="button button-board" id="microToolsButton" popovertarget="microTools">Tools</button>
+                    <button class="button button-board finish-recording" id="finishRecording" data-action="finishRecording" hidden>Finish recording</button>
+                  </div>
                 </div>
                 <div class="table-scroll mc-scroll" id="mcScroll" tabindex="0" role="region" aria-label="Microcode memory">
                   <table class="machine-table mc-table">
@@ -215,19 +208,8 @@
                     <tbody id="mcRows"></tbody>
                   </table>
                 </div>
-                <div class="micro-actions">
-                  <button class="text-button" data-action="openMc" title="Open a .mc file (Ctrl + Shift + O)">Open</button>
-                  <button class="text-button" data-action="saveMc" title="Save a .mc file (Ctrl + Shift + S)">Save</button>
-                  <button class="text-button" data-action="resetMc" title="Restore the default microcode (Alt + Shift + C)">Reset</button>
-                  <button class="text-button record-toggle" id="recordToggle" aria-pressed="false" data-action="toggleRecorder" aria-controls="recordPanel">Record</button>
-                </div>
-                <form id="recordPanel" class="record-panel" hidden>
-                  <label>Opcode <input id="recordOpcode" type="number" inputmode="numeric" min="1" max="19" value="11" required></label>
-                  <label>Name <input id="recordName" type="text" placeholder="e.g. COPY" maxlength="5" pattern="[A-Za-z0-9]+" autocomplete="off" required></label>
-                  <button class="button button-board" id="recordAction">Start</button>
-                </form>
               </div>
-              <div class="micro-wires">
+              <div class="micro-wires manual-control">
                 <button class="operation" data-op="7" title="Return to the start of the fetch cycle">µPC := 0</button>
                 <button class="operation operation-stop" data-op="19" title="Stop program execution">Halt</button>
               </div>
@@ -240,19 +222,17 @@
           </section>
 
           <section class="lane alu-lane" id="alu" aria-labelledby="aluHeading">
+            <span class="zero-flag" id="zeroFlag" data-active="true"><i aria-hidden="true"></i>Zero <span id="zeroValue">1</span></span>
             <div class="instrument accumulator" id="accBlock">
-              <div class="accumulator-head">
-                <h4>Accumulator</h4>
-                <span class="zero-flag" id="zeroFlag" data-active="true"><i></i>Zero <span id="zeroValue">1</span></span>
-              </div>
+              <div class="accumulator-head"><h4>Accumulator</h4></div>
               <output id="accValue" aria-label="Accumulator">00000</output>
-              <div class="accumulator-actions">
+              <div class="accumulator-actions manual-control">
                 <button class="operation" data-op="16" title="Increment the accumulator">+1</button>
                 <button class="operation" data-op="17" title="Decrement the accumulator">−1</button>
                 <button class="operation standard-only" data-op="12" title="Clear the accumulator">Clear</button>
               </div>
             </div>
-            <div class="alu-wires">
+            <div class="alu-wires manual-control">
               <div class="alu-input">
                 <button class="operation" data-op="18" title="Copy the data bus value to the accumulator">Data → ACC</button>
                 <button class="operation standard-only" data-op="13" title="Add the data bus value to the accumulator">Add</button>
@@ -266,7 +246,7 @@
             <div class="bus-content">
               <span class="bus-label"><i aria-hidden="true"></i>Data bus</span>
               <output class="bus-value" id="dataValue" aria-label="Data bus value">00000</output>
-              <form class="bus-editor" id="dataForm">
+              <form class="bus-editor manual-control" id="dataForm">
                 <input id="dataInput" type="text" inputmode="numeric" autocomplete="off" placeholder="00000" aria-label="New data bus value">
                 <button class="button button-board" title="Set data bus" aria-label="Set data bus">Set</button>
               </form>
@@ -278,25 +258,81 @@
       <div class="board-bottom">
         <div class="signal-line">
           <svg aria-hidden="true"><use href="./icons.svg#pulse"/></svg>
-          <span id="lastAction" aria-live="polite">Load an example or select a RAM word to start.</span>
+          <span id="lastAction" aria-live="polite">Load an example or select a RAM word.</span>
         </div>
       </div>
     </section>
 
-    <form id="commandLine" class="command-line" hidden>
-      <label for="commandInput">Command mode</label>
-      <input id="commandInput" type="text" placeholder="e.g. rd" autocomplete="off" autocapitalize="off" spellcheck="false">
-      <button class="button">Execute</button>
-      <button class="button button-quiet" type="button" data-action="leaveCommand">Close</button>
-    </form>
-
-    <footer class="site-footer">
-      <span id="instructionMode">Standard instruction set</span>
-      <div><button class="text-button" id="install" data-action="install" hidden>Install app</button><button class="text-button" data-action="command" title="Open command mode (: or V)">Command mode</button><a href="./presentation/">ATIW presentation</a><a href="https://github.com/revvnik/portfolio/tree/main/atiw">Source &amp; license</a></div>
-    </footer>
     <input type="file" id="ramFile" accept=".ram" hidden>
     <input type="file" id="mcFile" accept=".mc" hidden>
   </main>
+
+  <dialog id="ramTools" class="modal ram-tools" aria-labelledby="ramToolsTitle">
+    <div class="modal-head">
+      <h2 id="ramToolsTitle">Edit RAM</h2>
+      <button class="button button-quiet button-icon" data-close aria-label="Close RAM editor"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+    </div>
+    <div class="dialog-content">
+      <form class="ram-editor" id="ramEditor">
+        <label for="ramInput">Edit word <span class="editor-address" id="editorAddress">000</span></label>
+        <div class="edit-fields">
+          <input id="ramInput" type="text" inputmode="decimal" autocomplete="off" value="00.000" aria-label="RAM word">
+          <select id="commandSelect" aria-label="Insert instruction">
+            <option value="">Instruction</option>
+          </select>
+          <button class="button button-primary">Write</button>
+        </div>
+      </form>
+      <div class="ram-actions">
+        <button class="text-button" data-action="insert" title="Insert a word above the selection (Insert)">Insert row</button>
+        <button class="text-button" data-action="delete" title="Delete the selected word (Shift + Delete)">Delete row</button>
+        <span class="small-divider"></span>
+        <button class="text-button" data-action="undo" title="Undo (Ctrl + Z)" disabled>Undo</button>
+        <button class="text-button" data-action="redo" title="Redo (Ctrl + Y)" disabled>Redo</button>
+      </div>
+      <div class="file-buttons">
+        <button class="button" data-action="openRam" title="Open a .ram file (Ctrl + O)"><svg aria-hidden="true"><use href="./icons.svg#folder"/></svg>Open</button>
+        <button class="button" data-action="saveRam" title="Save a .ram file (Ctrl + S)"><svg aria-hidden="true"><use href="./icons.svg#save"/></svg>Save</button>
+        <button class="button" data-action="clearRam" title="Clear RAM (Alt + C)" aria-label="Clear RAM"><svg aria-hidden="true"><use href="./icons.svg#file"/></svg>Clear</button>
+      </div>
+      <p id="ramToolStatus" role="status" hidden></p>
+    </div>
+  </dialog>
+
+  <div class="menu-flyout" id="microTools" popover>
+    <button data-action="openMc" title="Open a .mc file (Ctrl + Shift + O)">Open microcode</button>
+    <button data-action="saveMc" title="Save a .mc file (Ctrl + Shift + S)">Save microcode</button>
+    <button data-action="resetMc" title="Restore the default microcode (Alt + Shift + C)">Reset microcode</button>
+    <button data-action="openRecorder">Record instruction</button>
+    <button data-action="undo" title="Undo (Ctrl + Z)" disabled>Undo edit</button>
+    <button data-action="redo" title="Redo (Ctrl + Y)" disabled>Redo edit</button>
+  </div>
+
+  <dialog id="recordDialog" class="modal" aria-labelledby="recordTitle">
+    <div class="modal-head">
+      <h2 id="recordTitle">Record instruction</h2>
+      <button class="button button-quiet button-icon" data-close aria-label="Close recorder"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+    </div>
+    <form id="recordPanel" class="record-panel dialog-content">
+      <label>Opcode <input id="recordOpcode" type="number" inputmode="numeric" min="1" max="19" value="11" required></label>
+      <label>Name <input id="recordName" type="text" placeholder="e.g. COPY" maxlength="5" pattern="[A-Za-z0-9]+" autocomplete="off" required></label>
+      <button class="button button-primary" id="recordAction">Start</button>
+      <p id="recordStatus" role="status" hidden></p>
+    </form>
+  </dialog>
+
+  <dialog id="commandDialog" class="modal command-dialog" aria-labelledby="commandTitle">
+    <div class="modal-head">
+      <h2 id="commandTitle">Command mode</h2>
+      <button class="button button-quiet button-icon" data-close aria-label="Close command mode"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+    </div>
+    <form id="commandLine" class="dialog-content">
+      <label for="commandInput">Command</label>
+      <input id="commandInput" type="text" placeholder="e.g. rd" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button class="button button-primary">Execute</button>
+      <p id="commandStatus" role="status" hidden></p>
+    </form>
+  </dialog>
 
   <dialog id="settings" class="modal" aria-labelledby="settingsTitle">
     <div class="modal-head">
@@ -307,6 +343,7 @@
       <label class="setting-row"><span>Instruction set <small>Bonsai provides a smaller set of instructions.</small></span>
         <select id="mode"><option value="standard">Standard</option><option value="bonsai">Bonsai</option></select>
       </label>
+      <label class="setting-row"><span>Show the control unit</span><input type="checkbox" id="controlVisible" checked aria-controls="controlBody"></label>
       <label class="setting-row"><span>Adjust operands when rows move</span><input type="checkbox" id="fixRAM"></label>
       <label class="setting-row"><span>Include operands equal to the selected address</span><input type="checkbox" id="fixRamEq"></label>
       <label class="setting-row"><span>Allow Delete to remove the selected row <small>Shift + Delete is always available.</small></span><input type="checkbox" id="useDeleteForDeleteRow"></label>
@@ -327,9 +364,9 @@
       <p>Choose <strong>Load example</strong> to add 7 and 5 in Standard mode. Use <strong>Step instruction</strong> to execute a full instruction, or <strong>Microstep</strong> to watch an individual transfer. The result goes to RAM address 022.</p>
       <h3>Read the diagram</h3>
       <p>The blue address bus selects a RAM word. The green data bus carries its value between RAM, the instruction register (IR) and the accumulator (ACC). The program counter (PC) holds the next instruction address, and µPC points to the next micro-operation.</p>
-      <p>RAM words are decimal. In <code>01.020</code>, <code>01</code> is the instruction code for <code>TAKE</code> and <code>020</code> is its operand. Select a RAM row to edit it. Use the arrow buttons in the diagram to move values by hand.</p>
+      <p>RAM words are decimal. In <code>01.020</code>, <code>01</code> is the instruction code for <code>TAKE</code> and <code>020</code> is its operand. Select a word and choose <strong>Edit RAM</strong> to change it or open a file. Turn on <strong>Manual controls</strong> to send values along the diagram’s arrows.</p>
       <h3>Microcode</h3>
-      <p>Select a micro-operation to edit it, or select an instruction name to rename it. To create an instruction, choose <strong>Record</strong>, enter an unused opcode and name, then press the diagram’s operation buttons in sequence. End with <strong>µPC := 0</strong> so the next instruction can be fetched.</p>
+      <p>Select a micro-operation to edit it, or select an instruction name to rename it. To create an instruction, choose <strong>Tools</strong> and <strong>Record instruction</strong>, enter an unused opcode and name, then press the diagram’s operation buttons in sequence. End with <strong>µPC := 0</strong> so the next instruction can be fetched.</p>
       <details>
         <summary>Instruction set</summary>
         <dl class="instruction-list" id="instructionList"></dl>
