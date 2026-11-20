@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="My apprenticeship in IT system integration at the Federal Ministry of Research, Technology and Space.">
+  <meta name="theme-color" content="#f5f2e9">
+  <title>My Job, my Company</title>
+  <link rel="canonical" href="https://revvnik.com/atiw/presentation/">
+  <link rel="stylesheet" href="./presentation.css?v=8">
+  <script data-cfasync="false" type="module" src="./presentation.js?v=7"></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <p class="wordmark"><span class="mark" aria-hidden="true"></span>BMFTR</p>
+      <div class="topbar-actions">
+        <button class="button" id="replay" type="button" hidden>Replay animation</button>
+        <button class="button fullscreen" id="fullscreen" type="button" aria-pressed="false" hidden>
+          <span class="fullscreen-icon" aria-hidden="true"></span><span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="stage-window" id="stage-window">
+      <main class="presentation" id="presentation">
+        <section class="slide cover" id="slide-1" aria-labelledby="title-cover" data-camera-orbit="24deg 64deg 58%">
+          <div class="copy">
+            <h1 id="title-cover" tabindex="-1">My Job,<br>my Company</h1>
+            <div class="title-rule" aria-hidden="true"></div>
+            <p class="ministry-name">Federal Ministry of Research,<br class="wide-break"> Technology and Space</p>
+            <p class="subtitle">IT Specialist for System Integration</p>
+          </div>
+          <figure class="plate cover-plate" aria-label="3D model of the ministry’s Berlin office">
+            <img class="model-fallback" data-camera-frame src="./assets/bmftr-front.webp" alt="Front and rooftops of the Berlin ministry" width="1250" height="458">
+            <figcaption>
+              <span>Kapelle-Ufer, Berlin</span>
+              <a class="credit" href="./assets/model-credits.txt" target="_blank" rel="noopener">3D model credits</a>
+            </figcaption>
+          </figure>
+        </section>
+
+        <section class="slide divider" id="ministry-section" aria-labelledby="title-ministry-section" data-camera-orbit="-33deg 59deg 86%">
+          <div class="copy">
+            <h2 id="title-ministry-section" tabindex="-1">The ministry</h2>
+            <div class="title-rule" aria-hidden="true"></div>
+            <ul class="divider-topics">
+              <li>Berlin and Bonn</li>
+              <li>Responsibilities and leadership</li>
+              <li>High-Tech Agenda</li>
+            </ul>
+          </div>
+          <figure class="plate divider-plate ministry-history">
+            <div class="history-model" data-camera-frame aria-hidden="true">
+              <img class="model-fallback" src="./assets/bmftr-front.webp" alt="" width="1250" height="458">
+            </div>
+            <figcaption>
+              <ol class="history-dates" aria-label="Ministry history">
+                <li>
+                  <time datetime="1955">1955</time>
+                  <strong>Federal Ministry for Atomic Affairs</strong>
+                  <p>Research into peaceful uses of nuclear energy</p>
+                </li>
+                <li>
+                  <time datetime="2025">2025</time>
+                  <strong>Research, Technology and Space</strong>
+                  <p>New name and responsibility for space policy</p>
+                </li>
+              </ol>
+              <p class="history-sources credit">
+                <a href="https://dserver.bundestag.de/btd/02/022/0202226.pdf" target="_blank" rel="noopener">1955 Bundestag record</a>
+                <a href="https://www.gesetze-im-internet.de/bkorgerl_2025/BJNR0830A0025.html" target="_blank" rel="noopener">2025 reorganisation</a>
+              </p>
+            </figcaption>
+          </figure>
+        </section>
+
+        <section class="slide" id="slide-2" aria-labelledby="title-locations" data-camera-orbit="-16deg 28deg 72%">
+          <div class="copy">
+            <h2 id="title-locations" tabindex="-1">Berlin &amp; Bonn</h2>
+            <ul class="points locations">
+              <li><strong>Berlin</strong><span>Kapelle-Ufer 1</span></li>
+              <li><strong>Bonn</strong><span>Heinemannstraße 2</span></li>
+            </ul>
+          </div>
+          <div class="plate gallery">
+            <div class="gallery-model" data-camera-frame role="img" aria-label="Aerial view of the ministry’s roofs and courtyards">
+              <img class="model-fallback" src="./assets/bmftr-aerial.webp" alt="" width="1150" height="541">
+            </div>
+            <figure>
+              <img src="./assets/kapelle-ufer.webp" alt="Street-level view of the ministry’s windowed façade and recessed entrance in Berlin" width="1500" height="1125">
+              <figcaption>
+                <span>Berlin · Kapelle-Ufer</span>
+                <span class="credit"><a href="https://commons.wikimedia.org/wiki/File:Mitte_Kapelle-Ufer_BMBF-002.JPG">Fridolin freudenfett</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></span>
+              </figcaption>
+            </figure>
+            <figure class="bonn-photo">
+              <img src="./assets/bonn-kreuzbauten.webp" alt="The Kreuzbauten, the ministry’s Bonn office at Heinemannstraße 2" width="880" height="880">
+              <figcaption>
+                <span>Bonn · Kreuzbauten</span>
+                <span class="credit">© Raimond Spekking / <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> (via <a href="https://commons.wikimedia.org/wiki/File:Kreuzbauten_Bonn-0704.jpg">Wikimedia Commons</a>)</span>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="slide with-building" id="slide-3" aria-labelledby="title-ministry" data-camera-orbit="-59deg 70deg 58%">
+          <div class="copy">
+            <h2 id="title-ministry" tabindex="-1">What the ministry does</h2>
+            <ul class="points">
+              <li>Federal research and technology policy</li>
+              <li>Public funding for research projects</li>
+              <li>Space programmes and cooperation</li>
+            </ul>
+          </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
+          <figure class="plate project">
+            <div class="chip" aria-hidden="true">
+              <span class="chip-core"></span>
+            </div>
+            <figcaption>
+              <span class="project-name">QSolid</span>
+              <span class="project-detail">Quantum computing at Forschungszentrum Jülich</span>
+            </figcaption>
+          </figure>
+        </section>
+
+        <section class="slide with-building" id="slide-4" aria-labelledby="title-minister" data-camera-orbit="-105deg 56deg 74%">
+          <div class="copy">
+            <h2 id="title-minister" tabindex="-1">Dorothee Bär</h2>
+            <ul class="points">
+              <li>Federal Minister since May 2025</li>
+              <li>Member of the Bundestag since 2002</li>
+              <li>Former Federal Government Commissioner for Digitalisation</li>
+            </ul>
+          </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
+          <figure class="plate portrait">
+            <img src="./assets/dorothee-baer-front.webp" alt="Front-facing portrait of Dorothee Bär at the WDR studio in Cologne" width="960" height="960">
+            <figcaption>
+              <span>Cologne, December 2024</span>
+              <span class="credit">© Raimond Spekking / <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> (via <a href="https://commons.wikimedia.org/wiki/File:Hart_aber_fair_2024-12-02-8076.jpg">Wikimedia Commons</a>)</span>
+            </figcaption>
+          </figure>
+        </section>
+
+        <section class="slide with-building" id="high-tech-agenda" aria-labelledby="title-agenda" data-camera-orbit="-132deg 68deg 60%">
+          <div class="copy">
+            <h2 id="title-agenda" tabindex="-1">High-Tech Agenda</h2>
+            <ul class="points">
+              <li>Germany’s strategy for six key technologies</li>
+              <li>Support for research and putting results into practice</li>
+            </ul>
+          </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
+          <figure class="plate agenda">
+            <div class="agenda-fields">
+              <p>Three priority technologies</p>
+              <ul>
+                <li>Artificial intelligence</li>
+                <li>Quantum technologies</li>
+                <li>Microelectronics</li>
+              </ul>
+            </div>
+            <figcaption><a class="credit" href="https://www.bundesregierung.de/breg-de/aktuelles/hightech-agenda-deutschland-2366912">Federal Government overview</a></figcaption>
+          </figure>
+        </section>
+
+        <section class="slide divider" id="my-it-work" aria-labelledby="title-it-work" data-camera-orbit="-174deg 36deg 87%">
+          <div class="copy">
+            <h2 id="title-it-work" tabindex="-1">My work in IT</h2>
+            <div class="title-rule" aria-hidden="true"></div>
+            <ul class="divider-topics">
+              <li>Building PCs and setting up desks</li>
+              <li>Virtual machines and networking</li>
+              <li>Short technical presentations</li>
+            </ul>
+          </div>
+          <figure class="plate divider-plate" data-camera-frame aria-hidden="true">
+            <img class="model-fallback" src="./assets/bmftr-aerial.webp" alt="" width="1150" height="541">
+          </figure>
+        </section>
+
+        <section class="slide with-building" id="slide-5" aria-labelledby="title-apprenticeship" data-camera-orbit="-149deg 64deg 60%">
+          <div class="copy">
+            <h2 id="title-apprenticeship" tabindex="-1">PCs &amp; workstations</h2>
+            <ul class="points">
+              <li>Assembling PCs with the IT team</li>
+              <li>Joining colleagues on visits to staff offices</li>
+              <li>Helping set up PCs, screens and peripherals</li>
+            </ul>
+          </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
+          <figure class="plate workstation" aria-label="Illustration of a PC, monitor and keyboard on a desk">
+            <div class="desk" aria-hidden="true">
+              <div class="computer-tower"><span></span></div>
+              <div class="computer-screen"><span></span></div>
+              <div class="keyboard"></div>
+            </div>
+          </figure>
+        </section>
+
+        <section class="slide with-building" id="slide-6" aria-labelledby="title-vms" data-camera-orbit="-191deg 40deg 73%">
+          <div class="copy">
+            <h2 id="title-vms" tabindex="-1">My virtual machine lab</h2>
+            <ul class="points">
+              <li>Setting up two virtual machines</li>
+              <li>Connecting them to the same virtual switch</li>
+              <li>Giving each VM an IP address and testing the connection</li>
+            </ul>
+          </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
+          <figure class="plate vm-lab">
+            <div class="topology" role="img" aria-label="Example lab: virtual machine A and virtual machine B connected through a virtual switch">
+              <div class="endpoints" aria-hidden="true">
+                <div class="vm"><span class="vm-screen"></span>VM A</div>
+                <div class="vm"><span class="vm-screen"></span>VM B</div>
+              </div>
+              <div class="connections" aria-hidden="true"><span></span><i class="packet"></i></div>
+              <div class="virtual-switch" aria-hidden="true"><span class="ports"><i></i><i></i><i></i><i></i></span>Virtual switch</div>
+            </div>
+            <figcaption>Example lab</figcaption>
+          </figure>
+        </section>
+
+        <section class="slide with-building" id="networking" aria-labelledby="title-networking" data-camera-orbit="-234deg 69deg 62%">
+          <div class="copy">
+            <h2 id="title-networking" tabindex="-1">Explaining networking</h2>
+            <ul class="points">
+              <li>Preparing short talks on technical topics</li>
+              <li>Showing how devices connect</li>
+              <li>Tracing how data gets from one device to another</li>
+            </ul>
+          </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
+          <figure class="plate networking">
+            <div class="network-path" role="img" aria-label="A switch forwards data from device A to device B">
+              <span>Device A</span>
+              <span class="network-switch">Switch</span>
+              <span>Device B</span>
+            </div>
+            <figcaption>Presentation example</figcaption>
+          </figure>
+        </section>
+
+        <section class="slide with-building" id="apprenticeship" aria-labelledby="title-apprenticeship-review" data-camera-orbit="-360deg 65deg 56.5%">
+          <div class="copy">
+            <h2 id="title-apprenticeship-review" tabindex="-1">My apprenticeship</h2>
+            <p class="subtitle">Questions?</p>
+          </div>
+          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
+          <figure class="plate apprenticeship-review">
+            <div class="apprenticeship-columns">
+              <div>
+                <h3>Pros</h3>
+                <ul>
+                  <li>Good pay and extra courses with certificates</li>
+                  <li>Supplementary pension for eligible staff</li>
+                  <li>Nice location, building and offices</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Cons</h3>
+                <ul>
+                  <li>Extra care with official information</li>
+                  <li>Many regulations and procedures to follow</li>
+                  <li>Frequent mandatory meetings</li>
+                </ul>
+              </div>
+            </div>
+            <figcaption><a class="credit" href="https://www.vbl.de/en/en-vblklassik" target="_blank" rel="noopener">VBL supplementary pension</a></figcaption>
+          </figure>
+        </section>
+
+        <div class="model-layer" hidden aria-hidden="true">
+          <model-viewer id="building" src="./assets/bmftr-berlin.glb"
+            alt="Photo-derived model of the ministry building at Kapelle-Ufer"
+            loading="eager" reveal="auto" interaction-prompt="none"
+            camera-orbit="-42deg 50deg 88%" min-camera-orbit="auto auto 50%" max-camera-orbit="auto auto 140%"
+            camera-target="0m -0.065m 0m" field-of-view="34deg" interpolation-decay="245" exposure="1.08" shadow-intensity="0.35">
+          </model-viewer>
+        </div>
+      </main>
+    </div>
+
+    <footer class="controls" id="controls">
+      <button class="button previous" id="previous" type="button" hidden>
+        <span class="arrow arrow-back" aria-hidden="true"></span><span>Previous</span>
+      </button>
+      <div class="progress">
+        <span class="count" id="count" aria-live="polite" aria-atomic="true"></span>
+        <nav class="segments" aria-label="Slide navigation" id="segments">
+          <a class="segment" href="#slide-1" aria-label="Slide 1: My Job, my Company"><span aria-hidden="true">1</span></a>
+          <a class="segment" href="#ministry-section" aria-label="Slide 2: The ministry"><span aria-hidden="true">2</span></a>
+          <a class="segment" href="#slide-2" aria-label="Slide 3: Berlin and Bonn"><span aria-hidden="true">3</span></a>
+          <a class="segment" href="#slide-3" aria-label="Slide 4: What the ministry does"><span aria-hidden="true">4</span></a>
+          <a class="segment" href="#slide-4" aria-label="Slide 5: Dorothee Bär"><span aria-hidden="true">5</span></a>
+          <a class="segment" href="#high-tech-agenda" aria-label="Slide 6: High-Tech Agenda"><span aria-hidden="true">6</span></a>
+          <a class="segment" href="#my-it-work" aria-label="Slide 7: My work in IT"><span aria-hidden="true">7</span></a>
+          <a class="segment" href="#slide-5" aria-label="Slide 8: PCs and workstations"><span aria-hidden="true">8</span></a>
+          <a class="segment" href="#slide-6" aria-label="Slide 9: My virtual machine lab"><span aria-hidden="true">9</span></a>
+          <a class="segment" href="#networking" aria-label="Slide 10: Explaining networking"><span aria-hidden="true">10</span></a>
+          <a class="segment" href="#apprenticeship" aria-label="Slide 11: My apprenticeship, pros and cons"><span aria-hidden="true">11</span></a>
+        </nav>
+      </div>
+      <button class="button next" id="next" type="button" hidden>
+        <span id="next-label">Next</span><span class="arrow" aria-hidden="true"></span>
+      </button>
+    </footer>
+  </div>
+</body>
+</html>

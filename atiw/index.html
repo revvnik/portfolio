@@ -1,312 +1,372 @@
 <!doctype html>
+<!--
+  Johnny 2.0, Copyright (C) 2019, 2021 David Laubersheimer.
+  Based on Peter Dauscher’s Johnny and the TobisMa web edition.
+  Modern browser interface, modified 2026-11-20.
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="My apprenticeship in IT system integration at the Federal Ministry of Research, Technology and Space.">
-  <meta name="theme-color" content="#f5f2e9">
-  <title>My Job, my Company</title>
+  <meta name="description" content="Explore a Von Neumann computer with Johnny’s interactive CPU diagram, RAM and microcode editor.">
+  <meta name="theme-color" content="#101b29">
+  <title>Johnny · CPU simulator</title>
+  <link rel="icon" href="./icons/app-192.png">
+  <link rel="apple-touch-icon" href="./icons/app-192.png">
+  <link rel="manifest" href="./johnny.webmanifest">
   <link rel="canonical" href="https://revvnik.com/atiw/">
-  <link rel="stylesheet" href="./presentation.css?v=8">
-  <script data-cfasync="false" type="module" src="./presentation.js?v=7"></script>
+  <link rel="stylesheet" href="./style.css">
+  <script data-cfasync="false" type="module" src="./app.js"></script>
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <p class="wordmark"><span class="mark" aria-hidden="true"></span>BMFTR</p>
-      <div class="topbar-actions">
-        <button class="button" id="replay" type="button" hidden>Replay animation</button>
-        <button class="button fullscreen" id="fullscreen" type="button" aria-pressed="false" hidden>
-          <span class="fullscreen-icon" aria-hidden="true"></span><span>Fullscreen</span>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-mark"><svg aria-hidden="true"><use href="./icons.svg#chip"/></svg></span>
+        <h1>Johnny</h1>
+        <span class="brand-label">Von Neumann simulator</span>
+      </div>
+      <div class="header-actions">
+        <button class="button button-quiet" data-dialog="guide">
+          <svg aria-hidden="true"><use href="./icons.svg#book"/></svg> Guide
+        </button>
+        <button class="button button-quiet" data-dialog="settings">
+          <svg aria-hidden="true"><use href="./icons.svg#gear"/></svg> Settings
         </button>
       </div>
-    </header>
-
-    <div class="stage-window" id="stage-window">
-      <main class="presentation" id="presentation">
-        <section class="slide cover" id="slide-1" aria-labelledby="title-cover" data-camera-orbit="24deg 64deg 58%">
-          <div class="copy">
-            <h1 id="title-cover" tabindex="-1">My Job,<br>my Company</h1>
-            <div class="title-rule" aria-hidden="true"></div>
-            <p class="ministry-name">Federal Ministry of Research,<br class="wide-break"> Technology and Space</p>
-            <p class="subtitle">IT Specialist for System Integration</p>
-          </div>
-          <figure class="plate cover-plate" aria-label="3D model of the ministry’s Berlin office">
-            <img class="model-fallback" data-camera-frame src="./assets/bmftr-front.webp" alt="Front and rooftops of the Berlin ministry" width="1250" height="458">
-            <figcaption>
-              <span>Kapelle-Ufer, Berlin</span>
-              <a class="credit" href="./assets/model-credits.txt" target="_blank" rel="noopener">3D model credits</a>
-            </figcaption>
-          </figure>
-        </section>
-
-        <section class="slide divider" id="ministry-section" aria-labelledby="title-ministry-section" data-camera-orbit="-33deg 59deg 86%">
-          <div class="copy">
-            <h2 id="title-ministry-section" tabindex="-1">The ministry</h2>
-            <div class="title-rule" aria-hidden="true"></div>
-            <ul class="divider-topics">
-              <li>Berlin and Bonn</li>
-              <li>Responsibilities and leadership</li>
-              <li>High-Tech Agenda</li>
-            </ul>
-          </div>
-          <figure class="plate divider-plate ministry-history">
-            <div class="history-model" data-camera-frame aria-hidden="true">
-              <img class="model-fallback" src="./assets/bmftr-front.webp" alt="" width="1250" height="458">
-            </div>
-            <figcaption>
-              <ol class="history-dates" aria-label="Ministry history">
-                <li>
-                  <time datetime="1955">1955</time>
-                  <strong>Federal Ministry for Atomic Affairs</strong>
-                  <p>Research into peaceful uses of nuclear energy</p>
-                </li>
-                <li>
-                  <time datetime="2025">2025</time>
-                  <strong>Research, Technology and Space</strong>
-                  <p>New name and responsibility for space policy</p>
-                </li>
-              </ol>
-              <p class="history-sources credit">
-                <a href="https://dserver.bundestag.de/btd/02/022/0202226.pdf" target="_blank" rel="noopener">1955 Bundestag record</a>
-                <a href="https://www.gesetze-im-internet.de/bkorgerl_2025/BJNR0830A0025.html" target="_blank" rel="noopener">2025 reorganisation</a>
-              </p>
-            </figcaption>
-          </figure>
-        </section>
-
-        <section class="slide" id="slide-2" aria-labelledby="title-locations" data-camera-orbit="-16deg 28deg 72%">
-          <div class="copy">
-            <h2 id="title-locations" tabindex="-1">Berlin &amp; Bonn</h2>
-            <ul class="points locations">
-              <li><strong>Berlin</strong><span>Kapelle-Ufer 1</span></li>
-              <li><strong>Bonn</strong><span>Heinemannstraße 2</span></li>
-            </ul>
-          </div>
-          <div class="plate gallery">
-            <div class="gallery-model" data-camera-frame role="img" aria-label="Aerial view of the ministry’s roofs and courtyards">
-              <img class="model-fallback" src="./assets/bmftr-aerial.webp" alt="" width="1150" height="541">
-            </div>
-            <figure>
-              <img src="./assets/kapelle-ufer.webp" alt="Street-level view of the ministry’s windowed façade and recessed entrance in Berlin" width="1500" height="1125">
-              <figcaption>
-                <span>Berlin · Kapelle-Ufer</span>
-                <span class="credit"><a href="https://commons.wikimedia.org/wiki/File:Mitte_Kapelle-Ufer_BMBF-002.JPG">Fridolin freudenfett</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></span>
-              </figcaption>
-            </figure>
-            <figure class="bonn-photo">
-              <img src="./assets/bonn-kreuzbauten.webp" alt="The Kreuzbauten, the ministry’s Bonn office at Heinemannstraße 2" width="880" height="880">
-              <figcaption>
-                <span>Bonn · Kreuzbauten</span>
-                <span class="credit">© Raimond Spekking / <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> (via <a href="https://commons.wikimedia.org/wiki/File:Kreuzbauten_Bonn-0704.jpg">Wikimedia Commons</a>)</span>
-              </figcaption>
-            </figure>
-          </div>
-        </section>
-
-        <section class="slide with-building" id="slide-3" aria-labelledby="title-ministry" data-camera-orbit="-59deg 70deg 58%">
-          <div class="copy">
-            <h2 id="title-ministry" tabindex="-1">What the ministry does</h2>
-            <ul class="points">
-              <li>Federal research and technology policy</li>
-              <li>Public funding for research projects</li>
-              <li>Space programmes and cooperation</li>
-            </ul>
-          </div>
-          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
-          <figure class="plate project">
-            <div class="chip" aria-hidden="true">
-              <span class="chip-core"></span>
-            </div>
-            <figcaption>
-              <span class="project-name">QSolid</span>
-              <span class="project-detail">Quantum computing at Forschungszentrum Jülich</span>
-            </figcaption>
-          </figure>
-        </section>
-
-        <section class="slide with-building" id="slide-4" aria-labelledby="title-minister" data-camera-orbit="-105deg 56deg 74%">
-          <div class="copy">
-            <h2 id="title-minister" tabindex="-1">Dorothee Bär</h2>
-            <ul class="points">
-              <li>Federal Minister since May 2025</li>
-              <li>Member of the Bundestag since 2002</li>
-              <li>Former Federal Government Commissioner for Digitalisation</li>
-            </ul>
-          </div>
-          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
-          <figure class="plate portrait">
-            <img src="./assets/dorothee-baer-front.webp" alt="Front-facing portrait of Dorothee Bär at the WDR studio in Cologne" width="960" height="960">
-            <figcaption>
-              <span>Cologne, December 2024</span>
-              <span class="credit">© Raimond Spekking / <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> (via <a href="https://commons.wikimedia.org/wiki/File:Hart_aber_fair_2024-12-02-8076.jpg">Wikimedia Commons</a>)</span>
-            </figcaption>
-          </figure>
-        </section>
-
-        <section class="slide with-building" id="high-tech-agenda" aria-labelledby="title-agenda" data-camera-orbit="-132deg 68deg 60%">
-          <div class="copy">
-            <h2 id="title-agenda" tabindex="-1">High-Tech Agenda</h2>
-            <ul class="points">
-              <li>Germany’s strategy for six key technologies</li>
-              <li>Support for research and putting results into practice</li>
-            </ul>
-          </div>
-          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
-          <figure class="plate agenda">
-            <div class="agenda-fields">
-              <p>Three priority technologies</p>
-              <ul>
-                <li>Artificial intelligence</li>
-                <li>Quantum technologies</li>
-                <li>Microelectronics</li>
-              </ul>
-            </div>
-            <figcaption><a class="credit" href="https://www.bundesregierung.de/breg-de/aktuelles/hightech-agenda-deutschland-2366912">Federal Government overview</a></figcaption>
-          </figure>
-        </section>
-
-        <section class="slide divider" id="my-it-work" aria-labelledby="title-it-work" data-camera-orbit="-174deg 36deg 87%">
-          <div class="copy">
-            <h2 id="title-it-work" tabindex="-1">My work in IT</h2>
-            <div class="title-rule" aria-hidden="true"></div>
-            <ul class="divider-topics">
-              <li>Building PCs and setting up desks</li>
-              <li>Virtual machines and networking</li>
-              <li>Short technical presentations</li>
-            </ul>
-          </div>
-          <figure class="plate divider-plate" data-camera-frame aria-hidden="true">
-            <img class="model-fallback" src="./assets/bmftr-aerial.webp" alt="" width="1150" height="541">
-          </figure>
-        </section>
-
-        <section class="slide with-building" id="slide-5" aria-labelledby="title-apprenticeship" data-camera-orbit="-149deg 64deg 60%">
-          <div class="copy">
-            <h2 id="title-apprenticeship" tabindex="-1">PCs &amp; workstations</h2>
-            <ul class="points">
-              <li>Assembling PCs with the IT team</li>
-              <li>Joining colleagues on visits to staff offices</li>
-              <li>Helping set up PCs, screens and peripherals</li>
-            </ul>
-          </div>
-          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
-          <figure class="plate workstation" aria-label="Illustration of a PC, monitor and keyboard on a desk">
-            <div class="desk" aria-hidden="true">
-              <div class="computer-tower"><span></span></div>
-              <div class="computer-screen"><span></span></div>
-              <div class="keyboard"></div>
-            </div>
-          </figure>
-        </section>
-
-        <section class="slide with-building" id="slide-6" aria-labelledby="title-vms" data-camera-orbit="-191deg 40deg 73%">
-          <div class="copy">
-            <h2 id="title-vms" tabindex="-1">My virtual machine lab</h2>
-            <ul class="points">
-              <li>Setting up two virtual machines</li>
-              <li>Connecting them to the same virtual switch</li>
-              <li>Giving each VM an IP address and testing the connection</li>
-            </ul>
-          </div>
-          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
-          <figure class="plate vm-lab">
-            <div class="topology" role="img" aria-label="Example lab: virtual machine A and virtual machine B connected through a virtual switch">
-              <div class="endpoints" aria-hidden="true">
-                <div class="vm"><span class="vm-screen"></span>VM A</div>
-                <div class="vm"><span class="vm-screen"></span>VM B</div>
-              </div>
-              <div class="connections" aria-hidden="true"><span></span><i class="packet"></i></div>
-              <div class="virtual-switch" aria-hidden="true"><span class="ports"><i></i><i></i><i></i><i></i></span>Virtual switch</div>
-            </div>
-            <figcaption>Example lab</figcaption>
-          </figure>
-        </section>
-
-        <section class="slide with-building" id="networking" aria-labelledby="title-networking" data-camera-orbit="-234deg 69deg 62%">
-          <div class="copy">
-            <h2 id="title-networking" tabindex="-1">Explaining networking</h2>
-            <ul class="points">
-              <li>Preparing short talks on technical topics</li>
-              <li>Showing how devices connect</li>
-              <li>Tracing how data gets from one device to another</li>
-            </ul>
-          </div>
-          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
-          <figure class="plate networking">
-            <div class="network-path" role="img" aria-label="A switch forwards data from device A to device B">
-              <span>Device A</span>
-              <span class="network-switch">Switch</span>
-              <span>Device B</span>
-            </div>
-            <figcaption>Presentation example</figcaption>
-          </figure>
-        </section>
-
-        <section class="slide with-building" id="apprenticeship" aria-labelledby="title-apprenticeship-review" data-camera-orbit="-360deg 65deg 56.5%">
-          <div class="copy">
-            <h2 id="title-apprenticeship-review" tabindex="-1">My apprenticeship</h2>
-            <p class="subtitle">Questions?</p>
-          </div>
-          <div class="building-frame" data-camera-frame aria-hidden="true"></div>
-          <figure class="plate apprenticeship-review">
-            <div class="apprenticeship-columns">
-              <div>
-                <h3>Pros</h3>
-                <ul>
-                  <li>Good pay and extra courses with certificates</li>
-                  <li>Supplementary pension for eligible staff</li>
-                  <li>Nice location, building and offices</li>
-                </ul>
-              </div>
-              <div>
-                <h3>Cons</h3>
-                <ul>
-                  <li>Extra care with official information</li>
-                  <li>Many regulations and procedures to follow</li>
-                  <li>Frequent mandatory meetings</li>
-                </ul>
-              </div>
-            </div>
-            <figcaption><a class="credit" href="https://www.vbl.de/en/en-vblklassik" target="_blank" rel="noopener">VBL supplementary pension</a></figcaption>
-          </figure>
-        </section>
-
-        <div class="model-layer" hidden aria-hidden="true">
-          <model-viewer id="building" src="./assets/bmftr-berlin.glb"
-            alt="Photo-derived model of the ministry building at Kapelle-Ufer"
-            loading="eager" reveal="auto" interaction-prompt="none"
-            camera-orbit="-42deg 50deg 88%" min-camera-orbit="auto auto 50%" max-camera-orbit="auto auto 140%"
-            camera-target="0m -0.065m 0m" field-of-view="34deg" interpolation-decay="245" exposure="1.08" shadow-intensity="0.35">
-          </model-viewer>
-        </div>
-      </main>
     </div>
+  </header>
 
-    <footer class="controls" id="controls">
-      <button class="button previous" id="previous" type="button" hidden>
-        <span class="arrow arrow-back" aria-hidden="true"></span><span>Previous</span>
-      </button>
-      <div class="progress">
-        <span class="count" id="count" aria-live="polite" aria-atomic="true"></span>
-        <nav class="segments" aria-label="Slide navigation" id="segments">
-          <a class="segment" href="#slide-1" aria-label="Slide 1: My Job, my Company"><span aria-hidden="true">1</span></a>
-          <a class="segment" href="#ministry-section" aria-label="Slide 2: The ministry"><span aria-hidden="true">2</span></a>
-          <a class="segment" href="#slide-2" aria-label="Slide 3: Berlin and Bonn"><span aria-hidden="true">3</span></a>
-          <a class="segment" href="#slide-3" aria-label="Slide 4: What the ministry does"><span aria-hidden="true">4</span></a>
-          <a class="segment" href="#slide-4" aria-label="Slide 5: Dorothee Bär"><span aria-hidden="true">5</span></a>
-          <a class="segment" href="#high-tech-agenda" aria-label="Slide 6: High-Tech Agenda"><span aria-hidden="true">6</span></a>
-          <a class="segment" href="#my-it-work" aria-label="Slide 7: My work in IT"><span aria-hidden="true">7</span></a>
-          <a class="segment" href="#slide-5" aria-label="Slide 8: PCs and workstations"><span aria-hidden="true">8</span></a>
-          <a class="segment" href="#slide-6" aria-label="Slide 9: My virtual machine lab"><span aria-hidden="true">9</span></a>
-          <a class="segment" href="#networking" aria-label="Slide 10: Explaining networking"><span aria-hidden="true">10</span></a>
-          <a class="segment" href="#apprenticeship" aria-label="Slide 11: My apprenticeship, pros and cons"><span aria-hidden="true">11</span></a>
-        </nav>
+  <main class="workspace">
+    <noscript><p class="noscript">Enable JavaScript to run the simulator.</p></noscript>
+
+    <section class="execution" aria-label="Execution controls">
+      <div class="execution-buttons">
+        <button class="button button-primary" id="run" data-action="run" title="Run or resume. Press E to reset and run." aria-keyshortcuts="E">
+          <svg aria-hidden="true"><use href="./icons.svg#play"/></svg><span id="runLabel">Run</span>
+        </button>
+        <button class="button" id="pause" data-action="pause" disabled title="Pause (P)" aria-keyshortcuts="P">
+          <svg aria-hidden="true"><use href="./icons.svg#pause"/></svg>Pause
+        </button>
+        <span class="divider"></span>
+        <button class="button" id="step" data-action="step" title="Execute one instruction (S)" aria-keyshortcuts="S">
+          <svg aria-hidden="true"><use href="./icons.svg#step"/></svg>Step instruction
+        </button>
+        <button class="button" id="microstep" data-action="microstep" title="Execute one micro-operation (Shift + S)" aria-keyshortcuts="Shift+S">
+          <svg aria-hidden="true"><use href="./icons.svg#micro"/></svg>Microstep
+        </button>
+        <button class="button button-quiet" data-action="reset" title="Reset registers and counters (R)" aria-keyshortcuts="R">
+          <svg aria-hidden="true"><use href="./icons.svg#reset"/></svg>Reset CPU
+        </button>
       </div>
-      <button class="button next" id="next" type="button" hidden>
-        <span id="next-label">Next</span><span class="arrow" aria-hidden="true"></span>
-      </button>
+      <div class="execution-meta">
+        <div class="speed">
+          <label for="speed">Speed</label>
+          <input type="range" min="0" max="3000" step="1" value="1700" id="speed" title="Execution speed (+ or −)">
+          <output for="speed" id="speedValue">1.30 s</output>
+        </div>
+        <span class="execution-status" id="executionStatus" role="status" data-state="ready">Ready</span>
+      </div>
+    </section>
+
+    <section class="board" aria-labelledby="boardTitle">
+      <div class="board-top">
+        <div class="board-title">
+          <svg aria-hidden="true"><use href="./icons.svg#diagram"/></svg>
+          <h2 id="boardTitle">CPU diagram</h2>
+        </div>
+        <div class="board-actions">
+          <button class="button button-board" data-action="example">
+            <svg aria-hidden="true"><use href="./icons.svg#flask"/></svg>Load example
+          </button>
+          <label class="switch" title="Show or hide the control unit (U)">
+            <input type="checkbox" id="controlVisible" checked aria-controls="controlBody">
+            <span class="switch-track" aria-hidden="true"></span>
+            <span>Control unit</span>
+          </label>
+        </div>
+      </div>
+
+      <nav class="board-nav" aria-label="Diagram sections">
+        <button data-pan="memory" aria-current="true">Memory</button>
+        <button data-pan="control">Control unit</button>
+        <button data-pan="alu">ALU</button>
+      </nav>
+      <div class="board-scroll" id="boardScroll" tabindex="0" role="region" aria-label="CPU diagram, scroll to view all components">
+        <div class="machine" id="machine">
+          <svg class="wiring" id="wiring" aria-hidden="true">
+            <defs>
+              <marker id="addressArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M0 0 L10 5 L0 10 Z" fill="#528af0"/>
+              </marker>
+              <marker id="dataArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M0 0 L10 5 L0 10 Z" fill="#3aab8a"/>
+              </marker>
+              <marker id="controlArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M0 0 L10 5 L0 10 Z" fill="#a8798b"/>
+              </marker>
+              <marker id="zeroArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M0 0 L10 5 L0 10 Z" fill="#ac924e"/>
+              </marker>
+            </defs>
+            <path id="addressToRam" class="wire wire-address"/>
+            <path id="dataToRam" class="wire wire-data"/>
+            <path id="ramToData" class="wire wire-data"/>
+            <path id="dataToIr" class="wire wire-data wire-control-unit"/>
+            <path id="irToAddress" class="wire wire-address wire-control-unit"/>
+            <path id="pcToAddress" class="wire wire-address wire-control-unit"/>
+            <path id="irToPc" class="wire wire-address wire-control-unit"/>
+            <path id="irToMc" class="wire wire-instruction wire-control-unit"/>
+            <path id="dataToAcc" class="wire wire-data"/>
+            <path id="accToData" class="wire wire-data"/>
+            <path id="zeroToPc" class="wire wire-zero wire-control-unit"/>
+          </svg>
+
+          <h3 class="lane-heading memory-heading" id="memoryHeading"><svg aria-hidden="true"><use href="./icons.svg#memory"/></svg>Memory <span>RAM</span></h3>
+          <h3 class="lane-heading control-heading" id="controlHeading"><svg aria-hidden="true"><use href="./icons.svg#sliders"/></svg>Control unit <span>CU</span></h3>
+          <h3 class="lane-heading alu-heading" id="aluHeading"><svg aria-hidden="true"><use href="./icons.svg#alu"/></svg>Arithmetic logic unit <span>ALU</span></h3>
+
+          <div class="bus address-bus" id="addressRail">
+            <div class="bus-content">
+              <span class="bus-label"><i aria-hidden="true"></i>Address bus</span>
+              <output class="bus-value" id="addressValue" aria-label="Address bus value">000</output>
+              <form class="bus-editor" id="addressForm">
+                <input id="addressInput" type="text" inputmode="numeric" autocomplete="off" placeholder="000" aria-label="New address bus value">
+                <button class="button button-board" title="Set address bus" aria-label="Set address bus">Set</button>
+              </form>
+            </div>
+          </div>
+
+          <section class="lane memory-lane" id="memory" aria-labelledby="memoryHeading">
+            <div class="instrument ram" id="ramPanel">
+              <div class="instrument-head">
+                <div>
+                  <h4>RAM</h4>
+                  <p>1,000 words</p>
+                </div>
+                <div class="file-buttons">
+                  <button class="button button-board" data-action="openRam" title="Open a .ram file (Ctrl + O)"><svg aria-hidden="true"><use href="./icons.svg#folder"/></svg>Open</button>
+                  <button class="button button-board" data-action="saveRam" title="Save a .ram file (Ctrl + S)"><svg aria-hidden="true"><use href="./icons.svg#save"/></svg>Save</button>
+                  <button class="button button-board" data-action="clearRam" title="Clear RAM (Alt + C)" aria-label="Clear RAM"><svg aria-hidden="true"><use href="./icons.svg#file"/></svg>Clear</button>
+                </div>
+              </div>
+              <div class="table-scroll ram-scroll" id="ramScroll" tabindex="0" role="region" aria-label="RAM words">
+                <table class="machine-table ram-table">
+                  <thead><tr><th scope="col">Address</th><th scope="col">Value</th><th scope="col">Instruction</th><th scope="col">Operand</th></tr></thead>
+                  <tbody id="ramRows"></tbody>
+                </table>
+              </div>
+              <form class="ram-editor" id="ramEditor">
+                <label for="ramInput">Edit word <span class="editor-address" id="editorAddress">000</span></label>
+                <div class="edit-fields">
+                  <input id="ramInput" type="text" inputmode="decimal" autocomplete="off" value="00.000" aria-label="RAM word">
+                  <select id="commandSelect" aria-label="Insert instruction">
+                    <option value="">Instruction</option>
+                  </select>
+                  <button class="button button-board button-write">Write</button>
+                </div>
+              </form>
+              <div class="ram-actions">
+                <button class="text-button" data-action="insert" title="Insert a word above the selection (Insert)">Insert row</button>
+                <button class="text-button" data-action="delete" title="Delete the selected word (Shift + Delete)">Delete row</button>
+                <span class="small-divider"></span>
+                <button class="text-button" id="undo" data-action="undo" title="Undo (Ctrl + Z)" disabled>Undo</button>
+                <button class="text-button" id="redo" data-action="redo" title="Redo (Ctrl + Y)" disabled>Redo</button>
+              </div>
+            </div>
+            <div class="ram-wires">
+              <button class="operation" data-op="1" title="Write the data bus value to the addressed RAM word">Data → RAM</button>
+              <button class="operation" data-op="2" title="Read the addressed RAM word onto the data bus">RAM → Data</button>
+            </div>
+          </section>
+
+          <section class="lane control-lane" id="control" aria-labelledby="controlHeading">
+            <div class="control-body" id="controlBody">
+              <div class="register-wires">
+                <button class="operation" data-op="4" title="Copy the instruction operand to the address bus">IR → Address</button>
+                <button class="operation" data-op="8" title="Copy the program counter to the address bus">PC → Address</button>
+              </div>
+              <div class="registers">
+                <div class="instrument register" id="irBlock">
+                  <h4>Instruction register</h4>
+                  <output id="irValue" aria-label="Instruction register"><span id="irOpcode">00</span><span class="register-dot">.</span><span id="irOperand">000</span></output>
+                </div>
+                <button class="operation ir-to-pc" data-op="11" title="Copy the instruction operand to the program counter">IR → PC</button>
+                <div class="instrument register" id="pcBlock">
+                  <h4>Program counter</h4>
+                  <output id="pcValue" aria-label="Program counter">000</output>
+                </div>
+              </div>
+              <div class="control-links">
+                <button class="operation" data-op="3" title="Copy the data bus value to the instruction register">Data → IR</button>
+                <button class="operation" data-op="9" title="Advance the program counter">PC + 1</button>
+                <button class="operation" data-op="5" title="Jump to the microcode for this opcode">IR → µPC</button>
+                <button class="operation" data-op="10" title="Advance the program counter if the accumulator is zero">If zero, PC + 1</button>
+              </div>
+              <div class="instrument microcode" id="mcBlock">
+                <div class="instrument-head">
+                  <h4>Microcode</h4>
+                  <span class="micro-counter">µPC <output id="mcValue" aria-label="Microcode counter">000</output></span>
+                </div>
+                <div class="table-scroll mc-scroll" id="mcScroll" tabindex="0" role="region" aria-label="Microcode memory">
+                  <table class="machine-table mc-table">
+                    <thead><tr><th scope="col">Address</th><th scope="col">Micro-operation</th></tr></thead>
+                    <tbody id="mcRows"></tbody>
+                  </table>
+                </div>
+                <div class="micro-actions">
+                  <button class="text-button" data-action="openMc" title="Open a .mc file (Ctrl + Shift + O)">Open</button>
+                  <button class="text-button" data-action="saveMc" title="Save a .mc file (Ctrl + Shift + S)">Save</button>
+                  <button class="text-button" data-action="resetMc" title="Restore the default microcode (Alt + Shift + C)">Reset</button>
+                  <button class="text-button record-toggle" id="recordToggle" aria-pressed="false" data-action="toggleRecorder" aria-controls="recordPanel">Record</button>
+                </div>
+                <form id="recordPanel" class="record-panel" hidden>
+                  <label>Opcode <input id="recordOpcode" type="number" inputmode="numeric" min="1" max="19" value="11" required></label>
+                  <label>Name <input id="recordName" type="text" placeholder="e.g. COPY" maxlength="5" pattern="[A-Za-z0-9]+" autocomplete="off" required></label>
+                  <button class="button button-board" id="recordAction">Start</button>
+                </form>
+              </div>
+              <div class="micro-wires">
+                <button class="operation" data-op="7" title="Return to the start of the fetch cycle">µPC := 0</button>
+                <button class="operation operation-stop" data-op="19" title="Stop program execution">Halt</button>
+              </div>
+            </div>
+            <div class="control-off" id="controlOff" hidden>
+              <svg aria-hidden="true"><use href="./icons.svg#sliders"/></svg>
+              <p>Control unit hidden</p>
+              <button class="button button-board" data-action="showControl">Show control unit</button>
+            </div>
+          </section>
+
+          <section class="lane alu-lane" id="alu" aria-labelledby="aluHeading">
+            <div class="instrument accumulator" id="accBlock">
+              <div class="accumulator-head">
+                <h4>Accumulator</h4>
+                <span class="zero-flag" id="zeroFlag" data-active="true"><i></i>Zero <span id="zeroValue">1</span></span>
+              </div>
+              <output id="accValue" aria-label="Accumulator">00000</output>
+              <div class="accumulator-actions">
+                <button class="operation" data-op="16" title="Increment the accumulator">+1</button>
+                <button class="operation" data-op="17" title="Decrement the accumulator">−1</button>
+                <button class="operation standard-only" data-op="12" title="Clear the accumulator">Clear</button>
+              </div>
+            </div>
+            <div class="alu-wires">
+              <div class="alu-input">
+                <button class="operation" data-op="18" title="Copy the data bus value to the accumulator">Data → ACC</button>
+                <button class="operation standard-only" data-op="13" title="Add the data bus value to the accumulator">Add</button>
+                <button class="operation standard-only" data-op="14" title="Subtract the data bus value from the accumulator">Subtract</button>
+              </div>
+              <button class="operation" data-op="15" title="Copy the accumulator to the data bus">ACC → Data</button>
+            </div>
+          </section>
+
+          <div class="bus data-bus" id="dataRail">
+            <div class="bus-content">
+              <span class="bus-label"><i aria-hidden="true"></i>Data bus</span>
+              <output class="bus-value" id="dataValue" aria-label="Data bus value">00000</output>
+              <form class="bus-editor" id="dataForm">
+                <input id="dataInput" type="text" inputmode="numeric" autocomplete="off" placeholder="00000" aria-label="New data bus value">
+                <button class="button button-board" title="Set data bus" aria-label="Set data bus">Set</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="board-bottom">
+        <div class="signal-line">
+          <svg aria-hidden="true"><use href="./icons.svg#pulse"/></svg>
+          <span id="lastAction" aria-live="polite">Load an example or select a RAM word to start.</span>
+        </div>
+      </div>
+    </section>
+
+    <form id="commandLine" class="command-line" hidden>
+      <label for="commandInput">Command mode</label>
+      <input id="commandInput" type="text" placeholder="e.g. rd" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button class="button">Execute</button>
+      <button class="button button-quiet" type="button" data-action="leaveCommand">Close</button>
+    </form>
+
+    <footer class="site-footer">
+      <span id="instructionMode">Standard instruction set</span>
+      <div><button class="text-button" id="install" data-action="install" hidden>Install app</button><button class="text-button" data-action="command" title="Open command mode (: or V)">Command mode</button><a href="./presentation/">ATIW presentation</a><a href="https://github.com/revvnik/portfolio/tree/main/atiw">Source &amp; license</a></div>
     </footer>
-  </div>
+    <input type="file" id="ramFile" accept=".ram" hidden>
+    <input type="file" id="mcFile" accept=".mc" hidden>
+  </main>
+
+  <dialog id="settings" class="modal" aria-labelledby="settingsTitle">
+    <div class="modal-head">
+      <h2 id="settingsTitle">Settings</h2>
+      <button class="button button-quiet button-icon" data-close aria-label="Close settings"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+    </div>
+    <div class="dialog-content">
+      <label class="setting-row"><span>Instruction set <small>Bonsai provides a smaller set of instructions.</small></span>
+        <select id="mode"><option value="standard">Standard</option><option value="bonsai">Bonsai</option></select>
+      </label>
+      <label class="setting-row"><span>Adjust operands when rows move</span><input type="checkbox" id="fixRAM"></label>
+      <label class="setting-row"><span>Include operands equal to the selected address</span><input type="checkbox" id="fixRamEq"></label>
+      <label class="setting-row"><span>Allow Delete to remove the selected row <small>Shift + Delete is always available.</small></span><input type="checkbox" id="useDeleteForDeleteRow"></label>
+      <label class="setting-row"><span>Ask for a filename when saving</span><input type="checkbox" id="setFilenameOnSave"></label>
+      <label class="setting-row"><span>Visible rows above the selection</span><input type="number" id="linesAheadTop" min="0" max="10"></label>
+      <label class="setting-row"><span>Visible rows below the selection</span><input type="number" id="linesAheadBottom" min="0" max="10"></label>
+      <label class="setting-row"><span>Undo history length</span><input type="number" id="historyMaxLength" min="10" max="100"></label>
+    </div>
+  </dialog>
+
+  <dialog id="guide" class="modal guide" aria-labelledby="guideTitle">
+    <div class="modal-head">
+      <h2 id="guideTitle">Johnny guide</h2>
+      <button class="button button-quiet button-icon" data-close aria-label="Close guide"><svg aria-hidden="true"><use href="./icons.svg#close"/></svg></button>
+    </div>
+    <div class="dialog-content">
+      <h3>Run your first program</h3>
+      <p>Choose <strong>Load example</strong> to add 7 and 5 in Standard mode. Use <strong>Step instruction</strong> to execute a full instruction, or <strong>Microstep</strong> to watch an individual transfer. The result goes to RAM address 022.</p>
+      <h3>Read the diagram</h3>
+      <p>The blue address bus selects a RAM word. The green data bus carries its value between RAM, the instruction register (IR) and the accumulator (ACC). The program counter (PC) holds the next instruction address, and µPC points to the next micro-operation.</p>
+      <p>RAM words are decimal. In <code>01.020</code>, <code>01</code> is the instruction code for <code>TAKE</code> and <code>020</code> is its operand. Select a RAM row to edit it. Use the arrow buttons in the diagram to move values by hand.</p>
+      <h3>Microcode</h3>
+      <p>Select a micro-operation to edit it, or select an instruction name to rename it. To create an instruction, choose <strong>Record</strong>, enter an unused opcode and name, then press the diagram’s operation buttons in sequence. End with <strong>µPC := 0</strong> so the next instruction can be fetched.</p>
+      <details>
+        <summary>Instruction set</summary>
+        <dl class="instruction-list" id="instructionList"></dl>
+      </details>
+      <details>
+        <summary>Keyboard shortcuts</summary>
+        <dl class="shortcut-list">
+          <dt><kbd>E</kbd> <kbd>P</kbd> <kbd>R</kbd></dt><dd>Reset and run, pause or resume, reset CPU</dd>
+          <dt><kbd>S</kbd> <kbd>Shift</kbd>+<kbd>S</kbd></dt><dd>Step instruction, microstep</dd>
+          <dt><kbd>↑</kbd> <kbd>↓</kbd> / <kbd>K</kbd> <kbd>J</kbd></dt><dd>Move up or down in RAM</dd>
+          <dt><kbd>A</kbd> <kbd>D</kbd> <kbd>W</kbd></dt><dd>Edit address bus, data bus, or RAM word</dd>
+          <dt><kbd>U</kbd> <kbd>+</kbd> <kbd>−</kbd></dt><dd>Toggle the control unit, speed up, slow down</dd>
+          <dt><kbd>Ctrl</kbd>+<kbd>O</kbd> / <kbd>S</kbd></dt><dd>Open or save RAM. Add Shift for microcode.</dd>
+          <dt><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd></dt><dd>Undo or redo</dd>
+          <dt><kbd>:</kbd> or <kbd>V</kbd></dt><dd>Open command mode</dd>
+        </dl>
+        <p><a href="https://github.com/TobisMa/johnny#shortcuts">All Johnny 2.0 shortcuts and commands</a></p>
+      </details>
+      <details>
+        <summary>Install for offline use</summary>
+        <p>Use your browser’s install option. On iPhone or iPad, open Johnny in Safari and choose <strong>Share → Add to Home Screen</strong>.</p>
+      </details>
+    </div>
+  </dialog>
+
+  <dialog id="prompt" class="modal prompt" aria-labelledby="promptTitle">
+    <form id="promptForm" method="dialog">
+      <div class="dialog-content">
+        <h2 id="promptTitle"></h2>
+        <p id="promptMessage" hidden></p>
+        <div id="promptField" hidden></div>
+        <div class="prompt-actions">
+          <button class="button" value="cancel" id="promptCancel" formnovalidate>Cancel</button>
+          <button class="button button-primary" value="ok" id="promptSubmit">OK</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
 </body>
 </html>
